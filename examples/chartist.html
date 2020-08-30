@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="chartist\chartist.min.css">
+
+    <title>Chartist Example</title>
+
+    <script src="chartist\chartist.min.js"></script>
+
+    <script>
+        var chart1;
+
+        var chart1Data = {
+                // A labels array that can contain any sort of values
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                // Our series array that contains series objects or in this case series data arrays
+                series: [
+                    [5, 2, 4, 2, 0],
+                    [4, 7, 2, 3, 8]
+                ]
+            };
+
+        var chart1Opt = {
+            //Make dimension dpi aware
+            width: 300 * window.devicePixelRatio,
+            height: 200 * window.devicePixelRatio
+        };
+
+        function body_onLoad() {
+            chart1 = new Chartist.Line('#chart1', chart1Data, chart1Opt);
+        }
+    </script>
+
+</head>
+<body onload="body_onLoad()" style="user-select:none;padding:10pt 20pt 20pt 20pt;margin:0">
+    <h1>Chartist.js example</h1>
+    <p>Use top menu to interact.</p>
+    <div id="chart1" class="ct-chart"></div>
+</body>
+</html>

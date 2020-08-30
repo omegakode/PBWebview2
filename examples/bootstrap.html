@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"  href="myapp://resources/bootstrap.min.css">
+    
+    <script src="myapp://resources/jquery-3.5.1.slim.min.js"></script>
+    <script src="myapp://resources/popper.min.js"></script>
+    <script src="myapp://resources/bootstrap.min.js"></script>
+	
+
+    <title>Bootstrap</title>
+  </head>
+
+  <body style="user-select:none;padding:20pt 20pt 20pt 20pt">
+
+    <h1>Bootstrap form test</h1>
+    <p>All content is loaded from the executable. Use the top menu to interact.</p>
+
+    <div class="form-group row">
+        <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+          <input type="email" class="form-control" id="inputEmail3" value="johnsmith@gmail.com">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" id="inputPassword3" value="123456">
+        </div>
+      </div>
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+          <div class="col-sm-10">
+            <div class="custom-control custom-radio">
+              <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+              <label class="custom-control-label" for="gridRadios1">
+                First radio
+              </label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+              <label class="custom-control-label" for="gridRadios2">
+                Second radio
+              </label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+              <label class="custom-control-label" for="gridRadios3">
+                Third disabled radio
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="form-group row">
+        <div class="col-sm-2">Checkbox</div>
+        <div class="col-sm-10">
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" id="gridCheck1" onchange="purebasic.callRTProc('check_Change', this.id, this.checked)">
+            <label class="custom-control-label" for="gridCheck1">
+              Example checkbox
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">Switch</div>
+        <div class="col-sm-10">
+          <div class="custom-control custom-switch">
+            <input class="custom-control-input" type="checkbox" id="switch1" onchange="purebasic.callRTProc('switch_Change', this.id, this.checked)">
+            <label class="custom-control-label" for="switch1">
+              Example switch
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn-primary" onclick="purebasic.callRTProc('signIn_Click')">Sign in</button>
+        </div>
+      </div>
+  </body>
+</html>

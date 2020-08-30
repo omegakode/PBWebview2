@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.72 (Windows - x64)">
+  <section name="config">
+    <options closefiles="1" openmode="0" name="PBWebView2"/>
+  </section>
+  <section name="data">
+    <explorer view="" pattern="0"/>
+    <log show="1"/>
+    <lastopen date="2020-08-30 09:28" user="carlos" host="DESKTOP-JICP41J"/>
+  </section>
+  <section name="files">
+    <file name="examples\basic_browser_async.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="93f7f7c077b82e732ff729c4a4d6e8c9"/>
+    </file>
+    <file name="examples\basic_browser_sync.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="d23fe9e0fd2af0dd483165b3eb3ab2a2"/>
+    </file>
+    <file name="examples\host_comunication.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="db203e8f34dbfd8d42d3cc865cbf2d7e"/>
+    </file>
+    <file name="examples\host_object.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="316374b6ad4e84a0be4fe714b6fb2cf5"/>
+    </file>
+    <file name="examples\resources.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="a6e26743cace293bad86b9da7dc2a8c9"/>
+    </file>
+    <file name="json.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="fb1555c14f7bb1077776a63a9b97e0bc"/>
+    </file>
+    <file name="PB_Host_Object.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="acbd5af3b57c5342524ef6f59ca0ee2a"/>
+    </file>
+    <file name="PBWebView2.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="87dca76414f13775b631d9ae0acacd92"/>
+    </file>
+    <file name="stream.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="4ad1fd1f8a3c14f89aabf6e72802ea77"/>
+    </file>
+    <file name="string.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="4bf2631673d859ecb8f8e70ba9fdd2b8"/>
+    </file>
+    <file name="VCall.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="ec29668401aedbbc9aa63c663f0da246"/>
+    </file>
+    <file name="vector.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="088912e7622098c00abcb9064534b0a5"/>
+    </file>
+    <file name="WebView2.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="4cf9a265906dc6be98f054bbc812f3da"/>
+    </file>
+    <file name="WebView2_Helper.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="16fb50757d15f31d89e62decdb984a05"/>
+    </file>
+    <file name="WebView2EnvironmentOptions.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="ccf1ee73869a4886fc62a3cefc99f12e"/>
+    </file>
+    <file name="WebView2Loader.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="efd2e6bf760b907c750cc6a89ad63482"/>
+    </file>
+    <file name="windows\OAIdl.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="0491ec0ed58877a9f881b7983722cb70"/>
+    </file>
+    <file name="windows\objidl.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="c5f24dffa23bc645b73d0af87a7c0472"/>
+    </file>
+    <file name="windows\Unknwn.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="abe6d838b14166fa5ae9cba46db173fe"/>
+    </file>
+    <file name="examples\bootstrap.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="3073c82f4ef6b930309b5f51ac135412"/>
+    </file>
+    <file name="examples\chartist.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="1a990e4e9d39edc0e56782949fc67f41"/>
+    </file>
+  </section>
+  <section name="targets">
+    <target name="Default Target" enabled="0" default="0">
+      <inputfile value="examples\WebView2_Test.pb"/>
+      <outputfile value=""/>
+      <options xpskin="1" dpiaware="1" debug="1"/>
+    </target>
+    <target name="Basic Browser Sync" enabled="0" default="0">
+      <inputfile value="examples\basic_browser_sync.pb"/>
+      <outputfile value=""/>
+      <options xpskin="1" dpiaware="1" debug="1"/>
+    </target>
+    <target name="Basic Browser Async" enabled="0" default="0">
+      <inputfile value="examples\basic_browser_async.pb"/>
+      <outputfile value=""/>
+      <options xpskin="1" dpiaware="1" debug="1"/>
+    </target>
+    <target name="Host Communication" enabled="0" default="0">
+      <inputfile value="examples\host_comunication.pb"/>
+      <outputfile value=""/>
+      <options xpskin="1" dpiaware="1" debug="1"/>
+    </target>
+    <target name="Host Object" enabled="0" default="0">
+      <inputfile value="examples\host_object.pb"/>
+      <outputfile value=""/>
+      <options xpskin="1" dpiaware="1" debug="1"/>
+    </target>
+    <target name="Bootstrap" enabled="0" default="1">
+      <inputfile value="examples\bootstrap.pb"/>
+      <outputfile value=""/>
+      <executable value="examples\test.exe"/>
+      <options xpskin="1" dpiaware="1" debug="1"/>
+    </target>
+    <target name="Resources" enabled="0" default="0">
+      <inputfile value="examples\resources.pb"/>
+      <outputfile value=""/>
+      <options xpskin="1" dpiaware="1" debug="1"/>
+    </target>
+    <target name="Chartist" enabled="0" default="0">
+      <inputfile value="examples\chartist.pb"/>
+      <outputfile value=""/>
+      <options/>
+    </target>
+  </section>
+</project>
