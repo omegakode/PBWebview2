@@ -6,9 +6,9 @@ XIncludeFile "windows/Unknwn.pbi"
 
 DataSection
 	IID_ICoreWebView2AcceleratorKeyPressedEventArgs:
-	Data.l $9224476E
-	Data.w $D8C3, $4EB7
-	Data.b $BB, $65, $2F, $D7, $79, $2B, $27, $CE
+	Data.l $9F760F8A
+	Data.w $FB79, $42BE
+	Data.b $99, $90, $7B, $56, $90, $F, $A9, $C7
 EndDataSection
 
 Interface ICoreWebView2AcceleratorKeyPressedEventArgs Extends IUnknown
@@ -40,9 +40,9 @@ EndStructure
 
 DataSection
 	IID_ICoreWebView2AcceleratorKeyPressedEventHandler:
-	Data.l $A7D303F9
-	Data.w $503C, $4B7E
-	Data.b $BC, $40, $5C, $7C, $E6, $CA, $BA, $AA
+	Data.l $B29C7E28
+	Data.w $FA79, $41A8
+	Data.b $8E, $44, $65, $81, $1C, $76, $DC, $B2
 EndDataSection
 
 Interface ICoreWebView2AcceleratorKeyPressedEventHandler Extends IUnknown
@@ -53,9 +53,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2Controller:
-	Data.l $7CCC5C7F
-	Data.w $8351, $4572
-	Data.b $90, $77, $9C, $1C, $80, $91, $38, $35
+	Data.l $4D00C0D1
+	Data.w $9434, $4EB6
+	Data.b $80, $78, $86, $97, $A5, $60, $33, $4F
 EndDataSection
 
 Interface ICoreWebView2Controller Extends IUnknown
@@ -96,9 +96,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ZoomFactorChangedEventHandler:
-	Data.l $F1828246
-	Data.w $8B98, $4274
-	Data.b $B7, $8, $EC, $DB, $6B, $F3, $84, $3A
+	Data.l $B52D71D6
+	Data.w $C4DF, $4543
+	Data.b $A9, $C, $64, $A3, $E6, $F, $38, $CB
 EndDataSection
 
 Interface ICoreWebView2ZoomFactorChangedEventHandler Extends IUnknown
@@ -119,9 +119,9 @@ EndStructure
 
 DataSection
 	IID_ICoreWebView2MoveFocusRequestedEventHandler:
-	Data.l $4B21D6DD
-	Data.w $3DE7, $47B0
-	Data.b $80, $19, $7D, $3A, $CE, $6E, $36, $31
+	Data.l $69035451
+	Data.w $6DC7, $4CB8
+	Data.b $9B, $CE, $B2, $BD, $70, $AD, $28, $9F
 EndDataSection
 
 Interface ICoreWebView2MoveFocusRequestedEventHandler Extends IUnknown
@@ -132,9 +132,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2MoveFocusRequestedEventArgs:
-	Data.l $71922903
-	Data.w $B180, $49D0
-	Data.b $AE, $D2, $C9, $F9, $D1, $0, $64, $B1
+	Data.l $2D6AA13B
+	Data.w $3839, $4A15
+	Data.b $92, $FC, $D8, $8B, $3C, $D, $9C, $9D
 EndDataSection
 
 Interface ICoreWebView2MoveFocusRequestedEventArgs Extends IUnknown
@@ -147,9 +147,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2FocusChangedEventHandler:
-	Data.l $76E67C71
-	Data.w $663F, $4C17
-	Data.b $B7, $1A, $93, $81, $CC, $F3, $B9, $4B
+	Data.l $5EA24BD
+	Data.w $6452, $4926
+	Data.b $90, $14, $4B, $82, $B4, $98, $13, $5D
 EndDataSection
 
 Interface ICoreWebView2FocusChangedEventHandler Extends IUnknown
@@ -160,9 +160,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2:
-	Data.l $189B8AAF
-	Data.w $426, $4748
-	Data.b $B9, $AD, $24, $3F, $53, $7E, $B4, $6B
+	Data.l $76ECEACB
+	Data.w $462, $4D94
+	Data.b $AC, $83, $42, $3A, $67, $93, $77, $5E
 EndDataSection
 
 Interface ICoreWebView2 Extends IUnknown
@@ -230,9 +230,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2Settings:
-	Data.l $203FBA37
-	Data.w $6850, $4DCC
-	Data.b $A2, $5A, $58, $A3, $51, $AC, $62, $5D
+	Data.l $E562E4F0
+	Data.w $D7FA, $43AC
+	Data.b $8D, $71, $C0, $51, $50, $49, $9F, $0
 EndDataSection
 
 Interface ICoreWebView2Settings Extends IUnknown
@@ -260,9 +260,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2NavigationStartingEventHandler:
-	Data.l $73337A4
-	Data.w $64D2, $4C7E
-	Data.b $AC, $9F, $98, $7F, $F, $61, $34, $97
+	Data.l $9ADBE429
+	Data.w $F36D, $432B
+	Data.b $9D, $DC, $F8, $88, $1F, $BD, $76, $E3
 EndDataSection
 
 Interface ICoreWebView2NavigationStartingEventHandler Extends IUnknown
@@ -273,9 +273,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2NavigationStartingEventArgs:
-	Data.l $EE1938CE
-	Data.w $D385, $4CB0
-	Data.b $85, $4B, $F4, $98, $F7, $8C, $3D, $88
+	Data.l $5B495469
+	Data.w $E119, $438A
+	Data.b $9B, $18, $76, $4, $F2, $5F, $2E, $49
 EndDataSection
 
 Interface ICoreWebView2NavigationStartingEventArgs Extends IUnknown
@@ -292,9 +292,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2HttpRequestHeaders:
-	Data.l $2C1F04DF
-	Data.w $C90E, $49E4
-	Data.b $BD, $25, $4A, $65, $93, $0, $33, $7B
+	Data.l $E86CAC0E
+	Data.w $5523, $465C
+	Data.b $B5, $36, $8F, $B9, $FC, $8C, $8C, $60
 EndDataSection
 
 Interface ICoreWebView2HttpRequestHeaders Extends IUnknown
@@ -310,16 +310,16 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2HttpHeadersCollectionIterator:
-	Data.l $4212F3A7
-	Data.w $FBC, $4C9C
-	Data.b $81, $18, $17, $ED, $63, $70, $C1, $B3
+	Data.l $702FC30
+	Data.w $F43B, $47BB
+	Data.b $AB, $52, $A4, $2C, $B5, $52, $AD, $9F
 EndDataSection
 
 Interface ICoreWebView2HttpHeadersCollectionIterator Extends IUnknown
 	GetCurrentHeader(name.i, value.i)
 	get_HasCurrentHeader(hasCurrent.i)
 	MoveNext(hasNext.i)
-EndInterface 
+EndInterface
 
 Structure ICoreWebView2HttpHeadersCollectionIteratorVtbl Extends IUnknownVtbl
 	GetCurrentHeader.i
@@ -331,9 +331,9 @@ EndStructure
 
 DataSection
 	IID_ICoreWebView2ContentLoadingEventHandler:
-	Data.l $7AF5CC82
-	Data.w $AE19, $4964
-	Data.b $BD, $71, $B9, $BC, $5F, $3, $E8, $5D
+	Data.l $364471E7
+	Data.w $F2BE, $4910
+	Data.b $BD, $BA, $D7, $20, $77, $D5, $1C, $4B
 EndDataSection
 
 Interface ICoreWebView2ContentLoadingEventHandler Extends IUnknown
@@ -344,9 +344,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ContentLoadingEventArgs:
-	Data.l $2A800835
-	Data.w $2179, $45D6
-	Data.b $A7, $45, $66, $57, $E9, $A5, $46, $B9
+	Data.l $C8A1275
+	Data.w $9B6B, $4901
+	Data.b $87, $AD, $70, $DF, $25, $BA, $FA, $6E
 EndDataSection
 
 Interface ICoreWebView2ContentLoadingEventArgs Extends IUnknown
@@ -358,9 +358,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2SourceChangedEventHandler:
-	Data.l $8FEDD1A7
-	Data.w $3A33, $416F
-	Data.b $AF, $81, $88, $1E, $EB, $0, $14, $33
+	Data.l $3C067F9F
+	Data.w $5388, $4772
+	Data.b $8B, $48, $79, $F7, $EF, $1A, $B3, $7C
 EndDataSection
 
 Interface ICoreWebView2SourceChangedEventHandler Extends IUnknown
@@ -371,9 +371,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2SourceChangedEventArgs:
-	Data.l $BD9A4BFB
-	Data.w $BE19, $40BD
-	Data.b $96, $8B, $EB, $CF, $D, $72, $7E, $F3
+	Data.l $31E0E545
+	Data.w $1DBA, $4266
+	Data.b $89, $14, $F6, $38, $48, $A1, $F7, $D7
 EndDataSection
 
 Interface ICoreWebView2SourceChangedEventArgs Extends IUnknown
@@ -384,9 +384,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2HistoryChangedEventHandler:
-	Data.l $54C9B7D7
-	Data.w $D9E9, $4158
-	Data.b $86, $1F, $F9, $7E, $1C, $3C, $66, $31
+	Data.l $C79A420C
+	Data.w $EFD9, $4058
+	Data.b $92, $95, $3E, $8B, $4B, $CA, $B6, $45
 EndDataSection
 
 Interface ICoreWebView2HistoryChangedEventHandler Extends IUnknown
@@ -397,9 +397,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2NavigationCompletedEventHandler:
-	Data.l $9F921239
-	Data.w $20C4, $455F
-	Data.b $9E, $3F, $60, $47, $A5, $E, $24, $8B
+	Data.l $D33A35BF
+	Data.w $1C49, $4F98
+	Data.b $93, $AB, $0, $6E, $5, $33, $FE, $1C
 EndDataSection
 
 Interface ICoreWebView2NavigationCompletedEventHandler Extends IUnknown
@@ -410,9 +410,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2NavigationCompletedEventArgs:
-	Data.l $361F5621
-	Data.w $EA7F, $4C55
-	Data.b $95, $EC, $3C, $5E, $69, $92, $EA, $4A
+	Data.l $30D68B7D
+	Data.w $20D9, $4752
+	Data.b $A9, $CA, $EC, $84, $48, $FB, $B5, $C1
 EndDataSection
 
 Interface ICoreWebView2NavigationCompletedEventArgs Extends IUnknown
@@ -444,9 +444,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ScriptDialogOpeningEventHandler:
-	Data.l $72D93789
-	Data.w $2727, $4A9B
-	Data.b $A4, $FC, $1B, $26, $9, $CB, $CB, $E3
+	Data.l $EF381BF9
+	Data.w $AFA8, $4E37
+	Data.b $91, $C4, $8A, $C4, $85, $24, $BD, $FB
 EndDataSection
 
 Interface ICoreWebView2ScriptDialogOpeningEventHandler Extends IUnknown
@@ -457,9 +457,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ScriptDialogOpeningEventArgs:
-	Data.l $B8F6356E
-	Data.w $24DC, $4D74
-	Data.b $90, $FE, $AD, $7, $1E, $11, $CB, $91
+	Data.l $7390BB70
+	Data.w $ABE0, $4843
+	Data.b $95, $29, $F1, $43, $B3, $1B, $3, $D6
 EndDataSection
 
 Interface ICoreWebView2ScriptDialogOpeningEventArgs Extends IUnknown
@@ -483,9 +483,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2Deferral:
-	Data.l $A7ED8BF0
-	Data.w $3EC9, $4E39
-	Data.b $84, $27, $3D, $6F, $15, $7B, $D2, $85
+	Data.l $C10E7F7B
+	Data.w $B585, $46F0
+	Data.b $A6, $23, $8B, $EF, $BF, $3E, $4E, $E0
 EndDataSection
 
 Interface ICoreWebView2Deferral Extends IUnknown
@@ -496,9 +496,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2PermissionRequestedEventHandler:
-	Data.l $543B4ADE
-	Data.w $9B0B, $4748
-	Data.b $9A, $B7, $D7, $64, $81, $B2, $23, $AA
+	Data.l $15E1C6A3
+	Data.w $C72A, $4DF3
+	Data.b $91, $D7, $D0, $97, $FB, $EC, $6B, $FD
 EndDataSection
 
 Interface ICoreWebView2PermissionRequestedEventHandler Extends IUnknown
@@ -509,9 +509,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2PermissionRequestedEventArgs:
-	Data.l $774B5EA1
-	Data.w $3FAD, $435C
-	Data.b $B1, $FC, $A7, $7D, $1A, $CD, $5E, $AF
+	Data.l $973AE2EF
+	Data.w $FF18, $4894
+	Data.b $8F, $B2, $3C, $75, $8F, $4, $68, $10
 EndDataSection
 
 Interface ICoreWebView2PermissionRequestedEventArgs Extends IUnknown
@@ -541,9 +541,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ProcessFailedEventHandler:
-	Data.l $7D2183F9
-	Data.w $CCA8, $40F2
-	Data.b $91, $A9, $EA, $FA, $D3, $2C, $8A, $9B
+	Data.l $79E0AEA4
+	Data.w $990B, $42D9
+	Data.b $AA, $1D, $F, $CC, $2E, $5B, $C7, $F1
 EndDataSection
 
 Interface ICoreWebView2ProcessFailedEventHandler Extends IUnknown
@@ -554,9 +554,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ProcessFailedEventArgs:
-	Data.l $EA45D1F4
-	Data.w $75C0, $471F
-	Data.b $A6, $E9, $80, $3F, $BF, $F8, $FE, $F2
+	Data.l $8155A9A4
+	Data.w $1474, $4A86
+	Data.b $8C, $AE, $15, $1B, $F, $A6, $B8, $CA
 EndDataSection
 
 Interface ICoreWebView2ProcessFailedEventArgs Extends IUnknown
@@ -572,9 +572,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler:
-	Data.l $7082ABED
-	Data.w $591, $428F
-	Data.b $A7, $22, $60, $C2, $F8, $14, $54, $6B
+	Data.l $B99369F3
+	Data.w $9B11, $47B5
+	Data.b $BC, $6F, $8E, $78, $95, $FC, $EA, $17
 EndDataSection
 
 Interface ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler Extends IUnknown
@@ -585,9 +585,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ExecuteScriptCompletedHandler:
-	Data.l $3B717C93
-	Data.w $3ED5, $4450
-	Data.b $9B, $13, $7F, $56, $AA, $36, $7A, $C7
+	Data.l $49511172
+	Data.w $CC67, $4BCA
+	Data.b $99, $23, $13, $71, $12, $F4, $C4, $CC
 EndDataSection
 
 Interface ICoreWebView2ExecuteScriptCompletedHandler Extends IUnknown
@@ -607,9 +607,9 @@ EndStructure
 
 DataSection
 	IID_ICoreWebView2CapturePreviewCompletedHandler:
-	Data.l $DCED64F8
-	Data.w $D9C7, $4A3C
-	Data.b $B9, $FD, $FB, $BC, $A0, $B4, $34, $96
+	Data.l $697E05E9
+	Data.w $3D8F, $45FA
+	Data.b $96, $F4, $8F, $FE, $1E, $DE, $DA, $F5
 EndDataSection
 
 Interface ICoreWebView2CapturePreviewCompletedHandler Extends IUnknown
@@ -620,9 +620,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2WebMessageReceivedEventHandler:
-	Data.l $199328C8
-	Data.w $9964, $4F5F
-	Data.b $84, $E6, $E8, $75, $B1, $B7, $63, $D6
+	Data.l $57213F19
+	Data.w $E6, $49FA
+	Data.b $8E, $7, $89, $8E, $A0, $1E, $CB, $D2
 EndDataSection
 
 Interface ICoreWebView2WebMessageReceivedEventHandler Extends IUnknown
@@ -633,9 +633,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2WebMessageReceivedEventArgs:
-	Data.l $B263B5AE
-	Data.w $9C54, $4B75
-	Data.b $B6, $32, $40, $AE, $1A, $B, $69, $12
+	Data.l $F99A40C
+	Data.w $E962, $4207
+	Data.b $9E, $92, $E3, $D5, $42, $EF, $F8, $49
 EndDataSection
 
 Interface ICoreWebView2WebMessageReceivedEventArgs Extends IUnknown
@@ -648,9 +648,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2CallDevToolsProtocolMethodCompletedHandler:
-	Data.l $C20CF895
-	Data.w $BA7C, $493B
-	Data.b $AB, $2E, $8A, $6E, $3A, $36, $2, $A2
+	Data.l $5C4889F0
+	Data.w $5EF6, $4C5A
+	Data.b $95, $2C, $D8, $F1, $B9, $2D, $5, $74
 EndDataSection
 
 Interface ICoreWebView2CallDevToolsProtocolMethodCompletedHandler Extends IUnknown
@@ -661,9 +661,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2DevToolsProtocolEventReceiver:
-	Data.l $FE59C48C
-	Data.w $540C, $4A3C
-	Data.b $88, $98, $8E, $16, $2, $E0, $5, $5D
+	Data.l $B32CA51A
+	Data.w $8371, $45E9
+	Data.b $93, $17, $AF, $2, $1D, $8, $3, $67
 EndDataSection
 
 Interface ICoreWebView2DevToolsProtocolEventReceiver Extends IUnknown
@@ -675,9 +675,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2DevToolsProtocolEventReceivedEventHandler:
-	Data.l $8E1DED79
-	Data.w $A40B, $4271
-	Data.b $8B, $E6, $57, $64, $C, $16, $7F, $4A
+	Data.l $E2FDA4BE
+	Data.w $5456, $406C
+	Data.b $A2, $61, $3D, $45, $21, $38, $36, $2C
 EndDataSection
 
 Interface ICoreWebView2DevToolsProtocolEventReceivedEventHandler Extends IUnknown
@@ -688,9 +688,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2DevToolsProtocolEventReceivedEventArgs:
-	Data.l $F661B1C2
-	Data.w $5FF5, $4700
-	Data.b $B7, $23, $C4, $39, $3, $45, $39, $B4
+	Data.l $653C2959
+	Data.w $BB3A, $4377
+	Data.b $86, $32, $B5, $8A, $DA, $4E, $66, $C4
 EndDataSection
 
 Interface ICoreWebView2DevToolsProtocolEventReceivedEventArgs Extends IUnknown
@@ -701,9 +701,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2NewWindowRequestedEventHandler:
-	Data.l $ACAA30EF
-	Data.w $A40C, $47BD
-	Data.b $9C, $B9, $D9, $C2, $AA, $DC, $9F, $CB
+	Data.l $D4C185FE
+	Data.w $C81C, $4989
+	Data.b $97, $AF, $2D, $3F, $A7, $AB, $56, $51
 EndDataSection
 
 Interface ICoreWebView2NewWindowRequestedEventHandler Extends IUnknown
@@ -714,9 +714,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2NewWindowRequestedEventArgs:
-	Data.l $9EDC7F5F
-	Data.w $C6EA, $4F3C
-	Data.b $82, $7B, $A8, $88, $7, $94, $C0, $A9
+	Data.l $34ACB11C
+	Data.w $FC37, $4418
+	Data.b $91, $32, $F9, $C2, $1D, $1E, $AF, $B9
 EndDataSection
 
 Interface ICoreWebView2NewWindowRequestedEventArgs Extends IUnknown
@@ -727,15 +727,38 @@ Interface ICoreWebView2NewWindowRequestedEventArgs Extends IUnknown
 	get_Handled(Handled.i)
 	get_IsUserInitiated(IsUserInitiated.i)
 	GetDeferral(deferral.i)
+	get_WindowFeatures(WindowFeatures.i)
+EndInterface 
+
+;- ICoreWebView2WindowFeatures
+
+DataSection
+	IID_ICoreWebView2WindowFeatures:
+	Data.l $5EAF559F
+	Data.w $B46E, $4397
+	Data.b $88, $60, $E4, $22, $F2, $87, $FF, $1E
+EndDataSection
+
+Interface ICoreWebView2WindowFeatures Extends IUnknown
+	HasPosition(HasPosition.i)
+	HasSize(HasSize.i)
+	get_left(left.i)
+	get_top(top.i)
+	get_Height(Height.i)
+	get_Width(Width.i)
+	get_MenuBar(MenuBar.i)
+	get_Status(Status.i)
+	get_Toolbar(Toolbar.i)
+	get_ScrollBars(ScrollBars.i)
 EndInterface 
 
 ;- ICoreWebView2DocumentTitleChangedEventHandler
 
 DataSection
 	IID_ICoreWebView2DocumentTitleChangedEventHandler:
-	Data.l $6423D6B1
-	Data.w $5A57, $46C5
-	Data.b $BA, $46, $DB, $B3, $73, $5E, $E7, $C9
+	Data.l $F5F2B923
+	Data.w $953E, $4042
+	Data.b $9F, $95, $F3, $A1, $18, $E1, $AF, $D4
 EndDataSection
 
 Interface ICoreWebView2DocumentTitleChangedEventHandler Extends IUnknown
@@ -746,9 +769,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2ContainsFullScreenElementChangedEventHandler:
-	Data.l $120888E3
-	Data.w $4CAD, $4EC2
-	Data.b $B6, $27, $B2, $1, $6D, $5, $61, $2D
+	Data.l $E45D98B1
+	Data.w $AFEF, $45BE
+	Data.b $8B, $AF, $6C, $77, $28, $86, $7F, $73
 EndDataSection
 
 Interface ICoreWebView2ContainsFullScreenElementChangedEventHandler Extends IUnknown
@@ -759,9 +782,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2WebResourceRequestedEventHandler:
-	Data.l $F6DC79F2
-	Data.w $E1FA, $4534
-	Data.b $89, $68, $4A, $FF, $10, $BB, $AA, $32
+	Data.l $AB00B74C
+	Data.w $15F1, $4646
+	Data.b $80, $E8, $E7, $63, $41, $D2, $5D, $71
 EndDataSection
 
 Interface ICoreWebView2WebResourceRequestedEventHandler Extends IUnknown
@@ -772,9 +795,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2WebResourceRequestedEventArgs:
-	Data.l $2D7B3282
-	Data.w $83B1, $41CA
-	Data.b $8B, $BF, $FF, $18, $F6, $BF, $E3, $20
+	Data.l $453E667F
+	Data.w $12C7, $49D4
+	Data.b $BE, $6D, $DD, $BE, $79, $56, $F5, $7A
 EndDataSection
 
 Interface ICoreWebView2WebResourceRequestedEventArgs Extends IUnknown
@@ -789,9 +812,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2WebResourceRequest:
-	Data.l $11B02254
-	Data.w $B827, $49F6
-	Data.b $89, $74, $30, $F6, $E6, $C5, $5A, $F6
+	Data.l $97055CD4
+	Data.w $512C, $4264
+	Data.b $8B, $5F, $E3, $F4, $46, $CE, $A6, $A5
 EndDataSection
 
 Interface ICoreWebView2WebResourceRequest Extends IUnknown
@@ -808,9 +831,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2WebResourceResponse:
-	Data.l $5953D1FC
-	Data.w $B08F, $46DD
-	Data.b $AF, $D3, $66, $B1, $72, $41, $9C, $D0
+	Data.l $AAFCC94F
+	Data.w $FA27, $48FD
+	Data.b $97, $DF, $83, $E, $F7, $5A, $AE, $C9
 EndDataSection
 
 Interface ICoreWebView2WebResourceResponse Extends IUnknown
@@ -837,9 +860,9 @@ EndStructure
 
 DataSection
 	IID_ICoreWebView2HttpResponseHeaders:
-	Data.l $B5F6D4D5
-	Data.w $1BFF, $4869
-	Data.b $85, $B8, $15, $81, $53, $1, $7B, $4
+	Data.l $3C5FF5A
+	Data.w $9B45, $4A88
+	Data.b $88, $1C, $89, $A9, $F3, $28, $61, $9C
 EndDataSection
 
 Interface ICoreWebView2HttpResponseHeaders Extends IUnknown
@@ -881,9 +904,9 @@ EndStructure
 
 DataSection
 	IID_ICoreWebView2WindowCloseRequestedEventHandler:
-	Data.l $63C89928
-	Data.w $AD32, $4421
-	Data.b $A0, $E4, $EC, $99, $B3, $4A, $A9, $7E
+	Data.l $5C19E9E0
+	Data.w $92F, $486B
+	Data.b $AF, $FA, $CA, $82, $31, $91, $30, $39
 EndDataSection
 
 Interface ICoreWebView2WindowCloseRequestedEventHandler Extends IUnknown
@@ -894,9 +917,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler:
-	Data.l $86EF6808
-	Data.w $3C3F, $4C6F
-	Data.b $97, $5E, $8C, $E0, $B9, $8F, $70, $BA
+	Data.l $6C4819F3
+	Data.w $C9B7, $4260
+	Data.b $81, $27, $C9, $F5, $BD, $E7, $F6, $8C
 EndDataSection
 
 Interface ICoreWebView2CreateCoreWebView2ControllerCompletedHandler Extends IUnknown
@@ -907,9 +930,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler:
-	Data.l $8B4F98CE
-	Data.w $DB0D, $4E71
-	Data.b $85, $FD, $C4, $C4, $EF, $1F, $26, $30
+	Data.l $4E8A3389
+	Data.w $C9D8, $4BD2
+	Data.b $B6, $B5, $12, $4F, $EE, $6C, $C1, $4D
 EndDataSection
 
 Interface ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler Extends IUnknown
@@ -920,9 +943,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2Environment:
-	Data.l $DA66D884
-	Data.w $6DA8, $410E
-	Data.b $96, $30, $8C, $48, $F8, $B3, $A4, $E
+	Data.l $B96D755E
+	Data.w $319, $4E92
+	Data.b $A2, $96, $23, $43, $6F, $46, $A1, $FC
 EndDataSection
 
 Interface ICoreWebView2Environment Extends IUnknown
@@ -937,9 +960,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2NewBrowserVersionAvailableEventHandler:
-	Data.l $E82E8242
-	Data.w $EE39, $4A57
-	Data.b $A0, $65, $E1, $32, $56, $D6, $3, $42
+	Data.l $F9A2976E
+	Data.w $D34E, $44FC
+	Data.b $AD, $EE, $81, $B6, $B5, $7C, $A9, $14
 EndDataSection
 
 Interface ICoreWebView2NewBrowserVersionAvailableEventHandler Extends IUnknown
@@ -950,9 +973,9 @@ EndInterface
 
 DataSection
 	IID_ICoreWebView2EnvironmentOptions:
-	Data.l $97E9FBD9
-	Data.w $646A, $4B75
-	Data.b $86, $82, $14, $9B, $71, $DA, $CE, $59
+	Data.l $2FDE08A8
+	Data.w $1E9A, $4766
+	Data.b $8C, $5, $95, $A9, $CE, $B9, $D1, $C5
 EndDataSection
 
 Interface ICoreWebView2EnvironmentOptions Extends IUnknown
@@ -962,6 +985,8 @@ Interface ICoreWebView2EnvironmentOptions Extends IUnknown
 	put_Language(value.s)
 	get_TargetCompatibleBrowserVersion(value.i)
 	put_TargetCompatibleBrowserVersion(value.s)
+	get_AllowSingleSignOnUsingOSPrimaryAccount(allow.i)
+	put_AllowSingleSignOnUsingOSPrimaryAccount(allow.l)
 EndInterface 
 
 Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
@@ -971,5 +996,7 @@ Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
 	put_Language.i
 	get_TargetCompatibleBrowserVersion.i
 	put_TargetCompatibleBrowserVersion.i
+	get_AllowSingleSignOnUsingOSPrimaryAccount.i
+	put_AllowSingleSignOnUsingOSPrimaryAccount.i
 EndStructure
 

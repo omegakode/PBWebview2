@@ -4,7 +4,7 @@ XIncludeFile "string.pb"
 
 EnableExplicit
 
-#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "86.0.579.0"
+#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "86.0.622.11"
 
 ;- WV2_ENVIRONMENT_OPTIONS
 Structure WV2_ENVIRONMENT_OPTIONS
@@ -63,7 +63,7 @@ Procedure wv2_EnvironmentOptions_Release(*this.WV2_ENVIRONMENT_OPTIONS)
 	EndIf 
 EndProcedure
 
-Procedure wv2_EnvironmentOptions_get_AdditionalBrowserArguments(*this.WV2_ENVIRONMENT_OPTIONS, *value.INTEGER)
+Procedure wv2_EnvironmentOptions_get_AdditionalBrowserArguments(*this.WV2_ENVIRONMENT_OPTIONS, *value.INTEGER)	
 	*value\i = str_MakeCoMemString(*this\additionalBrowserArguments)
 	
 	ProcedureReturn #S_OK
@@ -89,7 +89,7 @@ EndProcedure
 
 Procedure wv2_EnvironmentOptions_get_TargetCompatibleBrowserVersion(*this.WV2_ENVIRONMENT_OPTIONS, *value.INTEGER)
 	*value\i = str_MakeCoMemString(*this\targetCompatibleBrowserVersion)
-	
+
 	ProcedureReturn #S_OK
 EndProcedure
 

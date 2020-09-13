@@ -1,5 +1,8 @@
 ﻿XIncludeFile "stream.pb"
+XIncludeFile "resource.pb"
 XIncludeFile "json.pb"
+XIncludeFile "keyboard.pb"
+XIncludeFile "enum.pb"
 
 IncludeFile "WebView2.pbi"
 IncludeFile "WebView2EnvironmentOptions.pb"

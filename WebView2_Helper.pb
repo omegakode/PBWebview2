@@ -7,7 +7,7 @@ XIncludeFile "WebView2Loader.pbi"
 EnableExplicit
 
 ;- VERSION
-#WV2_VERSION = "0.1"
+#WV2_VERSION = "0.1.1"
 
 ;- CONSTANTS
 #WV2_FIRST_CUSTOM_EVENT = #PB_Event_FirstCustomValue
@@ -26,6 +26,7 @@ Structure WV2_EVENT_HANDLER
 	*iid.IID
 	retVal.i
 	retValStr.s
+	context.i
 EndStructure
 
 Prototype wv2_EventHandler_Invoke(*this.WV2_EVENT_HANDLER, sender.i, args.i)
@@ -42,7 +43,7 @@ Prototype wv2_Window_ProcessEvent(ev.l)
 Declare.s wv2_GetBrowserVersion(browserExecutableFolder.s)
 Declare wv2_Controller_put_Bounds(wvc.ICoreWebView2Controller, *bounds.RECT)
 
-Declare wv2_EventHandler_New(*id.IID, invokeHandler.wv2_EventHandler_Invoke)
+Declare wv2_EventHandler_New(*id.IID, invokeHandler.wv2_EventHandler_Invoke, context.i = 0)
 Declare wv2_EventHandler_Free(*this.WV2_EVENT_HANDLER)
 Declare wv2_EventHandler_QueryInterface(*this.WV2_EVENT_HANDLER, *id.IID, *obj.INTEGER)
 Declare wv2_EventHandler_AddRef(*this.WV2_EVENT_HANDLER)
@@ -60,7 +61,7 @@ Declare.s wv2_Core_ExecuteScriptSync(wvCore.ICoreWebView2, script.s, processEven
 
 Declare.s wv2_CreateJSHostObjectProxy(hostObjName.s)
 
-Procedure wv2_EventHandler_New(*iid.IID, invokeHandler.wv2_EventHandler_Invoke)
+Procedure wv2_EventHandler_New(*iid.IID, invokeHandler.wv2_EventHandler_Invoke, context.i = 0)
 	Protected.WV2_EVENT_HANDLER *this
 	
 	*this = AllocateMemory(SizeOf(WV2_EVENT_HANDLER))
@@ -73,6 +74,7 @@ Procedure wv2_EventHandler_New(*iid.IID, invokeHandler.wv2_EventHandler_Invoke)
 	*this\iid = *iid
 	*this\mutex = CreateMutex()
 	*this\refCount = 1
+	*this\context = context
 	
 	ProcedureReturn *this
 EndProcedure
@@ -362,7 +364,7 @@ EndProcedure
 
 Procedure	wv2_HttpResponseHeaders_getHeader(*this.WV2_HTTP_RESPONSE_HEADERS, name.s, *value.INTEGER)
 	Protected.i buf
-			
+	
 	If *value = #Null : ProcedureReturn #E_INVALIDARG : EndIf
 	
 	ForEach *this\headersCol\col()

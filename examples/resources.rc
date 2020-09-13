@@ -1,0 +1,4 @@
+// '1' is the resource id that must be passed to res_CreateResourceStream()
+
+1 RCDATA "resources\\img1.png"
+

@@ -96,13 +96,7 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @wvController_Created()))
 		
 		wv2_EventHandler_Release(*this)
-		
-		If app\envOptions
-			app\envOptions\Release()
-		EndIf
-		
-		app\wvEnvironment\Release()
-		
+			
 	Else
 		MessageRequester("Error", "Failed to create WebView2Environment.")
 		End 
@@ -114,7 +108,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 	Protected.VARIANT vPBObj
 	Protected.ICoreWebView2Settings sett
 	Protected.s file, currDir
-	
+		
 	If result = #S_OK
 		controller\QueryInterface(?IID_ICoreWebView2Controller, @app\wvController)
 		app\wvController\get_CoreWebView2(@app\wvCore)
@@ -126,6 +120,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 		app\wvCore\get_Settings(@sett)
 		sett\put_AreDefaultContextMenusEnabled(#False)
 		sett\put_IsStatusBarEnabled(#False)
+		sett\put_AreDevToolsEnabled(#False)
 		sett\Release()
 		
 		;Add purebasic object.
@@ -157,13 +152,11 @@ EndProcedure
 
 Procedure wvController_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2Controller, args.ICoreWebView2AcceleratorKeyPressedEventArgs)
 	Protected.l keyEventKind, key
-	Protected.w ctrlSate
 		
 	;Disable webview2 accelerator keys.
 	
 	args\get_KeyEventKind(@keyEventKind)
 	If keyEventKind = #COREWEBVIEW2_KEY_EVENT_KIND_KEY_DOWN Or keyEventKind = #COREWEBVIEW2_KEY_EVENT_KIND_SYSTEM_KEY_DOWN
-		ctrlSate = GetKeyState_(#VK_CONTROL)
 		args\get_VirtualKey(@key)
 		
 		Select key
@@ -173,7 +166,7 @@ Procedure wvController_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebV
 			
 			;Print.
 			Case #VK_P
-				If ctrlSate <> 0 
+				If key_IsDown(#VK_CONTROL)
 					args\put_Handled(#True)
 					
 				Else
@@ -400,7 +393,8 @@ Procedure app_Init()
 EndProcedure
 
 Procedure app_Free()
-	
+	If app\wvEnvironment : app\wvEnvironment\Release() : EndIf 
+	If app\envOptions : app\envOptions\Release() : EndIf 
 EndProcedure
 
 ;-
@@ -426,7 +420,7 @@ Procedure main()
 	app\envOptions = wv2_EnvironmentOptions_New()
 	;This disables CORS errors
 	app\envOptions\put_AdditionalBrowserArguments("--disable-web-security")
-	CreateCoreWebView2EnvironmentWithOptions("", "", app\envOptions, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
+	CreateCoreWebView2EnvironmentWithOptions("", "", 0, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
 	
 	Repeat		
 	Until window_ProcessEvents(WaitWindowEvent()) = #True

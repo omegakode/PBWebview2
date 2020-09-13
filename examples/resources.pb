@@ -1,5 +1,8 @@
 ﻿;resources.pb
 
+;Windows resources example.
+;You must add the file resources.rc as a resource in Compilers Options -> Resources
+
 XIncludeFile "..\PBWebView2.pb"
 
 EnableExplicit
@@ -37,7 +40,12 @@ EndProcedure
 Procedure.s page1_Create()
 	Protected.s page
 	
-	page = PeekS(?page1Start, -1, #PB_UTF8)
+	page = "<!DOCTYPE html><html><body>" +
+	"<h3>All content is loaded directly from the executable, without copying to disk." +
+	~"<span style=\"color:red\">You must add the file 'resources.rc' as a resource in PB IDE Compilers Options -> Resources " +
+	"to see the image loaded.</span></h3>" +
+	~"<img src=\"myapp://resources/img1.png\" width=\"\" height=\"\">" +
+	"</body></html>"
 
 	ProcedureReturn page
 EndProcedure
@@ -47,7 +55,8 @@ Procedure wv_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2,
 	Protected.ICoreWebView2WebResourceResponse resp
 	Protected.IStream img1Stream
 	Protected.s uri
-	Protected.i img1Len, uriBuf
+	Protected.i uriBuf
+	Protected.s st
 	
 	args\get_Request(@req)
 	req\get_uri(@uriBuf)
@@ -56,14 +65,14 @@ Procedure wv_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2,
 		uri = PeekS(uriBuf)
 	
 		Select GetFilePart(GetURLPart(uri, #PB_URL_Path))
-			Case "_resources_img1.png"
-				img1Len = ?img1End - ?img1Start
-				img1Stream = stm_CreateStream(?img1Start, img1Len)
-
-				resp = wv2_WebResourceResponse_New2(img1Stream, "image/jpeg")
-				args\put_Response(resp)
-
-				resp\Release()			
+			Case "img1.png"
+				
+				img1Stream = res_CreateResourceStream(1, #RT_RCDATA)
+				If img1Stream
+					resp = wv2_WebResourceResponse_New2(img1Stream, "image/jpeg")
+					args\put_Response(resp)
+					resp\Release()
+				EndIf 
 		EndSelect
 		
 		str_FreeCoMemString(uriBuf)
@@ -149,13 +158,3 @@ EndProcedure
 
 main()
 
-;- DATA
-DataSection
-	page1Start:
-	IncludeBinary "resources\resources_page1.html"
-	Data.b 0, 0
-	
-	img1Start:
-	IncludeBinary "resources\resources_img1.png"
-	img1End:
-EndDataSection 

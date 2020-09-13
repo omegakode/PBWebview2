@@ -6,7 +6,7 @@ Procedure str_MakeCoMemString(str.s)
 	byteLen = StringByteLength(str) + SizeOf(CHARACTER)
 	buf = CoTaskMemAlloc_(byteLen)
 	If buf
-		PokeS(buf, str, -1)
+		PokeS(buf, str)
 	EndIf 
 	
 	ProcedureReturn buf
