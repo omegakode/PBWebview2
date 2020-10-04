@@ -189,8 +189,9 @@ EndProcedure
 Procedure wvCore_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
 	Protected.ICoreWebView2WebResourceRequest req
 	Protected.ICoreWebView2WebResourceResponse resp
-	Protected.s uri
+	Protected.s uri, contentType
 	Protected.i uriBuf
+	Protected.IStream respStream
 	
 	args\get_Request(@req)
 	req\get_uri(@uriBuf)
@@ -201,21 +202,31 @@ Procedure wvCore_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebVi
 		
 		Select GetFilePart(uri)
 			Case "bootstrap.min.js"
-				resp = wv2_WebResourceResponse_New2(app\stmBootstrap, "text/javascript")
+				respStream = app\stmBootstrap
+				contentType = "text/javascript"
 				
 			Case "bootstrap.min.css"
-				resp = wv2_WebResourceResponse_New2(app\stmBootstrapCss, "text/css")
-								
+				respStream = app\stmBootstrapCss
+				contentType = "text/css"
+					
 			Case "jquery-3.5.1.slim.min.js"
-				resp = wv2_WebResourceResponse_New2(app\stmJQuery, "text/javascript")
-				
+				respStream = app\stmJQuery
+				contentType = "text/javascript"
+
 			Case "popper.min.js"
-				resp = wv2_WebResourceResponse_New2(app\stmPopper, "text/javascript")
+				respStream = app\stmPopper
+				contentType = "text/javascript"
 		EndSelect
 				
-		If resp
-			args\put_Response(resp)
-			resp\Release()
+		If respStream
+			app\wvEnvironment\CreateWebResourceResponse(respStream, 200, "OK", 
+				"Content-Type: " + contentType + #CRLF$ + 
+				"Content-Length: " + Str(stm_GetSize(respStream)) + #CRLF$ + #CRLF$, @resp)
+
+			If resp
+				args\put_Response(resp)
+				resp\Release()
+			EndIf 
 		EndIf 
 		
 		str_FreeCoMemString(uriBuf)

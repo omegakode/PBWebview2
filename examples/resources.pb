@@ -54,9 +54,8 @@ Procedure wv_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2,
 	Protected.ICoreWebView2WebResourceRequest req
 	Protected.ICoreWebView2WebResourceResponse resp
 	Protected.IStream img1Stream
-	Protected.s uri
+	Protected.s uri, respHeaders
 	Protected.i uriBuf
-	Protected.s st
 	
 	args\get_Request(@req)
 	req\get_uri(@uriBuf)
@@ -66,12 +65,17 @@ Procedure wv_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2,
 	
 		Select GetFilePart(GetURLPart(uri, #PB_URL_Path))
 			Case "img1.png"
-				
 				img1Stream = res_CreateResourceStream(1, #RT_RCDATA)
 				If img1Stream
-					resp = wv2_WebResourceResponse_New2(img1Stream, "image/jpeg")
-					args\put_Response(resp)
-					resp\Release()
+					respHeaders =	"Content-Type: image/jpeg" + #CRLF$ +
+												"Content-Length: " + Str(stm_GetSize(img1Stream)) + #CRLF$ + #CRLF$
+					
+					app\wvEnvironment\CreateWebResourceResponse(img1Stream, 200, "OK", respHeaders, @resp)
+					
+					If resp
+						args\put_Response(resp)
+						resp\Release()
+					EndIf 
 				EndIf 
 		EndSelect
 		
@@ -84,7 +88,6 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 		environment\QueryInterface(?IID_ICoreWebView2Environment, @app\wvEnvironment)
 		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @wvController_Created()))
 		wv2_EventHandler_Release(*this)
-		app\wvEnvironment\Release()
 		
 	Else
 		MessageRequester("Error", "Failed to create WebView2Environment.")
@@ -154,6 +157,10 @@ Procedure main()
 		ev = WaitWindowEvent()
 		
 	Until app\quit
+	
+	If app\wvEnvironment
+		app\wvEnvironment\Release()
+	EndIf 
 EndProcedure
 
 main()

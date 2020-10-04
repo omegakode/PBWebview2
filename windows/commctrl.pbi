@@ -1,5 +1,20 @@
 ﻿;- commctrl.pbi
 
+; XIncludeFile "lib.pb"
+
+;- Imports
+; CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+; 	Import "lib\64\comctl32.lib"
+; CompilerElse
+; 	Import "lib\32\comctl32.lib"
+; CompilerEndIf
+; 
+; 	SetWindowSubclass_(hwnd.i, pfnSubclass.i, uIdSubclass.i, dwRefData.i) As lib::IMP_NAME(SetWindowSubclass, 16)
+; 	DefSubclassProc_(hwnd.i, msg.i, wparam.i, lparam.i) As lib::IMP_NAME(DefSubclassProc, 16)
+; 	RemoveWindowSubclass_(hwnd.i, pfnSubclass.i, uIdSubclass.i) As lib::IMP_NAME(RemoveWindowSubclass, 12)
+; 	GetWindowSubclass_(hWnd.i, pfnSubclass.i, uIdSubclass.i, pdwRefData.i) As lib::IMP_NAME(GetWindowSubclass, 16)
+; EndImport
+
 ;- REBAR CONTROL
 #RBBS_USECHEVRON 	   = $00000200
 #RBBS_HIDETITLE      = $00000400
@@ -87,7 +102,24 @@ Structure TCHITTESTINFO Align #PB_Structure_AlignC
 	flags.l
 EndStructure
 
+Structure TCITEMHEADER Align #PB_Structure_AlignC
+	mask.l
+	lpReserved1.l
+	lpReserved2.l
+	pszText.i
+	cchTextMax.l
+	iImage.l
+EndStructure
+
 ;- TOOLTIP CONTROL
 #TTF_TRACK  = $0020
+
+;- UPDOWN CONTROL
+Structure NMUPDOWN Align #PB_Structure_AlignC
+	hdr.NMHDR
+	iPos.l
+	iDelta.l
+EndStructure
+
 
 

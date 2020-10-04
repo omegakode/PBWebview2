@@ -17,10 +17,3 @@ Structure POINTL
 	x.l
 	y.l
 EndStructure
-
-
-; IDE Options = PureBasic 5.72 (Windows - x64)
-; CursorPosition = 12
-; Folding = -
-; EnableXP
-; DPIAware

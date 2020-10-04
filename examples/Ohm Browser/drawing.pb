@@ -64,3 +64,22 @@ Procedure drw_DrawRefreshArrow(size.i, hw.d, half.d, third.d, color.l)
 	ClosePath()
 	FillPath()
 EndProcedure
+
+Procedure drw_DrawMagnifyingGlass (_x_.d, _y_.d, _size_.i, _reflection_=#False)
+	; _x_, _y_    : coordinates of the upper left corner
+	; _size_      : width and height
+	; _reflection_: #True / #False
+	; [by Little John]
+	
+	MovePathCursor(_x_+0.39*_size_, _y_+0.61*_size_)
+	AddPathLine   (_x_+0.08*_size_, _y_+0.92*_size_)
+	StrokePath(0.12857 * _size_)
+	
+	AddPathCircle(_x_+0.65*_size_, _y_+0.35*_size_, 0.29*_size_)
+	StrokePath(0.07 * _size_)
+	
+	If _reflection_
+	   AddPathCircle(_x_+0.65*_size_, _y_+0.35*_size_, 0.17*_size_, -90.0, 0.0)
+	   StrokePath(0.057 * _size_)
+	EndIf
+EndProcedure

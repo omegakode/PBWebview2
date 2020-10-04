@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2020-09-13 11:22" user="carlos" host="DESKTOP-JICP41J"/>
+    <lastopen date="2020-10-04 12:40" user="carlos" host="DESKTOP-JICP41J"/>
   </section>
   <section name="files">
     <file name="enum.pb">
@@ -22,17 +22,57 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
       <fingerprint md5="d23fe9e0fd2af0dd483165b3eb3ab2a2"/>
     </file>
-    <file name="examples\Ohm\button.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
+    <file name="examples\bootstrap.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="f797b7deb60f9b6c1505559673c34fa6"/>
+    </file>
+    <file name="examples\chartist.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="3b1eaf900dea245a15dd03647c12e4c7"/>
+    </file>
+    <file name="examples\host_comunication.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="db203e8f34dbfd8d42d3cc865cbf2d7e"/>
+    </file>
+    <file name="examples\host_object.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="316374b6ad4e84a0be4fe714b6fb2cf5"/>
+    </file>
+    <file name="examples\Ohm Browser\button.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
       <fingerprint md5="a2e5d95fc438f55b40427db7a3a3959a"/>
     </file>
-    <file name="examples\Ohm\drawing.pb">
+    <file name="examples\Ohm Browser\drawing.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
-      <fingerprint md5="e3fa1e79698b62fa94bd28656e19ab5f"/>
+      <fingerprint md5="25943aab9bd20efe4858db06bfa536bd"/>
     </file>
-    <file name="examples\Ohm\Ohm.pb">
+    <file name="examples\Ohm Browser\font.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
-      <fingerprint md5="00a21dfe77c56c93a9616be6e5ea74fe"/>
+      <fingerprint md5="6f00dc76c46de965d4d042c90ed93613"/>
+    </file>
+    <file name="examples\Ohm Browser\gadget.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
+      <fingerprint md5="a4d4b901fa90cfd5549de2766d522951"/>
+    </file>
+    <file name="examples\Ohm Browser\Ohm.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
+      <fingerprint md5="6f1e07160b1e9c077112eaadada50c39"/>
+    </file>
+    <file name="examples\Ohm Browser\Ohm.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
+      <fingerprint md5="3918468056e9a302bedd2569e18e3fc4"/>
+    </file>
+    <file name="examples\Ohm Browser\tabCtrl.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+++"/>
+      <fingerprint md5="46a63f0fcc29f53add4fee6aa354619b"/>
+    </file>
+    <file name="examples\Ohm Browser\tabCtrl_public.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+++"/>
+      <fingerprint md5="3e94fc44390ef294ccde1e081eba82d5"/>
+    </file>
+    <file name="examples\resources.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="cfc64ab84fadc34bd8768194ade89b74"/>
     </file>
     <file name="json.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -55,11 +95,11 @@
       <fingerprint md5="961fa323689996eb7a01010872a7f01f"/>
     </file>
     <file name="stream.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="4ad1fd1f8a3c14f89aabf6e72802ea77"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="f1a18297d1b13892ef354a4eff756085"/>
     </file>
     <file name="string.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="5e6f600bc531f42b790da31868dd8435"/>
     </file>
     <file name="VCall.pb">
@@ -75,8 +115,8 @@
       <fingerprint md5="e5ef5c008126cf166d20d52b3a549bf3"/>
     </file>
     <file name="WebView2_Helper.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="65eb63ecbadff8ca48813cce27488ea3"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="137eb51743aae94b16dffe38df9fc192"/>
     </file>
     <file name="WebView2EnvironmentOptions.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -85,6 +125,10 @@
     <file name="WebView2Loader.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="efd2e6bf760b907c750cc6a89ad63482"/>
+    </file>
+    <file name="windows\commctrl.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="977dc22fa2420cf5badd72a34a8ae4c0"/>
     </file>
     <file name="windows\OAIdl.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
@@ -98,25 +142,9 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="abe6d838b14166fa5ae9cba46db173fe"/>
     </file>
-    <file name="examples\chartist.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="3b1eaf900dea245a15dd03647c12e4c7"/>
-    </file>
-    <file name="examples\host_comunication.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="db203e8f34dbfd8d42d3cc865cbf2d7e"/>
-    </file>
-    <file name="examples\host_object.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="316374b6ad4e84a0be4fe714b6fb2cf5"/>
-    </file>
-    <file name="examples\resources.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="ad147b3a02003542726bb8e1a14eff76"/>
-    </file>
-    <file name="examples\bootstrap.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="8c274c5c3b0d26b5ce3bb412111702e8"/>
+    <file name="windows\windef.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
+      <fingerprint md5="d5ca0a63eaf0bbcf06b079fd76221bd4"/>
     </file>
   </section>
   <section name="targets">
@@ -158,6 +186,9 @@
       <inputfile value="examples\resources.pb"/>
       <outputfile value=""/>
       <options xpskin="1" dpiaware="1" debug="1"/>
+      <resources>
+        <resource value="examples\resources.rc"/>
+      </resources>
     </target>
     <target name="Chartist" enabled="0" default="0">
       <inputfile value="examples\chartist.pb"/>
@@ -165,7 +196,7 @@
       <options/>
     </target>
     <target name="Ohm" enabled="0" default="1">
-      <inputfile value="examples\Ohm\Ohm.pb"/>
+      <inputfile value="examples\Ohm Browser\Ohm.pb"/>
       <outputfile value=""/>
       <options xpskin="1" dpiaware="1" debug="1"/>
     </target>

@@ -1,47 +1,22 @@
-﻿;browser_multitab.pb
+﻿;Ohm.pb
 
 XIncludeFile "..\..\PBWebView2.pb"
 
 XIncludeFile "..\..\windows\commctrl.pbi"
 XIncludeFile "..\..\windows\windef.pbi"
 
+XIncludeFile "gadget.pb"
 XIncludeFile "button.pb"
+XIncludeFile "tabCtrl.pb"
+XIncludeFile "Ohm.pbi"
 
 EnableExplicit
 
-#APP_NAME = "Ohm"
-#APP_VERSION = "0.1"
-
-;- Enum MENU_ID
-Enumeration 1
-	#MENU_ID_NEW_TAB
-	#MENU_ID_CLOSE_TAB
-	#MENU_ID_NEXT_TAB
-	#MENU_ID_PREVIOUS_TAB
-	#MENU_ID_QUIT
-	
-	#MENU_ID_GO_BACK
-	#MENU_ID_GO_FORWARD
-	#MENU_ID_GO_HOME
-	#MENU_ID_RELOAD
-	#MENU_ID_STOP
-	
-	#MENU_ID_ZOOM_IN
-	#MENU_ID_ZOOM_OUT
-	#MENU_ID_RESET_ZOOM
-	#MENU_ID_TOGGLE_FULLSCREEN
-	
-	#MENU_ID_GET_VERSION
-	
-	#MENU_ID_URL_SELECT
-	#MENU_ID_URL_SET_HTTP
-	#MENU_ID_SHOW_MENU
-EndEnumeration
-
-;- Enum TIMER_ID
-Enumeration 1
-	#TIMER_ID_FULLSCREEN
-EndEnumeration
+;- SEARCH_PROVIDER
+Structure SEARCH_PROVIDER
+	name.s
+	url.s
+EndStructure
 
 ;- BROWSER
 Structure BROWSER
@@ -58,6 +33,7 @@ Structure BROWSER
 	*evAccelKeyPressed.WV2_EVENT_HANDLER
 
 	createParam.i
+	createUrl.s
 EndStructure
 
 ;- APP_TAG
@@ -66,11 +42,12 @@ Structure APP_TAG
 	windowIsFullscreen.b
 	windowOldStyle.i
 	windowOldPlacement.WINDOWPLACEMENT
-	
+		
 	menu.i
 	
 	toolBar.i
 	toolBarHeight.i
+	toolBarOldProc.i
 	
 	btnSize.l
 	btnNewTab.i
@@ -79,35 +56,36 @@ Structure APP_TAG
 	btnGoForward.i
 	btnGoHome.i
 	btnReload.i
+	btnSearch.i
 	
 	tab.i
-	tabOldProc.i
 	tabTip.i
-	tabTipBuffer.i
 	tabHeight.l
 	tabCurrent.l
 	tabMenu.i
 
 	url.i
-	urlOldProc.i
 	urlHeight.l
 	
 	List browsers.BROWSER()
+	
+	List spProviders.SEARCH_PROVIDER()
+	spMenu.i
 	
 	env.ICoreWebView2Environment
 EndStructure
 Global.APP_TAG app
 
 ;- DECLARES
-Declare browser_New(env.ICoreWebView2Environment, tanIndex.l)
-Declare browser_GetCurrent()
+Declare browser_New(env.ICoreWebView2Environment, tanIndex.l, url.s = "")
+Declare tab_GetCurrentBrowser()
 Declare browser_GoBack(*browser.BROWSER)
 Declare browser_GoForward(*browser.BROWSER)
 Declare browser_ZoomIn(*browser.BROWSER)
 Declare browser_ZoomOut(*browser.BROWSER)
 Declare browser_GoHome(*browser.BROWSER)
 Declare browser_Free(*browser.BROWSER)
-Declare browser_GetTab(*browser.BROWSER)
+Declare browser_GetTabIndex(*browser.BROWSER)
 Declare browser_Reload(*browser.BROWSER)
 
 Declare window_Resize()
@@ -117,49 +95,115 @@ Declare window_ToggleFullscreen()
 Declare toolBar_HideIfFullscreen()
 Declare toolBar_UpdateNavButtons(*browser.BROWSER)
 
+Declare url_Edit_SetText(url.i, text.s)
+Declare url_Edit_SetHttp()
+Declare url_Edit_SetBrowserSource(*bowser.BROWSER)
+
 Declare menu_Show()
 
-Declare url_SelectAll()
+Declare url_Edit_SelectAll(url.i)
 
 Declare core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
 Declare core_NewWindowRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
 Declare core_ContainsFullScreenElementChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
 Declare core_HistoryChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
 
-Macro browser_Get(tabIndex)
-	GetGadgetItemData(app\tab, tabIndex)
+;-
+Macro tab_GetBrowser(tabIndex)
+	tabCtrl_GetItemUserData(app\tab, tabIndex)
 EndMacro
 
-;-
-Macro gadget_Enable(gd, enable)
-	DisableGadget(gd, Bool(Not(enable)))
-EndMacro
-
-;-
 Macro tab_DeleteItem(item)
- SendMessage_(GadgetID(app\tab), #TCM_DELETEITEM, item, 0)
+ tabCtrl_DeleteItem(app\tab, item)
 EndMacro
 
 Macro tab_GetSelected()
-	GetGadgetState(app\tab)
+	tabCtrl_GetCurSel(app\tab)
 EndMacro
 
-Procedure tab_New()
+;-
+;- SEARCH PROVIDERS
+Procedure sp_Add(name.s, url.s)
+	LastElement(app\spProviders())
+	AddElement(app\spProviders())
+	app\spProviders()\name = name
+	app\spProviders()\url = url
+EndProcedure
+
+Procedure sp_SelectProvider(index.l)
+	Protected.l currIndex
+	
+	If index < 1  Or index > ListSize(app\spProviders()) : ProcedureReturn : EndIf
+	
+	currIndex = ListIndex(app\spProviders()) 
+	If currIndex <> -1
+		SetMenuItemState(app\spMenu, currIndex + 1, #False)
+	EndIf 
+	
+	SelectElement(app\spProviders(), index - 1)
+	SetMenuItemState(app\spMenu, index, #True)
+EndProcedure
+
+Procedure sp_CreateMenu()
+	Protected.l cmd
+	
+	If ListSize(app\spProviders()) = 0 : ProcedureReturn : EndIf
+	
+	If app\spMenu
+		FreeMenu(app\spMenu)
+	EndIf
+	
+	app\spMenu = CreatePopupMenu(#PB_Any)
+	cmd = 1
+	ForEach app\spProviders()
+		MenuItem(cmd, app\spProviders()\name)      
+		cmd + 1
+	Next 
+	
+; 	FirstElement(app\spProviders())
+; 	SetMenuItemState(app\spMenu, 1, #True)
+; 	sp_SelectProvider(1)
+EndProcedure
+
+Procedure sp_Init()
+	sp_Add("DuckDuckGo", "https://duckduckgo.com/?q=%s")
+	sp_Add("Google", "https://www.google.com/search?q=%s")
+	sp_Add("Bing", "https://www.bing.com/search?q=%s")
+	sp_Add("Purebasic", ~"https://duckduckgo.com/?q=site:forums.purebasic.com +\"%s\"")
+
+	sp_CreateMenu()
+EndProcedure
+
+
+
+Procedure sp_ShowMenu()
+	Protected.l cmd, x, y
+	
+	x = DesktopScaledX(GadgetX(app\btnSearch, #PB_Gadget_ScreenCoordinate))
+	y = DesktopScaledY(GadgetY(app\btnSearch, #PB_Gadget_ScreenCoordinate)) + DesktopScaledY(GadgetHeight(app\btnSearch))
+
+	cmd = TrackPopupMenu_(MenuID(app\spMenu), #TPM_LEFTALIGN | #TPM_TOPALIGN | #TPM_RETURNCMD | #TPM_LEFTBUTTON | #TPM_NONOTIFY, x, y, 0, WindowID(app\window), #Null)
+	If cmd <> 0
+		sp_SelectProvider(cmd)
+	EndIf 
+EndProcedure
+
+
+;-
+Procedure tab_New(url.s = "")
 	Protected.l tabIndex
 	
-	OpenGadgetList(app\tab)
-	AddGadgetItem(app\tab, -1, "New Tab")
-	CloseGadgetList()
-	tabIndex = CountGadgetItems(app\tab) - 1
+	tabCtrl_InsertItem(app\tab, -1, "New Tab")
+	tabIndex = tabCtrl_GetItemCount(app\tab) - 1
 	app\tabCurrent = tabIndex
-	browser_New(app\env, tabIndex)
+	browser_New(app\env, tabIndex, url)
 EndProcedure
 
 Procedure tab_Select(index.l)
 	Protected.BROWSER *currBrowser, *newBrowser
 
-	*currBrowser = browser_GetCurrent()
-	*newBrowser = browser_Get(index)
+	*currBrowser = tab_GetCurrentBrowser()
+	*newBrowser = tab_GetBrowser(index)
 	
 	If *currBrowser
 		If *currBrowser\controller
@@ -171,21 +215,31 @@ Procedure tab_Select(index.l)
 		If *newBrowser\controller
 			*newBrowser\controller\put_IsVisible(#True)
 		EndIf 
+		url_Edit_SetBrowserSource(*newBrowser)
 	EndIf
 	
-	SetGadgetState(app\tab, index)
+	tabCtrl_SetCurSel(app\tab, index)
 	app\tabCurrent = index
 	
-	toolBar_UpdateNavButtons(browser_GetCurrent())
+	toolBar_UpdateNavButtons(tab_GetCurrentBrowser())
 	
 	window_Resize()
 EndProcedure
 
-Procedure tab_Changed()
+Procedure tab_GetCurrentBrowser()
+	Protected.l tabIndex
+	
+	tabIndex = tabCtrl_GetCurSel(app\tab)
+	If tabIndex <> - 1
+		ProcedureReturn tabCtrl_GetItemUserData(app\tab, tabIndex)
+	EndIf 
+EndProcedure
+
+Procedure tab_On_SELCHANGE(hwndParent.i, msg.l, wparam.i, *nmh.NMHDR)
 	Protected.BROWSER *currBrowser, *newBrowser
-		
-	*currBrowser = browser_Get(app\tabCurrent)
-	*newBrowser = browser_Get(GetGadgetState(app\tab))
+
+	*currBrowser = tab_GetBrowser(app\tabCurrent)
+	*newBrowser = tab_GetBrowser(tabCtrl_GetCurSel(app\tab))
 	
 	If *currBrowser
 		If *currBrowser\controller : *currBrowser\controller\put_IsVisible(#False) : EndIf 
@@ -193,21 +247,24 @@ Procedure tab_Changed()
 	
 	If *newBrowser
 		If *newBrowser\controller : *newBrowser\controller\put_IsVisible(#True) : EndIf 
+		url_Edit_SetBrowserSource(*newBrowser)
 	EndIf
 	
-	app\tabCurrent = GetGadgetState(app\tab)
+	app\tabCurrent = tabCtrl_GetCurSel(app\tab)
 	
-	toolBar_UpdateNavButtons(browser_GetCurrent())
+	toolBar_UpdateNavButtons(tab_GetCurrentBrowser())
 	
 	window_Resize()
 	
 	toolBar_HideIfFullscreen()
+	
+	ProcedureReturn 0
 EndProcedure
 
 Procedure tab_SelectNext(currentTab.l)
 	Protected.l tabCount, nextTab
 	
-	tabCount = CountGadgetItems(app\tab)
+	tabCount = tabCtrl_GetItemCount(app\tab)
 	If tabCount <= 1 : ProcedureReturn : EndIf
 	
 	nextTab = currentTab + 1
@@ -221,7 +278,7 @@ EndProcedure
 Procedure tab_SelectPrevious(currentTab.l)
 	Protected.l tabCount, prevTab
 	
-	tabCount = CountGadgetItems(app\tab)
+	tabCount = tabCtrl_GetItemCount(app\tab)
 	If tabCount <= 1 : ProcedureReturn : EndIf
 	
 	prevTab = currentTab - 1
@@ -238,12 +295,12 @@ Procedure tab_Close(item.l)
 	
 	If item = -1 : ProcedureReturn : EndIf
 	
-	tabCount = CountGadgetItems(app\tab)
+	tabCount = tabCtrl_GetItemCount(app\tab)
 	If tabCount = 1 ;Close app
 		PostEvent(#PB_Event_CloseWindow, app\window, 0)
 	EndIf 
 	
-	*browser = browser_Get(item)
+	*browser = tab_GetBrowser(item)
 	
 	;Update selected tab
 	If item = tab_GetSelected()
@@ -259,7 +316,7 @@ Procedure tab_Close(item.l)
 	browser_Free(*browser)
 EndProcedure
 
-Procedure tab_On_RBUTTONDOWN(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure tab_On_RBUTTONUP(hwnd.i, msg.l, wparam.i, lparam.i)
 	Protected.l cmd, tabIndex
 	Protected.POINT pt
 	Protected.TCHITTESTINFO tcht
@@ -276,15 +333,20 @@ Procedure tab_On_RBUTTONDOWN(hwnd.i, msg.l, wparam.i, lparam.i)
 		cmd = TrackPopupMenu_(MenuID(app\tabMenu), #TPM_LEFTALIGN | #TPM_TOPALIGN | #TPM_RETURNCMD | #TPM_LEFTBUTTON | #TPM_NONOTIFY, pt\x, pt\y, 0, WindowID(app\window), #Null)
 		Select cmd
 			Case #MENU_ID_CLOSE_TAB : tab_Close(tabIndex)
+			Case #MENU_ID_NEW_TAB : tab_New()
+			Case #MENU_ID_RELOAD : browser_Reload(tab_GetBrowser(tabIndex))
 		EndSelect
 	EndIf 
 EndProcedure
 
-Procedure tab_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure tab_Callback(hwnd.i, msg.l, param1.i, param2.i)
 	Select msg
-		Case #WM_RBUTTONDOWN : ProcedureReturn tab_On_RBUTTONDOWN(hwnd.i, msg.l, wparam.i, lparam.i)
-		
-		Default : ProcedureReturn CallWindowProc_(app\tabOldProc, hwnd, msg, wparam, lparam)
+		Case #TAB_CTRL_MSG_CLOSE_BUTTON_CLICK
+			tab_Close(param1)
+			
+		Case #TAB_CTRL_MSG_RBUTTONUP
+			tab_On_RBUTTONUP(hwnd, msg, param1, param2)
+			
 	EndSelect
 EndProcedure
 
@@ -293,13 +355,16 @@ Procedure tabMenu_Create()
 	Protected.i men
 	
 	men = CreatePopupMenu(#PB_Any)
+	MenuItem(#MENU_ID_NEW_TAB, "New tab")
+	MenuBar()
+	MenuItem(#MENU_ID_RELOAD, "Reload")
 	MenuItem(#MENU_ID_CLOSE_TAB, "Close tab")
 	
 	ProcedureReturn men
 EndProcedure
 
 ;-
-Procedure tabTip_New(hwParent.i, hwPanel.i)
+Procedure tabTip_Create(hwParent.i, hwPanel.i)
 	Protected.i hwTip
 	Protected.TOOLINFO ti
 	
@@ -326,26 +391,15 @@ EndProcedure
 Procedure tabTip_On_TTN_GETDISPINFO(hwnd.i, msg.l, wparam.i, *ttdi.NMTTDISPINFO)
 	Protected.l tabIndex
 	Protected.TCHITTESTINFO tcht
-	Protected.BROWSER *browser
-	Protected.i title, tipByteLen
-	
+	Protected.TAB_CTRL_ITEM_EXTRA *ie
+		
 	GetCursorPos_(@tcht\pt)
-	ScreenToClient_(GadgetID(app\tab), @tcht\pt)
-	tabIndex = SendMessage_(GadgetID(app\tab), #TCM_HITTEST, 0, @tcht)
+	ScreenToClient_(app\tab, @tcht\pt)
+	tabIndex = SendMessage_(app\tab, #TCM_HITTEST, 0, @tcht)
 	If tabIndex <> -1
-		*browser = browser_Get(tabIndex)
-		If *browser And *browser\core
-			*browser\core\get_DocumentTitle(@title)
-			If title
-				tipByteLen = (MemoryStringLength(title) + 1) * SizeOf(Character)
-				If MemorySize(app\tabTipBuffer) <> tipByteLen
-					app\tabTipBuffer = ReAllocateMemory(app\tabTipBuffer, tipByteLen)
-					CopyMemory(title, app\tabTipBuffer, tipByteLen)
-				EndIf 
-				
-				*ttdi\lpszText = app\tabTipBuffer
-
-			EndIf 
+		*ie = tabCtrl_GetItemParam(app\tab, tabIndex)
+		If *ie			
+			*ttdi\lpszText = @*ie\itemText
 		EndIf 
 	EndIf 
 	
@@ -353,14 +407,9 @@ Procedure tabTip_On_TTN_GETDISPINFO(hwnd.i, msg.l, wparam.i, *ttdi.NMTTDISPINFO)
 EndProcedure
 
 ;-
-Procedure toolBar_Show(show.b)
-	If show
-		HideGadget(app\toolBar, #False)
-
-	Else
-		HideGadget(app\toolBar, #True)
-	EndIf 
-EndProcedure
+Macro toolBar_Show(show)
+	gadget_Show(app\toolBar, show)
+EndMacro
 
 Procedure toolBar_HideIfFullscreen()
 	If app\windowIsFullscreen
@@ -382,15 +431,56 @@ Procedure toolBar_UpdateNavButtons(*browser.BROWSER)
 	EndIf 
 EndProcedure
 
+Procedure toolBar_On_Default(hwnd.i, msg.l, wparam.i, lparam.i)
+	If app\toolBarOldProc
+		ProcedureReturn CallWindowProc_(app\toolBarOldProc, hwnd, msg, wparam, lparam)
+		
+	Else
+		ProcedureReturn DefWindowProc_(hwnd, msg, wparam, lparam)
+	EndIf 
+EndProcedure
+
+Procedure toolBar_On_DRAWITEM(hwnd.i, msg.l, wparam.i, *di.DRAWITEMSTRUCT)
+	Select *di\hwndItem
+		Case app\tab : ProcedureReturn tabCtrl_Parent_On_DRAWITEM(hwnd, msg, wparam, *di)
+		
+		Default : ProcedureReturn #False
+	EndSelect
+EndProcedure
+
+Procedure toolBar_On_NOTIFY(hwnd.i, msg.l, wparam.i, *nmh.NMHDR)
+	Select *nmh\hwndFrom
+		Case app\tab
+			Select *nmh\code
+				Case #TCN_SELCHANGE : ProcedureReturn tab_On_SELCHANGE(hwnd, msg, wparam, *nmh)
+				
+		EndSelect
+	EndSelect
+	
+	ProcedureReturn toolBar_On_Default(hwnd, msg, wparam, *nmh)
+EndProcedure
+
+Procedure toolBar_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+	Select msg
+		Case #WM_NOTIFY : ProcedureReturn toolBar_On_NOTIFY(hwnd, msg, wparam, lparam)
+		
+		Case #WM_DRAWITEM : ProcedureReturn tabCtrl_Parent_On_DRAWITEM(hwnd, msg, wparam, lparam)
+		
+		Default : ProcedureReturn toolBar_On_Default(hwnd, msg, wparam, lparam)
+	EndSelect
+EndProcedure
+
 ;-
 Procedure btn_OnLeftClickOrSpace(btn.i)
 	Select btn
 		Case app\btnNewTab : tab_New()
-		Case app\btnGoBack : browser_GoBack(browser_GetCurrent())
-		Case app\btnGoForward : browser_GoForward(browser_GetCurrent())
-		Case app\btnReload : browser_Reload(browser_GetCurrent())
-		Case app\btnGoHome : browser_GoHome(browser_GetCurrent())
+		Case app\btnGoBack : browser_GoBack(tab_GetCurrentBrowser())
+		Case app\btnGoForward : browser_GoForward(tab_GetCurrentBrowser())
+		Case app\btnReload : browser_Reload(tab_GetCurrentBrowser())
+		Case app\btnGoHome : browser_GoHome(tab_GetCurrentBrowser())
 		Case app\btnMenu : menu_Show()
+		Case app\btnSearch : sp_ShowMenu()
+
 	EndSelect
 EndProcedure
 
@@ -454,6 +544,7 @@ Procedure btnNewTab_Callback(btn.i, msg.l)
 			size = DesktopScaledX(GadgetWidth(btn))
 			half = size / 2.0
 	    w = Int(size / 6.0) - (size % 3)
+	    w = DesktopScaledX(1)
 	    
 	    foreColor = btn_GetForeColor(btn)
 	
@@ -502,7 +593,7 @@ Procedure btnMenu_CallBack(btn.i, msg.l)
 			EndIf 
 			
 			;Options
-			drw_ZoomOutCoordinates(0.8, size)
+			drw_ZoomOutCoordinates(0.6, size)
 
 			h = size / 2
 			p = size / 32
@@ -551,7 +642,7 @@ Procedure btnGoBack_CallBack(btn.i, msg.l)
 			EndIf 
 			
 			;Arrow
-			drw_ZoomOutCoordinates(0.8, size)
+			drw_ZoomOutCoordinates(0.6, size)
 			drw_DrawArrow(size, -90, foreColor)
 			
 			StopVectorDrawing()
@@ -582,7 +673,7 @@ Procedure btnGoForward_CallBack(btn.i, msg.l)
 			EndIf 
 			
 			;Arrow
-			drw_ZoomOutCoordinates(0.8, size)
+			drw_ZoomOutCoordinates(0.6, size)
 			drw_DrawArrow(size, 90, foreColor)
 			
 			StopVectorDrawing()
@@ -616,7 +707,10 @@ Procedure btnGoHome_CallBack(btn.i, msg.l)
 			;Home
 			w = size / 8
 			p = size / 32
+      p = DesktopScaledX(1)
       
+      drw_ZoomOutCoordinates(0.6, size)
+
       VectorSourceColor(foreColor)
       	
 			MovePathCursor(4*w, 2*p)
@@ -627,13 +721,6 @@ Procedure btnGoHome_CallBack(btn.i, msg.l)
 			AddPathLine(6*w, 4*w+2*p)
 			AddPathLine(7*w, 4*w+2*p)
 			ClosePath()
-			
-			MovePathCursor(3*w, 4*w)
-			AddPathLine(3*w, 6*w)
-			MovePathCursor(3*w, 5*w)
-			AddPathLine(5*w, 5*w)
-			MovePathCursor(5*w, 4*w)
-			AddPathLine(5*w, 6*w)
 			StrokePath(p*2)
 
 			StopVectorDrawing()
@@ -665,7 +752,7 @@ Procedure btnReload_CallBack(btn.i, msg.l)
 			EndIf 
 			
 			;Reload
-			drw_ZoomOutCoordinates(0.8, size)
+			drw_ZoomOutCoordinates(0.6, size)
 			
 			hw = size / 12.0
 			half = size / 2.0
@@ -711,19 +798,19 @@ Procedure controller_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebVie
 				
 			Case #VK_ADD
 				If key_IsDown(#VK_CONTROL)
-					browser_ZoomIn(browser_GetCurrent())
+					browser_ZoomIn(tab_GetCurrentBrowser())
 					handled = #True
 				EndIf 
 				
 			Case #VK_SUBTRACT
 				If key_IsDown(#VK_CONTROL)
-					browser_ZoomOut(browser_GetCurrent())
+					browser_ZoomOut(tab_GetCurrentBrowser())
 					handled = #True
 				EndIf 
 				
 			Case #VK_HOME
 				If key_IsDown(#VK_MENU)
-					browser_GoHome(browser_GetCurrent())
+					browser_GoHome(tab_GetCurrentBrowser())
 					handled = #True
 				EndIf 
 				
@@ -734,9 +821,12 @@ Procedure controller_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebVie
 				EndIf 
 				
 			Case #VK_L
-				If key_IsDown(#VK_CONTROL)
-					SetActiveGadget(app\url)
-					url_SelectAll()
+				If key_IsDown(#VK_CONTROL) And key_IsDown(#VK_SHIFT)
+					url_Edit_SetHttp()
+					handled = #True
+					
+				ElseIf key_IsDown(#VK_CONTROL)
+					url_Edit_SelectAll(app\url)
 					handled = #True
 				EndIf 
 				
@@ -765,8 +855,11 @@ Procedure controller_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICore
 	
 	controller\QueryInterface(?IID_ICoreWebView2Controller, @*browser\controller)
 	*browser\controller\get_CoreWebView2(@*browser\core)
-	SetGadgetItemData(app\tab, *browser\createParam, *browser)
+	tabCtrl_SetItemUserData(app\tab, *browser\createParam, *browser)
 	
+	;Set zoom as dpi scaling
+	*browser\controller\put_ZoomFactor(DesktopResolutionX())
+
 	;Events
 	;Core
 	*browser\evNavigationCompleted = wv2_EventHandler_New(?IID_ICoreWebView2NavigationCompletedEventHandler, @core_NavigationCompleted(), *browser)
@@ -782,12 +875,18 @@ Procedure controller_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICore
 	*browser\controller\add_AcceleratorKeyPressed(*browser\evAccelKeyPressed, #Null)
 
 	;Show window after fisrt browser created
-	If CountGadgetItems(app\tab) = 1
+	If tabCtrl_GetItemCount(app\tab) = 1
 		*browser\controller\put_IsVisible(#True)
 		HideWindow(app\window, #False)
 	EndIf 
 	
-	*browser\core\Navigate("https://duckduckgo.com")
+	If *browser\createUrl
+		*browser\core\Navigate(*browser\createUrl)
+		*browser\createUrl = #Null$
+		
+	Else 
+		*browser\core\Navigate("about:blank")
+	EndIf 
 
 	tab_Select(*browser\createParam)
 	SetActiveGadget(app\url)
@@ -798,7 +897,6 @@ EndProcedure
 ;-
 Procedure env_Created(*this.WV2_EVENT_HANDLER, result.l, env.ICoreWebView2Environment)	
 	env\QueryInterface(?IID_ICoreWebView2Environment, @app\env)
-
 	;First tab browser
 	browser_New(app\env, 0)
 		
@@ -826,16 +924,32 @@ Procedure core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2
 		str_FreeCoMemString(title)
 	EndIf 
 	
-	SetGadgetText(app\url, suri)
+	url_Edit_SetText(app\url, suri)
 	
-	SetGadgetItemText(app\tab, browser_GetTab(*browser), Left(stitle, 15) + " ...")
+	If stitle = ""
+		stitle = "New tab"
+	EndIf 
 	
+	tabCtrl_SetItemText2(app\tab, browser_GetTabIndex(*browser), stitle, #TAB_MAX_ITEM_WIDTH)
+
 	UnlockMutex(*this\mutex)
 EndProcedure
 
 Procedure core_NewWindowRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
-	LockMutex(*this\mutex)
+	Protected.i uriBuf
+	Protected.s uriStr
 	
+	LockMutex(*this\mutex)
+		args\get_uri(@uriBuf)
+		If uriBuf
+			uriStr = PeekS(uriBuf)
+		
+			tab_New(uriStr)
+			
+			args\put_Handled(#True)
+			
+			str_FreeCoMemString(uriBuf)
+		EndIf 
 	UnlockMutex(*this\mutex)
 EndProcedure
 
@@ -861,7 +975,7 @@ Procedure core_HistoryChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, arg
 	*browser = *this\context
 	
 	;Nav buttons
-	If *browser = browser_GetCurrent()
+	If *browser = tab_GetCurrentBrowser()
 		toolBar_UpdateNavButtons(*browser)
 	EndIf 
 	
@@ -869,20 +983,11 @@ Procedure core_HistoryChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, arg
 EndProcedure
 
 ;-
-Procedure browser_GetCurrent()
-	Protected.l tabIndex
-	
-	tabIndex = GetGadgetState(app\tab)
-	If tabIndex <> - 1
-		ProcedureReturn GetGadgetItemData(app\tab, tabIndex)
-	EndIf 
-EndProcedure
-
-Procedure browser_GetTab(*browser.BROWSER)
+Procedure browser_GetTabIndex(*browser.BROWSER)
 	Protected.l item
 	
-	For item = 0 To CountGadgetItems(app\tab) - 1
-		If GetGadgetItemData(app\tab, item) = *browser
+	For item = 0 To tabCtrl_GetItemCount(app\tab) - 1
+		If tabCtrl_GetItemUserData(app\tab, item) = *browser
 			ProcedureReturn item
 		EndIf 
 	Next
@@ -890,9 +995,10 @@ Procedure browser_GetTab(*browser.BROWSER)
 	ProcedureReturn -1
 EndProcedure
 
-Procedure browser_New(env.ICoreWebView2Environment, tabIndex.l)
+Procedure browser_New(env.ICoreWebView2Environment, tabIndex.l, url.s = "")
 	AddElement(app\browsers())
 	app\browsers()\createParam = tabIndex
+	app\browsers()\createUrl = url
 	
 	env\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @controller_Created(), @app\browsers()))
 EndProcedure
@@ -902,8 +1008,15 @@ Procedure browser_Free(*browser.BROWSER)
 		ProcedureReturn
 	EndIf
 	
-	If *browser\controller : *browser\controller\Release() : EndIf
-	If *browser\core : *browser\core\Release() : EndIf 
+	If *browser\core 
+		*browser\core\Stop()
+		*browser\core\Release()
+	EndIf 
+
+	If *browser\controller
+		 *browser\controller\Close()
+		 *browser\controller\Release()
+	EndIf
 	
 	If *browser\evNavigationCompleted : wv2_EventHandler_Release(*browser\evNavigationCompleted) : EndIf
 	If *browser\evAccelKeyPressed : wv2_EventHandler_Release(*browser\evAccelKeyPressed) : EndIf 
@@ -993,6 +1106,7 @@ Procedure accel_Add(win.i)
 	AddKeyboardShortcut(win, #PB_Shortcut_F5, #MENU_ID_RELOAD)
 	AddKeyboardShortcut(win, #PB_Shortcut_Home | #PB_Shortcut_Alt, #MENU_ID_GO_HOME)
 	AddKeyboardShortcut(win, #PB_Shortcut_L | #PB_Shortcut_Control, #MENU_ID_URL_SELECT)
+	AddKeyboardShortcut(win, #PB_Shortcut_L | #PB_Shortcut_Control | #PB_Shortcut_Shift, #MENU_ID_URL_SET_HTTP)
 	AddKeyboardShortcut(win, #PB_Shortcut_F11, #MENU_ID_TOGGLE_FULLSCREEN)
 	AddKeyboardShortcut(win, #PB_Shortcut_Control | #PB_Shortcut_M, #MENU_ID_SHOW_MENU)
 EndProcedure
@@ -1032,53 +1146,312 @@ Procedure menu_Show()
 EndProcedure
 
 ;-
-Procedure url_On_WM_CHAR(hwnd.i, msg.l, wparam.i, lparam.i)
-	Protected.s url
-	
-	Select wparam
-		Case #VK_RETURN
-			url = GetGadgetText(app\url)
-			If url
-				If Left(url, 7) = "http://" Or Left(url, 8) = "https://"
-					browser_Navigate(browser_GetCurrent(), url)
-					
-				Else ;search
-					browser_Navigate(browser_GetCurrent(), "https://duckduckgo.com/?q=" + url)
-				EndIf 
-			EndIf 
-	EndSelect
-	
-	ProcedureReturn CallWindowProc_(app\urlOldProc, hwnd, msg, wparam, lparam)
-EndProcedure
+Macro url_IsValidProtocol(prot)
+	Bool(FindString(#URL_VALID_PROTOCOLS, LCase(prot)))
+EndMacro
 
-Procedure url_On_WM_KEYDOWN(hwnd.i, msg.l, wparam.i, lparam.i)
-	Protected.s s1, s2
-	Protected.l s1Len
-		
-	s1 = "http://www."
-	s1Len = Len(s1)
+Macro url_GetData(url)
+	GetGadgetData(url)
+EndMacro
+
+Procedure url_Edit_SelectAll(url.i)
+	Protected.URL_DATA	 *ud
 	
-	If wparam = #VK_L And key_IsDown(#VK_SHIFT) And key_IsDown(#VK_CONTROL)
-		SetGadgetText(app\url, s1 + ".com")
-		SendMessage_(hwnd, #EM_SETSEL, s1Len, s1Len)
+	*ud = url_GetData(url)
+	If *ud
+		SetActiveGadget(*ud\edit)
+		SendMessage_(GadgetID(*ud\edit), #EM_SETSEL, 0, -1)
 	EndIf 
-	
-	ProcedureReturn CallWindowProc_(app\urlOldProc, hwnd, msg, wparam, lparam)
 EndProcedure
 
-Procedure url_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
-	Select msg
-		Case #WM_KEYDOWN : ProcedureReturn url_On_WM_KEYDOWN(hwnd, msg, wparam, lparam)
+Procedure url_Edit_SetBrowserSource(*bowser.BROWSER)
+	Protected.i uriBuf
+	Protected.s uriStr
+	
+	If *bowser And *bowser\core
+		*bowser\core\get_Source(@uriBuf)
+		If uriBuf
+			uriStr = PeekS(uriBuf)
+			url_Edit_SetText(app\url, uriStr)
+			str_FreeCoMemString(uriBuf)
+		EndIf 
+	EndIf 
+EndProcedure
 
-		Case #WM_CHAR : ProcedureReturn url_On_WM_CHAR(hwnd, msg, wparam, lparam)
+Procedure.s url_Edit_GetText(url.i)
+	Protected.URL_DATA	 *ud
+	
+	*ud = url_GetData(url)
+	If *ud
+		ProcedureReturn GetGadgetText(*ud\edit)
+	EndIf
+EndProcedure
+
+Procedure url_Edit_SetText(url.i, text.s)
+	Protected.URL_DATA	 *ud
+	
+	*ud = url_GetData(url)
+	If *ud
+		SetGadgetText(*ud\edit, text)
+	EndIf
+EndProcedure
+
+Procedure url_Edit_Resize(*ud.URL_DATA)
+	Protected.RECT rcEdit, rcUrl
+	Protected.l editHeight, edity, btnSize
+	
+	gadget_GetClientRectPx(*ud\url, @rcUrl)
+	
+	;Vertical align
+	editHeight = GadgetHeight(*ud\edit, #PB_Gadget_RequiredSize)
+	edity = (GadgetHeight(*ud\url) - editHeight) / 2
+	
+	btnSize = editHeight
+	ResizeGadget(app\btnSearch, #URL_FRAME_WIDTH + #URL_PADDING_LEFT, edity, btnSize, btnSize)
+	
+	ResizeGadget(*ud\edit, GadgetX(app\btnSearch) + btnSize + #URL_PADDING_LEFT, edity, 0, editHeight)
+
+	;Width
+	gadget_GetClientPosPx(*ud\edit, *ud\url, @rcEdit)
+	gadget_MovePx(*ud\edit, rcEdit\left, rcEdit\top, 
+		rcUrl\right - (rcEdit\left + DesktopScaledX(#URL_FRAME_WIDTH) + DesktopScaledX(#URL_PADDING_RIGHT)), 
+		rcEdit\bottom - rcEdit\top)
+EndProcedure
+
+Procedure url_DrawFramePx(x.l, y.l, width.l, height.l, frameWidth.l, color.l)
+	Protected.l i, offset
+
+	offset = 0
+	DrawingMode(#PB_2DDrawing_Outlined)
+	For i = 1 To frameWidth
+		Box(x + offset, y + offset, width - (offset * 2), height - (offset *2), color)
+		offset + 1
+	Next
+EndProcedure
+
+Procedure url_Draw(url)	
+	Protected.URL_DATA *ud
+	Protected.l frameColor
+	
+	*ud = url_GetData(url)
+	If *ud
+		StartDrawing(CanvasOutput(url))
+			If *ud\state = #URL_STATE_FOCUSED
+				frameColor = GetSysColor_(#COLOR_ACTIVECAPTION)
+				
+			Else
+				frameColor = GetSysColor_(#COLOR_3DLIGHT)
+			EndIf 
 			
-		Default : ProcedureReturn CallWindowProc_(app\urlOldProc, hwnd, msg, wparam, lparam)
+			url_DrawFramePx(0, 0, OutputWidth(), OutputHeight(), DesktopScaledX(#URL_FRAME_WIDTH), frameColor)
+		StopDrawing()
+	EndIf
+EndProcedure
+
+Macro url_Edit_GetData(hwEdit)
+	GetWindowLongPtr_(hwEdit, #GWLP_USERDATA)
+EndMacro
+
+Procedure url_Edit_OnDefault(hwnd.i, msg.l, wparam.i, lparam.i)
+	Protected.URL_DATA *ud
+	
+	*ud = url_Edit_GetData(hwnd)
+	If *ud
+		ProcedureReturn CallWindowProc_(*ud\editOldProc, hwnd, msg, wparam, lparam)
+		
+	Else
+		ProcedureReturn DefWindowProc_(hwnd, msg, wparam, lparam)
+	EndIf 
+EndProcedure
+
+Procedure url_Edit_On_CHAR(hwnd.i, msg.l, wparam.i, lparam.i)
+	Protected.s url, prot, searchUrl
+	Protected.URL_DATA *ud
+	Protected.SEARCH_PROVIDER *sp
+	
+	*ud = url_Edit_GetData(hwnd)
+	If *ud
+		Select wparam
+			Case #VK_RETURN
+				url = Trim(url_Edit_GetText(app\url))
+				If url
+					prot = GetURLPart(url, #PB_URL_Protocol)
+					If prot And url_IsValidProtocol(prot)
+						browser_Navigate(tab_GetCurrentBrowser(), url)
+						
+					Else ;search
+						If ListIndex(app\spProviders()) <> -1
+							*sp = @app\spProviders()
+							searchUrl = ReplaceString(*sp\url, "%s", url)
+							browser_Navigate(tab_GetCurrentBrowser(), searchUrl)
+						EndIf	
+					EndIf 
+				EndIf 
+				
+				ProcedureReturn 0
+		EndSelect
+		
+		ProcedureReturn CallWindowProc_(*ud\editOldProc, hwnd, msg, wparam, lparam)
+	
+	Else
+		ProcedureReturn DefWindowProc_(hwnd, msg, wparam, lparam)
+	EndIf 
+EndProcedure
+
+Procedure url_Edit_SetHttp()
+	Protected.s s1
+	Protected.l s1Len
+	Protected.URL_DATA *ud
+	
+	*ud = url_GetData(app\url)
+	If *ud
+		s1 = "http://www."
+		s1Len = Len(s1)
+		
+		url_Edit_SetText(app\url, s1 + ".com")
+		SendMessage_(GadgetID(*ud\edit), #EM_SETSEL, s1Len, s1Len)
+		SetActiveGadget(*ud\edit)
+	EndIf 
+EndProcedure
+
+Procedure url_Edit_On_SETFOCUS(hwnd.i, msg.l, wparam.i, lparam.i)
+	Protected.URL_DATA *ud
+	
+	*ud = url_Edit_GetData(hwnd)
+	If *ud
+		*ud\state = #URL_STATE_FOCUSED
+		url_Draw(*ud\url)
+		
+		ProcedureReturn CallWindowProc_(*ud\editOldProc, hwnd, msg, wparam, lparam)
+		
+	Else
+		ProcedureReturn DefWindowProc_(hwnd, msg, wparam, lparam)
+	EndIf 
+EndProcedure
+
+Procedure url_Edit_On_KILLFOCUS(hwnd.i, msg.l, wparam.i, lparam.i)
+	Protected.URL_DATA *ud
+	
+	*ud = url_Edit_GetData(hwnd)
+	If *ud
+		*ud\state = #URL_STATE_NORMAL
+		url_Draw(*ud\url)
+
+		ProcedureReturn CallWindowProc_(*ud\editOldProc, hwnd, msg, wparam, lparam)
+		
+	Else
+		ProcedureReturn DefWindowProc_(hwnd, msg, wparam, lparam)
+	EndIf 
+EndProcedure
+
+
+
+Procedure url_Edit_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+	Select msg
+		Case #WM_CHAR : ProcedureReturn url_Edit_On_CHAR(hwnd, msg, wparam, lparam)
+				
+		Case #WM_SETFOCUS : ProcedureReturn url_Edit_On_SETFOCUS(hwnd, msg, wparam, lparam)
+			
+		Case #WM_KILLFOCUS : ProcedureReturn url_Edit_On_KILLFOCUS(hwnd, msg, wparam, lparam)
+				
+		Default : ProcedureReturn url_Edit_OnDefault(hwnd, msg, wparam, lparam)
 	EndSelect
 EndProcedure
 
-Procedure url_SelectAll()
-	SetActiveGadget(app\url)
-	SendMessage_(GadgetID(app\url), #EM_SETSEL, 0, -1)
+Procedure url_OnResize()
+	Protected.URL_DATA *ud
+	
+	*ud = GetGadgetData(EventGadget())
+	If *ud
+		url_Edit_Resize(*ud)
+		url_Draw(EventGadget())
+	EndIf 
+EndProcedure
+
+Procedure url_OnLeftButtonDown()
+	Protected.URL_DATA *ud
+	
+	*ud = GetGadgetData(EventGadget())
+	If *ud
+		SetActiveGadget(*ud\edit)
+	EndIf 
+EndProcedure
+
+Procedure url_Btn_DrawBackground(*bd.BUTTON_DATA)
+	Protected.l bColor
+	
+	If enum_HasFlag(*bd\state, #BUTTON_STATE_PUSHED)
+		bColor = GetSysColor_(#COLOR_3DSHADOW)
+
+	ElseIf enum_HasFlag(*bd\state, #BUTTON_STATE_HIGHLIGHTED)
+		bColor = GetSysColor_(#COLOR_3DLIGHT)
+		
+	Else
+		bColor = GetSysColor_(#COLOR_WINDOW)
+	EndIf
+	
+	VectorSourceColor(RGBA(Red(bColor), Green(bColor), Blue(bColor), 255))
+	FillVectorOutput()
+EndProcedure
+
+Procedure url_BtnSearch_Callback(btn.i, msg.l)
+	Protected.BUTTON_DATA *bd
+	Protected.i size
+	Protected.l foreColor
+
+	*bd = btn_GetData(btn)
+	If *bd = 0 : ProcedureReturn : EndIf
+	
+	Select msg
+		Case #BUTTON_MSG_DRAW
+			StartVectorDrawing(CanvasVectorOutput(btn))
+			size = DesktopScaledX(GadgetWidth(btn))
+
+			url_btn_DrawBackground(*bd)
+			
+			foreColor = btn_GetForeColor(btn)
+			
+			;Focus
+			If GetActiveGadget() = btn
+				btn_DrawFocus(btn, size, foreColor)
+			EndIf
+			
+			VectorSourceColor(foreColor)
+			
+      drw_ZoomOutCoordinates(0.7, size)
+			drw_DrawMagnifyingGlass(0, 0, size)
+
+			StopVectorDrawing()
+	EndSelect
+EndProcedure
+
+Procedure url_Create(x.l, y.l, w.l, h.l)
+	Protected.URL_DATA *ud
+	Protected.l editHeight, edity, editXPos
+	
+	*ud = AllocateMemory(SizeOf(URL_DATA))
+	*ud\url = CanvasGadget(#PB_Any, x, y, w, h, #PB_Canvas_Container)
+	SetGadgetData(*ud\url, *ud)
+	SetGadgetAttribute(*ud\url, #PB_Canvas_Cursor, #PB_Cursor_IBeam)
+	
+	;Search button
+	app\btnSearch = btn_Create(0, 0, 0, 0, @url_BtnSearch_Callback(), #False)
+	
+	;Edit
+	*ud\edit = StringGadget(#PB_Any, #URL_FRAME_WIDTH + #URL_PADDING_LEFT, 0, 0, 0, "", #PB_String_BorderLess)
+	SetWindowLongPtr_(GadgetID(*ud\edit), #GWLP_USERDATA, *ud)
+	*ud\editOldProc = SetWindowLongPtr_(GadgetID(*ud\edit), #GWLP_WNDPROC, @url_Edit_Proc())
+	SetGadgetFont(*ud\edit, font_GetDefault(1.2))
+
+	url_Edit_Resize(*ud)
+	CloseGadgetList()
+	
+	BindGadgetEvent(*ud\url, @url_OnResize(), #PB_EventType_Resize)
+	BindGadgetEvent(*ud\url, @url_OnLeftButtonDown(), #PB_EventType_LeftButtonDown)
+
+	url_Draw(*ud\url)
+	
+	ProcedureReturn *ud\url
 EndProcedure
 
 ;-
@@ -1104,7 +1477,7 @@ Procedure window_ToggleFullscreen()
 	Protected.BROWSER *browser
 	Protected.l cfs
 	
-	*browser = browser_GetCurrent()
+	*browser = tab_GetCurrentBrowser()
 	If *browser And *browser\core
 		*browser\core\get_ContainsFullScreenElement(@cfs)
 		If cfs
@@ -1118,26 +1491,20 @@ EndProcedure
 Procedure window_OnTimerFullscreen()
 	Protected.POINT pt
 	
-	GetCursorPos_(@pt)
-	
-	If pt\y <= 0
-		HideGadget(app\toolBar, #False)
-		
-	ElseIf pt\y > DesktopScaledY(GadgetHeight(app\toolBar))
-		HideGadget(app\toolBar, #True)
-	EndIf
-	
+	If GetCursorPos_(@pt) 
+		If pt\y <= 0
+			toolBar_Show(#True)
+			
+		ElseIf pt\y > DesktopScaledY(GadgetHeight(app\toolBar))
+			toolBar_Show(#False)
+		EndIf
+	EndIf 
 EndProcedure
 
 Procedure window_ProcessEvents(ev.l)
 	Select ev
 		Case #PB_Event_Gadget			
-			Select EventType()
-				Case #PB_EventType_Change
-					Select EventGadget()
-						Case app\tab : tab_Changed()
-					EndSelect
-					
+			Select EventType()					
 				Case #PB_EventType_KeyDown
 					If GetGadgetAttribute(EventGadget(), #PB_Canvas_Key) = #PB_Shortcut_Space
 						btn_OnLeftClickOrSpace(EventGadget())
@@ -1159,27 +1526,29 @@ Procedure window_ProcessEvents(ev.l)
 				
 				Case #MENU_ID_QUIT : ProcedureReturn window_Quit()
 				
-				Case #MENU_ID_GO_BACK : browser_GoBack(browser_GetCurrent())
+				Case #MENU_ID_GO_BACK : browser_GoBack(tab_GetCurrentBrowser())
 				
-				Case #MENU_ID_GO_FORWARD : browser_GoForward(browser_GetCurrent())
+				Case #MENU_ID_GO_FORWARD : browser_GoForward(tab_GetCurrentBrowser())
 				
-				Case #MENU_ID_GO_HOME : browser_GoHome(browser_GetCurrent())
+				Case #MENU_ID_GO_HOME : browser_GoHome(tab_GetCurrentBrowser())
 				
-				Case #MENU_ID_RELOAD : browser_Reload(browser_GetCurrent())
+				Case #MENU_ID_RELOAD : browser_Reload(tab_GetCurrentBrowser())
 				
-				Case #MENU_ID_STOP : browser_Stop(browser_GetCurrent())
+				Case #MENU_ID_STOP : browser_Stop(tab_GetCurrentBrowser())
 				
-				Case #MENU_ID_ZOOM_IN : browser_ZoomIn(browser_GetCurrent())
+				Case #MENU_ID_ZOOM_IN : browser_ZoomIn(tab_GetCurrentBrowser())
 				
-				Case #MENU_ID_ZOOM_OUT : browser_ZoomOut(browser_GetCurrent())
+				Case #MENU_ID_ZOOM_OUT : browser_ZoomOut(tab_GetCurrentBrowser())
 				
-				Case #MENU_ID_RESET_ZOOM : browser_ResetZoom(browser_GetCurrent())
+				Case #MENU_ID_RESET_ZOOM : browser_ResetZoom(tab_GetCurrentBrowser())
 				
 				Case #MENU_ID_TOGGLE_FULLSCREEN : window_ToggleFullscreen()
 				
 				Case #MENU_ID_GET_VERSION : browser_GetVersion()
 				
-				Case #MENU_ID_URL_SELECT : url_SelectAll()
+				Case #MENU_ID_URL_SET_HTTP : url_Edit_SetHttp()
+					
+				Case #MENU_ID_URL_SELECT : url_Edit_SelectAll(app\url)
 				
 				Case #MENU_ID_SHOW_MENU : menu_Show()
 			EndSelect
@@ -1192,7 +1561,7 @@ Procedure window_ProcessEvents(ev.l)
 		Case #PB_Event_CloseWindow : ProcedureReturn window_Close()
 	EndSelect
 	
-	ProcedureReturn #False ;Keep the wvwnt loop running
+	ProcedureReturn #False ;Keep the event loop running
 EndProcedure
 
 Procedure window_SetFullScreen(fs.b)
@@ -1210,7 +1579,6 @@ Procedure window_SetFullScreen(fs.b)
 		
 		SetWindowLong_(hwMain, #GWL_STYLE, app\windowOldStyle & ~(#WS_CAPTION | #WS_THICKFRAME | #WS_MAXIMIZEBOX))
 		
-		HideMenu(app\menu, #True)
 		SetWindowPos_(hwMain, #HWND_TOP, 0, 0, GetSystemMetrics_(#SM_CXSCREEN), GetSystemMetrics_(#SM_CYSCREEN), #SWP_FRAMECHANGED)
 		
 		AddWindowTimer(app\window, #TIMER_ID_FULLSCREEN, 300)
@@ -1231,35 +1599,49 @@ Procedure window_SetFullScreen(fs.b)
 			SetWindowPlacement_(hwMain, @app\windowOldPlacement)
 		EndIf
 		
-		HideMenu(app\menu, #False)
-		
 		RemoveWindowTimer(app\window, #TIMER_ID_FULLSCREEN)
 	EndIf 
 EndProcedure
 
 Procedure window_Resize()
-	Protected.l winw, winh, urlWidth
+	Protected.l winw, winh, urlWidth, urlBtnCount, tabWidth, btnXPos, urlXPos
 	Protected.BROWSER *browser
 	Protected.RECT rc
 	
 	winw = WindowWidth(app\window)
 	winh = WindowHeight(app\window)
 	
+	urlBtnCount = 5
+	
+	;Toolbar
 	ResizeGadget(app\toolBar, #PB_Ignore, #PB_Ignore, winw, app\toolBarHeight)
-	ResizeGadget(app\btnNewTab, #PB_Ignore, #PB_Ignore, app\btnSize, app\btnSize)
 	
-	ResizeGadget(app\tab, app\btnSize, #PB_Ignore, winw - app\btnSize, app\tabHeight)
-	urlWidth = winw - (app\btnSize * 5) - 2
-	ResizeGadget(app\url, app\btnSize * 4, #PB_Ignore, urlWidth, app\urlHeight)
+	;Button New
+	ResizeGadget(app\btnNewTab, #TOOLBAR_PADDING_LEFT, 0, app\btnSize, app\btnSize)
 	
-	ResizeGadget(app\btnGoBack, #PB_Ignore, #PB_Ignore, app\btnSize, app\btnSize)
-	ResizeGadget(app\btnGoForward, app\btnSize, #PB_Ignore, app\btnSize, app\btnSize)
-	ResizeGadget(app\btnReload, app\btnSize * 2, #PB_Ignore, app\btnSize, app\btnSize)
-	ResizeGadget(app\btnGoHome, app\btnSize * 3, #PB_Ignore, app\btnSize, app\btnSize)
+	;Tab
+	tabWidth = winw - #TOOLBAR_PADDING_LEFT - #TOOLBAR_PADDING_RIGHT - app\btnSize - #BTN_MARGIN
+	tabCtrl_Move(app\tab, gadget_GetRight(app\btnNewTab) + #BTN_MARGIN, 0, tabWidth, app\tabHeight, #True)
 
-	ResizeGadget(app\btnMenu, GadgetX(app\url) + GadgetWidth(app\url), #PB_Ignore, app\btnSize, app\btnSize)
+	;Nav buttons
+	btnXPos = #TOOLBAR_PADDING_LEFT
+	ResizeGadget(app\btnGoBack, btnXPos, #PB_Ignore, app\btnSize, app\btnSize)
+	btnXPos + app\btnSize + #BTN_MARGIN
+	ResizeGadget(app\btnGoForward, btnXPos, #PB_Ignore, app\btnSize, app\btnSize)
+	btnXPos + app\btnSize + #BTN_MARGIN
+	ResizeGadget(app\btnReload, btnXPos, #PB_Ignore, app\btnSize, app\btnSize)
+	btnXPos + app\btnSize + #BTN_MARGIN
+	ResizeGadget(app\btnGoHome, btnXPos, #PB_Ignore, app\btnSize, app\btnSize)
 	
-	*browser = browser_GetCurrent()
+	;Url
+	urlXPos = btnXPos + app\btnSize + #BTN_MARGIN
+	urlWidth = winw - urlXPos - #BTN_MARGIN - app\btnSize - #TOOLBAR_PADDING_RIGHT
+	ResizeGadget(app\url, urlXPos, #PB_Ignore, urlWidth, app\urlHeight)
+	
+	;Button Menu
+	ResizeGadget(app\btnMenu, urlXPos + urlWidth + #BTN_MARGIN, #PB_Ignore, app\btnSize, app\btnSize)
+	
+	*browser = tab_GetCurrentBrowser()
 
 	If *browser
 		GetClientRect_(WindowID(app\window), @rc)
@@ -1277,7 +1659,7 @@ EndProcedure
 Procedure window_On_MOVE_MOVING()
 	Protected.BROWSER *browser
 	
-	*browser = browser_GetCurrent()
+	*browser = tab_GetCurrentBrowser()
 	If *browser And *browser\controller
 		wv2_Controller_On_WM_MOVE_MOVING(*browser\controller)
 	EndIf 
@@ -1285,12 +1667,6 @@ EndProcedure
 
 Procedure window_On_NOTIFY(hwnd.i, msg.l, wparam.i, *nmh.NMHDR)
 	Select *nmh\hwndFrom
-		Case GadgetID(app\tab)
-			Select *nmh\code
-				Case #TCN_SELCHANGING
-			
-			EndSelect
-			
 		Case app\tabTip
 			Select *nmh\code
 				Case #TTN_GETDISPINFO : ProcedureReturn tabTip_On_TTN_GETDISPINFO(hwnd, msg, wparam, *nmh)
@@ -1305,37 +1681,44 @@ Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	Select msg
 		Case #WM_MOVE, #WM_MOVING : window_On_MOVE_MOVING()
 		
-		Case #WM_NOTIFY : ProcedureReturn window_On_NOTIFY(hwnd.i, msg.l, wparam.i, lparam.i)
-		
+		Case #WM_NOTIFY : ProcedureReturn window_On_NOTIFY(hwnd, msg, wparam, lparam)
+				
 		Default : ProcedureReturn #PB_ProcessPureBasicEvents
 	EndSelect
 EndProcedure
 
 Procedure window_Create()
 	Protected.i win, winw, winh
-	
+	Protected.URL_DATA *ud
 	Protected.l tbs, tbes
+	Protected.TAB_CTRL_OPTIONS tabOpts
 	
 	winw = 600
 	winh = 400
 	win = OpenWindow(#PB_Any, 10, 10, winw, winh, #APP_NAME, #PB_Window_SystemMenu | #PB_Window_MinimizeGadget | #PB_Window_MaximizeGadget | #PB_Window_SizeGadget | #PB_Window_Invisible)
 	SmartWindowRefresh(win, #True)
-		
+	
+	;Toolbar
 	app\toolBar = ContainerGadget(#PB_Any, 0, 0, 0, 0, #PB_Container_BorderLess)
-	app\btnNewTab = btn_Create(0, 0, 0, 0, @btnNewTab_Callback(), #False)
+	
+	;Button New
+	app\btnNewTab = btn_Create(#TOOLBAR_PADDING_LEFT, 0, 0, 0, @btnNewTab_Callback(), #False)
 
+	;Toolbar
 	tbs = GetWindowLong_(GadgetID(app\toolBar), #GWL_STYLE)
 	tbes = GetWindowLong_(GadgetID(app\toolBar), #GWL_EXSTYLE)
 	SetWindowLong_(GadgetID(app\toolBar), #GWL_STYLE, tbs | #WS_TABSTOP | #WS_CLIPCHILDREN)
-	SetWindowLong_(GadgetID(app\toolBar), #GWL_EXSTYLE, tbes | #WS_EX_CONTROLPARENT )
+	SetWindowLong_(GadgetID(app\toolBar), #GWL_EXSTYLE, tbes | #WS_EX_CONTROLPARENT)
+	app\toolBarOldProc = SetWindowLongPtr_(GadgetID(app\toolBar), #GWLP_WNDPROC, @toolBar_Proc())
 
-	app\tab = PanelGadget(#PB_Any, 0, 0, 0, 0)	
-	app\tabOldProc = SetWindowLongPtr_(GadgetID(app\tab), #GWLP_WNDPROC, @tab_Proc())
-	AddGadgetItem(app\tab, -1, "New tab")
+	;Tab
+	tabOpts\flags = #TAB_CTRL_FLAG_TRUNCATE_TEXT
+	app\tab = tabCtrl_Create(GadgetID(app\toolBar), 0, 0, 0, 0, @tab_Callback(), @tabOpts)
+	tabCtrl_InsertItem(app\tab, -1, "New tab")
 
-	app\tabHeight = GetGadgetAttribute(app\tab, #PB_Panel_TabHeight)
-	CloseGadgetList() ;tab
+	app\tabHeight = tabCtrl_GetTabsHeight(app\tab)
 	
+	;Nav Buttons
 	app\btnGoBack = btn_Create(0, app\tabHeight, 0, 0, @btnGoBack_CallBack(), #False)
 	app\btnGoForward = btn_Create(0, app\tabHeight, 0, 0, @btnGoForward_CallBack(), #False)
 	app\btnReload = btn_Create(0, app\tabHeight, 0, 0, @btnReload_CallBack(), #False)
@@ -1344,18 +1727,19 @@ Procedure window_Create()
 	DisableGadget(app\btnGoBack, #True)
 	DisableGadget(app\btnGoForward, #True)
 	
-	app\url = StringGadget(#PB_Any, 0, app\tabHeight, 0, 0, "")
-	app\urlOldProc = SetWindowLongPtr_(GadgetID(app\url), #GWLP_WNDPROC, @url_Proc())
-	app\urlHeight = GadgetHeight(app\url, #PB_Gadget_RequiredSize) + 4
-	app\toolBarHeight = app\tabHeight + app\urlHeight + 2
-	app\btnSize = app\urlHeight
+	;URL
+	app\url = url_Create(0, app\tabHeight + #URL_OFFSET_Y, 0, 0)
+	app\urlHeight = app\tabHeight - (#URL_OFFSET_Y * 2)
+
+	app\toolBarHeight = (app\tabHeight * 2) + #TOOLBAR_PADDING_BOTTOM
+	app\btnSize = app\tabHeight
 	
 	app\btnMenu = btn_Create(0, app\tabHeight, 0, 0, @btnMenu_CallBack(), #False)
 	
 	CloseGadgetList() ;toolbar
 
-	app\tabTip = tabTip_New(WindowID(win), GadgetID(app\tab))
-	
+	app\tabTip = tabTip_Create(WindowID(win), app\tab)
+
 	SetWindowCallback(@window_Proc(), win)
 	BindEvent(#PB_Event_SizeWindow, @window_Resize())
 	
@@ -1365,6 +1749,9 @@ Procedure window_Create()
 	GadgetToolTip(app\btnReload, "Reload (Ctrl + R)")
 	GadgetToolTip(app\btnGoHome, "Home (Alt + Home)")
 	GadgetToolTip(app\btnMenu, "Options (Ctrl + M)")
+	GadgetToolTip(app\btnSearch, "Search providers")
+
+	sp_SelectProvider(1)
 
 	ProcedureReturn win
 EndProcedure
@@ -1372,13 +1759,11 @@ EndProcedure
 ;-
 Procedure app_Init()
 	InitializeStructure(@app, APP_TAG)
-
-	app\tabTipBuffer = AllocateMemory(10)
+	
+	sp_Init()
 EndProcedure
 
 Procedure app_Free()
-	FreeMemory(app\tabTipBuffer)
-	
 	If app\env : app\env\Release() : EndIf 
 EndProcedure
 
