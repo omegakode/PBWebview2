@@ -4,77 +4,19 @@ XIncludeFile "..\..\PBWebView2.pb"
 
 XIncludeFile "..\..\windows\commctrl.pbi"
 XIncludeFile "..\..\windows\windef.pbi"
+XIncludeFile "..\..\windows\ocidl.pbi"
+
+XIncludeFile "gdiplus\gdiplus.pbi"
 
 XIncludeFile "gadget.pb"
 XIncludeFile "button.pb"
 XIncludeFile "tabCtrl.pb"
 XIncludeFile "Ohm.pbi"
+XIncludeFile "favIcon.pb"
 
 EnableExplicit
 
-;- SEARCH_PROVIDER
-Structure SEARCH_PROVIDER
-	name.s
-	url.s
-EndStructure
 
-;- BROWSER
-Structure BROWSER
-	controller.ICoreWebView2Controller
-	core.ICoreWebView2
-	
-	;Events
-	;Core
-	*evNavigationCompleted.WV2_EVENT_HANDLER
-	*evNewWindowRequested.WV2_EVENT_HANDLER
-	*evContainsFullScreenElementChanged.WV2_EVENT_HANDLER
-	*evHistoryChanged.WV2_EVENT_HANDLER
-	;Controller
-	*evAccelKeyPressed.WV2_EVENT_HANDLER
-
-	createParam.i
-	createUrl.s
-EndStructure
-
-;- APP_TAG
-Structure APP_TAG
-	window.i
-	windowIsFullscreen.b
-	windowOldStyle.i
-	windowOldPlacement.WINDOWPLACEMENT
-		
-	menu.i
-	
-	toolBar.i
-	toolBarHeight.i
-	toolBarOldProc.i
-	
-	btnSize.l
-	btnNewTab.i
-	btnMenu.i
-	btnGoBack.i
-	btnGoForward.i
-	btnGoHome.i
-	btnReload.i
-	btnSearch.i
-	
-	tab.i
-	tabTip.i
-	tabHeight.l
-	tabCurrent.l
-	tabMenu.i
-
-	url.i
-	urlHeight.l
-	
-	List browsers.BROWSER()
-	
-	List spProviders.SEARCH_PROVIDER()
-	spMenu.i
-	
-	env.ICoreWebView2Environment
-EndStructure
-Global.APP_TAG app
 
 ;- DECLARES
 Declare browser_New(env.ICoreWebView2Environment, tanIndex.l, url.s = "")
@@ -104,6 +46,7 @@ Declare menu_Show()
 Declare url_Edit_SelectAll(url.i)
 
 Declare core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Declare core_NavigationStaring(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
 Declare core_NewWindowRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
 Declare core_ContainsFullScreenElementChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
 Declare core_HistoryChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
@@ -237,7 +180,7 @@ EndProcedure
 
 Procedure tab_On_SELCHANGE(hwndParent.i, msg.l, wparam.i, *nmh.NMHDR)
 	Protected.BROWSER *currBrowser, *newBrowser
-
+	
 	*currBrowser = tab_GetBrowser(app\tabCurrent)
 	*newBrowser = tab_GetBrowser(tabCtrl_GetCurSel(app\tab))
 	
@@ -862,6 +805,8 @@ Procedure controller_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICore
 
 	;Events
 	;Core
+	*browser\evNavigationStarting = wv2_EventHandler_New(?IID_ICoreWebView2NavigationStartingEventHandler, @core_NavigationStaring(), *browser)
+	*browser\core\add_NavigationStarting(*browser\evNavigationStarting, #Null)
 	*browser\evNavigationCompleted = wv2_EventHandler_New(?IID_ICoreWebView2NavigationCompletedEventHandler, @core_NavigationCompleted(), *browser)
 	*browser\core\add_NavigationCompleted(*browser\evNavigationCompleted, #Null)
 	*browser\evNewWindowRequested = wv2_EventHandler_New(?IID_ICoreWebView2NewWindowRequestedEventHandler, @core_NewWindowRequested(), *browser)
@@ -904,9 +849,20 @@ Procedure env_Created(*this.WV2_EVENT_HANDLER, result.l, env.ICoreWebView2Enviro
 EndProcedure
 
 ;-
+Procedure core_NavigationStaring(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
+	Protected.i uri
+	Protected.s suri
+	Protected.BROWSER *browser
+	
+	LockMutex(*this\mutex)
+	*browser = *this\context
+	
+	UnlockMutex(*this\mutex)
+EndProcedure
+
 Procedure core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
 	Protected.i uri, title
-	Protected.s suri, stitle
+	Protected.s suri, stitle, host, iconUrl
 	Protected.BROWSER *browser, *currBrowser
 	
 	LockMutex(*this\mutex)
@@ -917,6 +873,13 @@ Procedure core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2
 		suri = PeekS(uri)
 		str_FreeCoMemString(uri)
 	EndIf
+	
+	host = GetURLPart(suri, #PB_URL_Site)
+	If host
+		
+		;Get favicon	
+; 		*browser\core\ExecuteScript(#FAVICON_SCRIPT_GET_ICON, wv2_EventHandler_New(?IID_ICoreWebView2ExecuteScriptCompletedHandler, @favicon_ScriptExecuted(), *browser))
+	EndIf 
 	
 	sender\get_DocumentTitle(@title)
 	If title
@@ -1019,6 +982,7 @@ Procedure browser_Free(*browser.BROWSER)
 	EndIf
 	
 	If *browser\evNavigationCompleted : wv2_EventHandler_Release(*browser\evNavigationCompleted) : EndIf
+	If *browser\evNavigationStarting : wv2_EventHandler_Release(*browser\evNavigationStarting) : EndIf
 	If *browser\evAccelKeyPressed : wv2_EventHandler_Release(*browser\evAccelKeyPressed) : EndIf 
 	If *browser\evContainsFullScreenElementChanged : wv2_EventHandler_Release(*browser\evContainsFullScreenElementChanged) : EndIf
 	If *browser\evHistoryChanged : wv2_EventHandler_Release(*browser\evHistoryChanged) : EndIf 
@@ -1204,6 +1168,9 @@ Procedure url_Edit_Resize(*ud.URL_DATA)
 	
 	;Vertical align
 	editHeight = GadgetHeight(*ud\edit, #PB_Gadget_RequiredSize)
+	editHeight - DesktopScaledY((GetSystemMetrics_(#SM_CYBORDER) * 2))
+
+
 	edity = (GadgetHeight(*ud\url) - editHeight) / 2
 	
 	btnSize = editHeight
@@ -1512,6 +1479,9 @@ Procedure window_ProcessEvents(ev.l)
 					
 				Case #PB_EventType_LeftClick
 					btn_OnLeftClickOrSpace(EventGadget())
+					
+				Case #PB_EventType_DragStart
+					Debug "ds"
 			EndSelect
 			
 		Case #PB_Event_Menu
@@ -1714,7 +1684,8 @@ Procedure window_Create()
 	;Tab
 	tabOpts\flags = #TAB_CTRL_FLAG_TRUNCATE_TEXT
 	app\tab = tabCtrl_Create(GadgetID(app\toolBar), 0, 0, 0, 0, @tab_Callback(), @tabOpts)
-	tabCtrl_InsertItem(app\tab, -1, "New tab")
+
+	tabCtrl_InsertItem(app\tab, -1, "New tab", app\iconTest)
 
 	app\tabHeight = tabCtrl_GetTabsHeight(app\tab)
 	
@@ -1728,8 +1699,8 @@ Procedure window_Create()
 	DisableGadget(app\btnGoForward, #True)
 	
 	;URL
-	app\url = url_Create(0, app\tabHeight + #URL_OFFSET_Y, 0, 0)
 	app\urlHeight = app\tabHeight - (#URL_OFFSET_Y * 2)
+	app\url = url_Create(0, app\tabHeight + #URL_OFFSET_Y, app\urlHeight, 0)
 
 	app\toolBarHeight = (app\tabHeight * 2) + #TOOLBAR_PADDING_BOTTOM
 	app\btnSize = app\tabHeight
@@ -1758,13 +1729,20 @@ EndProcedure
 
 ;-
 Procedure app_Init()
-	InitializeStructure(@app, APP_TAG)
+	Protected.GdiplusStartupInput si
 	
+	InitializeStructure(@app, APP_TAG)
 	sp_Init()
+	app\favIcon = favIcon_New()
+	
+	si\GdiplusVersion = 1
+	GdiplusStartup(@app\gdipStartupToken, @si, 0)
 EndProcedure
 
 Procedure app_Free()
 	If app\env : app\env\Release() : EndIf 
+	
+	GdiplusShutdown(app\gdipStartupToken)
 EndProcedure
 
 ;-
@@ -1776,7 +1754,10 @@ Procedure main()
 	app\tabMenu = tabMenu_Create()
 	accel_Add(app\window)
 	
-	CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @env_Created()))
+	If CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @env_Created())) <> #S_OK
+		MessageRequester(#APP_NAME, "Error, failed to created WebView2 Environment.")
+		End
+	EndIf 
 
 	Repeat
 	Until window_ProcessEvents(WaitWindowEvent()) = #True

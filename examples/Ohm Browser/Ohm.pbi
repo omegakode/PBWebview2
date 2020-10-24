@@ -1,7 +1,78 @@
 ﻿;Ohm.pbi
 
 #APP_NAME = "Ohm"
-#APP_VERSION = "0.2"
+#APP_VERSION = "0.2.1"
+
+;- SEARCH_PROVIDER
+Structure SEARCH_PROVIDER
+	name.s
+	url.s
+EndStructure
+
+;- BROWSER
+Structure BROWSER
+	controller.ICoreWebView2Controller
+	core.ICoreWebView2
+	
+	;Events
+	;Core
+	*evNavigationCompleted.WV2_EVENT_HANDLER
+	*evNavigationStarting.WV2_EVENT_HANDLER
+	*evNewWindowRequested.WV2_EVENT_HANDLER
+	*evContainsFullScreenElementChanged.WV2_EVENT_HANDLER
+	*evHistoryChanged.WV2_EVENT_HANDLER
+	;Controller
+	*evAccelKeyPressed.WV2_EVENT_HANDLER
+
+	createParam.i
+	createUrl.s
+EndStructure
+
+;- APP_TAG
+Structure APP_TAG
+	iconTest.i
+	
+	window.i
+	windowIsFullscreen.b
+	windowOldStyle.i
+	windowOldPlacement.WINDOWPLACEMENT
+		
+	menu.i
+	
+	toolBar.i
+	toolBarHeight.i
+	toolBarOldProc.i
+	
+	btnSize.l
+	btnNewTab.i
+	btnMenu.i
+	btnGoBack.i
+	btnGoForward.i
+	btnGoHome.i
+	btnReload.i
+	btnSearch.i
+	
+	tab.i
+	tabTip.i
+	tabHeight.l
+	tabCurrent.l
+	tabMenu.i
+
+	url.i
+	urlHeight.l
+	
+	List browsers.BROWSER()
+	
+	List spProviders.SEARCH_PROVIDER()
+	spMenu.i
+	
+	*favIcon.FAVICON
+	
+	gdipStartupToken.i
+	
+	env.ICoreWebView2Environment
+EndStructure
+Global.APP_TAG app
 
 ;- URL
 ;- Enum URL_STATE

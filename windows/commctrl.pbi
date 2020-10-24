@@ -111,6 +111,11 @@ Structure TCITEMHEADER Align #PB_Structure_AlignC
 	iImage.l
 EndStructure
 
+#TCN_GETOBJECT           = #TCN_FIRST - 3
+
+#TCS_EX_FLATSEPARATORS   = $00000001
+#TCS_EX_REGISTERDROP     = $00000002
+
 ;- TOOLTIP CONTROL
 #TTF_TRACK  = $0020
 

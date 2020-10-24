@@ -72,14 +72,12 @@ Procedure main()
 		MessageRequester("Error", "Failed to create WebView2Environment.")
 		End
 	EndIf
-	Debug "Environment created"
 	
 	app\wvController = wv2_Environment_CreateCoreWebView2ControllerSync(app\wvEnvironment, WindowID(app\window), @window_ProcessEvent())
 	If app\wvController = 0
 		MessageRequester("Error", "Failed to create WebView2Controller.")
 		End 
 	EndIf 
-	Debug "Controller created"
 	
 	app\wvController\get_CoreWebView2(@app\wvCore)
 	window_Resize()

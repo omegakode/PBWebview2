@@ -20,7 +20,17 @@ Structure TAB_CTRL_DATA
 	opts.TAB_CTRL_OPTIONS
 	
 	isMouseOver.b
+	isMouseDown.b
+	isDragging.b
+	
 	itemHot.l
+	itemDragSource.l
+	
+	mouseXPos.w
+	mouseYPos.w
+	
+	cursorDrag.i
+	cursorDefault.i
 	
 	closeBtnHot.l
 	closeBtnDown.b
@@ -38,11 +48,13 @@ EndStructure
 Structure TAB_CTRL_ITEM_EXTRA
 	userData.i
 	itemText.s
+	img.i ;gdip image
 EndStructure
 
 ;- DECLARES
 Declare tabCtrl_Proc(hwnd.i, msg.l,  wparam.i, lparam.i)
 Declare tabCtrl_GetCloseButtonRect(hwnd.i, item.i, *rc.RECT)
+Declare tabCtrl_InvalidateItem(hwnd, item.l)
 
 Macro tabCtrl_GetTabData(tab)
 	GetWindowLongPtr_(tab, #GWLP_USERDATA)
@@ -62,6 +74,12 @@ Procedure tabCtrl_Create(hwParent.i, x.l, y.l, w.l, h.l, callback.tabCtrl_Callba
 	*td\closeBtnHot = -1
 	*td\closeBtnDown = #False
 	*td\callback = callback
+	*td\isDragging = #False
+	*td\itemDragSource = -1
+	*td\mouseXPos = -1
+	*td\mouseYPos = -1
+	*td\cursorDrag = LoadCursor_(0, #IDC_HAND)
+	
 	If *opts
 		CopyMemory(*opts, @*td\opts, SizeOf(TAB_CTRL_OPTIONS))
 	EndIf 
@@ -85,7 +103,7 @@ Procedure tabCtrl_Create(hwParent.i, x.l, y.l, w.l, h.l, callback.tabCtrl_Callba
   ;Height
   SendMessage_(hwTab, #TCM_SETIMAGELIST, 0, ImageList_Create_(*td\fontHeight, *td\fontHeight * 2.5, 0, 0, 0))
   ;Widh
-  SendMessage_(hwTab, #TCM_SETPADDING, 0, MAKELONG(*td\fontHeight * 2, 0))
+  SendMessage_(hwTab, #TCM_SETPADDING, 0, MAKELONG(*td\fontHeight * 4, 0))
   
   ProcedureReturn hwTab
 EndProcedure
@@ -112,11 +130,22 @@ EndProcedure
 
 Procedure tabCtrl_GetItemParam(hwnd.i, item.i)
 	Protected.TCITEM tci
+	Protected.i p
 	
 	tci\mask = #TCIF_PARAM
 	SendMessage_(hwnd, #TCM_GETITEM, item, @tci)
 	
-	ProcedureReturn tci\lParam
+	p = tci\lParam 
+	
+	ProcedureReturn p
+EndProcedure
+
+Procedure tabCtrl_SetItemParam(hwnd.i, item.i, param.i)
+	Protected.TCITEM tci
+	
+	tci\mask = #TCIF_PARAM
+	tci\lParam = param
+	SendMessage_(hwnd, #TCM_SETITEM, item, @tci)
 EndProcedure
 
 Procedure.s tabCtrl_TruncateItemText(hwnd.i, text.s, maxWidth.l)
@@ -192,6 +221,32 @@ Procedure tabCtrl_GetItemUserData(hwnd.i, item.i)
 	EndIf
 EndProcedure
 
+Procedure tabCtrl_SetItemIcon(hwnd.i, item.i, img.i)
+	Protected.TAB_CTRL_ITEM_EXTRA *ie
+	Protected.i oldImg
+	
+	*ie = tabCtrl_GetItemParam(hwnd, item)
+	If *ie
+		oldImg = *ie\img
+		*ie\img = img
+		tabCtrl_InvalidateItem(hwnd, item)
+	EndIf 
+	
+	ProcedureReturn oldImg
+EndProcedure
+
+Procedure tabCtrl_GetItemIcon(hwnd.i, item.i)
+	Protected.TAB_CTRL_ITEM_EXTRA *ie
+	Protected.i img
+	
+	*ie = tabCtrl_GetItemParam(hwnd, item)
+	If *ie
+		img = *ie\img
+		
+		ProcedureReturn img
+	EndIf 
+EndProcedure
+
 Procedure tabCtrl_GetUpDownIfVisible(hwTab.i)
 	Protected.i hwUd
 
@@ -215,12 +270,15 @@ Procedure tabCtrl_GetUpDownRect(hwTab.i, *rc.RECT)
 	EndIf 
 EndProcedure
 
-Procedure tabCtrl_InsertItem(hwTab, item.l, text.s)
+Procedure tabCtrl_InsertItem(hwTab, item.l, text.s, img.i = 0)
 	Protected.TCITEM tci
+	Protected.TAB_CTRL_ITEM_EXTRA *ie
 
 	tci\mask = #TCIF_TEXT | #TCIF_PARAM
 	tci\pszText = @text
-	tci\lParam = AllocateMemory(SizeOf(TAB_CTRL_ITEM_EXTRA))
+	*ie = AllocateMemory(SizeOf(TAB_CTRL_ITEM_EXTRA))
+	*ie\img = img
+	tci\lParam = *ie
 	
 	If item = -1
 		item = SendMessage_(hwTab, #TCM_GETITEMCOUNT, 0, 0)
@@ -302,6 +360,30 @@ Procedure tabCtrl_TrackMouse(hwTab.i)
 	TrackMouseEvent_(@tme)
 EndProcedure
 
+Procedure tabCtrl_SwitchTabs(hwnd.i, item1.l, item2.l)
+	Protected.TAB_CTRL_DATA *td
+	Protected.TAB_CTRL_ITEM_EXTRA *ie1, *ie2
+	Protected.s text1, text2
+	
+	If item1 = item2 : ProcedureReturn : EndIf 
+	
+	*td = tabCtrl_GetTabData(hwnd)
+	If *td
+		*ie1 = tabCtrl_GetItemParam(hwnd, item1)
+		*ie2 = tabCtrl_GetItemParam(hwnd, item2)
+		If *ie1 And *ie2
+			text1 = tabCtrl_GetItemText(hwnd, item1)
+			text2 = tabCtrl_GetItemText(hwnd, item2)
+
+			tabCtrl_SetItemParam(hwnd, item1, *ie2)
+			tabCtrl_SetItemParam(hwnd, item2, *ie1)
+			
+			tabCtrl_SetItemText(hwnd, item1, text2)
+			tabCtrl_SetItemText(hwnd, item2, text1)
+		EndIf 
+	EndIf 
+EndProcedure
+
 Procedure tabCtrl_HitTest(hwnd, x.w, y.w)
 	Protected.TCHITTESTINFO tch
 
@@ -329,6 +411,31 @@ Procedure tabCtrl_InvalidateItem(hwnd, item.l)
 	EndIf 
 EndProcedure
 
+Procedure tabCtrl_OnDragStart(hwnd.i)
+	Protected.TAB_CTRL_DATA *td
+
+	*td = tabCtrl_GetTabData(hwnd)
+	If *td
+		*td\cursorDefault = SetCursor_(*td\cursorDrag)
+	EndIf 
+EndProcedure
+
+Procedure tabCtrl_OnDragEnd(hwnd.i, itemDragSource.l, itemDragDest.l)
+	Protected.TAB_CTRL_DATA *td
+	Protected.NMHDR nmh
+
+	*td = tabCtrl_GetTabData(hwnd)
+	If *td
+		tabCtrl_SwitchTabs(hwnd, itemDragSource, itemDragDest)
+		tabCtrl_SetCurSel(hwnd, itemDragDest)
+		nmh\code = #TCN_SELCHANGE
+		nmh\hwndFrom = hwnd
+		SendMessage_(GetParent_(hwnd), #WM_NOTIFY, GetWindowLong_(hwnd, #GWL_ID), @nmh)
+		
+		SetCursor_(*td\cursorDefault)
+	EndIf 
+EndProcedure
+
 Procedure tabCtrl_On_MOUSEMOVE(hwnd.i, msg.l,  wparam.i, lparam.i)
 	Protected.TAB_CTRL_DATA *td
 	Protected.l tabIndex
@@ -336,8 +443,19 @@ Procedure tabCtrl_On_MOUSEMOVE(hwnd.i, msg.l,  wparam.i, lparam.i)
 	
 	*td = tabCtrl_GetTabData(hwnd)
 	If *td 
+		If *td\mouseXPos = LOWORD(lparam) And *td\mouseYPos = HIWORD(lparam) : ProcedureReturn : EndIf 
+		
 		tabIndex =  tabCtrl_HitTest(hwnd, LOWORD(lparam), HIWORD(lparam))
 		If tabIndex = -1 : ProcedureReturn : EndIf 
+		
+		If *td\isMouseDown And *td\isDragging = #False ;And tabCtrl_GetItemCount(hwnd) > 1
+			SetCapture_(hwnd)
+			*td\isDragging = #True
+			If tabCtrl_GetItemCount(hwnd) > 1
+				*td\itemDragSource = tabIndex
+				tabCtrl_OnDragStart(hwnd)
+			EndIf 
+		EndIf 
 		
 		tabCtrl_GetCloseButtonRect(hwnd, tabIndex, @rcClose)
 
@@ -364,6 +482,7 @@ Procedure tabCtrl_On_MOUSEMOVE(hwnd.i, msg.l,  wparam.i, lparam.i)
 
 		Else
 			;mouse move
+			
 			If tabIndex <> *td\itemHot 
 				;Invalidate previous hot item
 				If *td\itemHot <> -1
@@ -374,6 +493,9 @@ Procedure tabCtrl_On_MOUSEMOVE(hwnd.i, msg.l,  wparam.i, lparam.i)
 				tabCtrl_InvalidateItem(hwnd, *td\itemHot)
 			EndIf
 		EndIf
+		
+		*td\mouseXPos = LOWORD(lparam)
+		*td\mouseYPos = HIWORD(lparam)
 	EndIf 
 EndProcedure
 
@@ -394,10 +516,25 @@ Procedure tabCtrl_On_LBUTTONUP(hwnd.i, msg.l, wparam.i, lparam.i)
 	Protected.TAB_CTRL_DATA *td
 	Protected.RECT rcClose
 	Protected.i tabIndex
+	Protected.l itemDragSource
 	
 	*td = tabCtrl_GetTabData(hwnd)
 	If *td
 		tabIndex =  tabCtrl_HitTest(hwnd, LOWORD(lparam), HIWORD(lparam))
+
+		*td\isMouseDown = #False
+		If *td\isDragging
+			ReleaseCapture_()
+			*td\isDragging = #False
+			itemDragSource = *td\itemDragSource
+			*td\itemDragSource = -1
+			If itemDragSource <> -1 And tabIndex <> -1
+				tabCtrl_OnDragEnd(hwnd, itemDragSource, tabIndex)
+			EndIf 
+			
+			ProcedureReturn CallWindowProc_(*td\oldProc, hwnd, msg, wparam, lparam)
+		EndIf
+		
 		If tabIndex <> -1
 			tabCtrl_GetCloseButtonRect(hwnd, tabIndex, @rcClose)
 			If drw_PointInRect(LOWORD(lparam), HIWORD(lparam), rcClose)
@@ -423,6 +560,7 @@ Procedure tabCtrl_On_LBUTTONDOWN(hwnd.i, msg.l, wparam.i, lparam.i)
 	
 	*td = tabCtrl_GetTabData(hwnd)
 	If *td
+		*td\isMouseDown = #True
 		tabIndex =  tabCtrl_HitTest(hwnd, LOWORD(lparam), HIWORD(lparam))
 		If tabIndex <> -1
 			tabCtrl_GetCloseButtonRect(hwnd, tabIndex, @rcClose)
@@ -432,17 +570,21 @@ Procedure tabCtrl_On_LBUTTONDOWN(hwnd.i, msg.l, wparam.i, lparam.i)
 				
 				ProcedureReturn 0
 				
-			ElseIf GetWindowLong_(hwnd, #GWL_STYLE) & #TCS_BUTTONS = #TCS_BUTTONS
+			ElseIf GetWindowLong_(hwnd, #GWL_STYLE) & #TCS_BUTTONS = #TCS_BUTTONS And tabIndex <> tabCtrl_GetCurSel(hwnd)
 				tabCtrl_SetCurSel(hwnd, tabIndex)
 				nmh\code = #TCN_SELCHANGE
 				nmh\hwndFrom = hwnd
 				SendMessage_(GetParent_(hwnd), #WM_NOTIFY, GetWindowLong_(hwnd, #GWL_ID), @nmh)
+				If GetWindowLong_(hwnd, #GWL_STYLE) & #TCS_FOCUSONBUTTONDOWN = #TCS_FOCUSONBUTTONDOWN
+					SetFocus_(hwnd)
+				EndIf
 				
 				ProcedureReturn 0
 			EndIf 
 		EndIf 
 		
-		ProcedureReturn CallWindowProc_(*td\oldProc, hwnd, msg, wparam, lparam)
+		ProcedureReturn 0
+; 		ProcedureReturn CallWindowProc_(*td\oldProc, hwnd, msg, wparam, lparam)
 		
 	Else
 		ProcedureReturn DefWindowProc_(hwnd, msg, wparam, lparam)
@@ -480,9 +622,16 @@ EndProcedure
 Procedure tabCtrl_DrawBackground(*di.DRAWITEMSTRUCT)
 	Protected.TAB_CTRL_DATA *td
 	Protected.l colorBack
+	Protected.RECT rc
+	Protected.i rgn
+	
 	
 	*td = GetWindowLongPtr_(*di\hwndItem, #GWLP_USERDATA)
 	If *td
+; 		Debug *di\rcItem\left
+; 		InflateRect_(*di\rcItem, -1, -1)
+; 		Debug *di\rcItem\left
+		rgn = CreateRectRgn_(*di\rcItem\left, *di\rcItem\top, *di\rcItem\right, *di\rcItem\bottom)
 		If *di\itemID = SendMessage_(*di\hwndItem, #TCM_GETCURSEL, 0, 0)
 			colorBack = #COLOR_WINDOW + 1
 
@@ -499,6 +648,7 @@ Procedure tabCtrl_DrawBackground(*di.DRAWITEMSTRUCT)
 		
 		EndIf 
 
+; 		SelectClipRgn_(*di\hDC, rgn)
 		FillRect_(*di\hDC, @*di\rcItem, colorBack)
 	EndIf 
 EndProcedure
@@ -515,7 +665,7 @@ Procedure tabCtrl_GetCloseButtonRect(hwnd.i, item.i, *rc.RECT)
 	
 		*rc\right = *rc\right - DesktopScaledX(#TAB_CTRL_ITEM_PAD_RIGHT) - GetSystemMetrics_(#SM_CYEDGE) 
 		*rc\left = *rc\right - closeSize
-		*rc\top = ((*rc\bottom - closeSize) / 2) + GetSystemMetrics_(#SM_CXEDGE)
+		*rc\top = ((*rc\bottom - closeSize) / 2)
 		*rc\bottom = *rc\top + closeSize
 	EndIf 
 EndProcedure
@@ -572,12 +722,34 @@ Procedure tabCtrl_DrawText(*di.DRAWITEMSTRUCT, *rcClose.RECT, *td.TAB_CTRL_DATA)
 		tabCtrl_GetItemRect(*di\hwndItem, *di\itemID, @rcItem)
 		
 		SetBkMode_(*di\hDC, #TRANSPARENT)
-		rcItem\left + DesktopScaledX(#TAB_CTRL_ITEM_PAD_LEFT)
+		rcItem\left + DesktopScaledX(#TAB_CTRL_ITEM_PAD_LEFT) + (*td\fontHeight * 2)
 		rcItem\right = *rcClose\left - DesktopScaledX(#TAB_CTRL_ITEM_PAD_LEFT)
 		DrawText_(*di\hDC, @*ie\itemText, -1, @rcItem, #DT_LEFT | #DT_VCENTER | #DT_SINGLELINE | #DT_END_ELLIPSIS)
 	EndIf 
-	
+EndProcedure
 
+Procedure tabCtrl_DrawImage(*di.DRAWITEMSTRUCT, *rcClose.RECT, *td.TAB_CTRL_DATA)
+	Protected.TAB_CTRL_ITEM_EXTRA *ie
+	Protected.l imgSize, imgYPos, imgXPos, picWidth, picHeight
+	Protected.i gs
+	Protected.s imgFile
+	
+	*ie = tabCtrl_GetItemParam(*di\hwndItem, *di\itemID)
+	
+	GdipLoadImageFromFile(imgFile, @*ie\img)
+	If *ie And *ie\img
+		GdipCreateFromHDC(*di\hDC, @gs)
+	
+		imgSize = *di\rcItem\bottom - *di\rcItem\top
+		imgSize = *td\fontHeight * 1.5
+		imgYPos = ((*di\rcItem\bottom - *di\rcItem\top) - imgSize) / 2
+		imgYPos + GetSystemMetrics_(#SM_CYEDGE)
+		imgXPos = *di\rcItem\left + GetSystemMetrics_(#SM_CXEDGE) + DesktopScaledX(#TAB_CTRL_ITEM_PAD_LEFT)
+
+		GdipDrawImageRectI(gs, *ie\img, imgXPos, imgYPos, imgSize, imgSize)
+
+		GdipDeleteGraphics(gs)
+	EndIf 
 EndProcedure
 
 Procedure tabCtrl_Parent_On_DRAWITEM(hwParent.i, msg.l, wparam.i, *di.DRAWITEMSTRUCT)
@@ -590,6 +762,7 @@ Procedure tabCtrl_Parent_On_DRAWITEM(hwParent.i, msg.l, wparam.i, *di.DRAWITEMST
 		tabCtrl_GetCloseButtonRect(*di\hwndItem, *di\itemID, @rcClose)
 		tabCtrl_DrawCloseButton(*di, @rcClose)
 		tabCtrl_DrawText(*di, @rcClose, *td)
+		tabCtrl_DrawImage(*di, @rcClose, *td)
 	
 		ProcedureReturn #True
 	EndIf 
@@ -621,7 +794,7 @@ Procedure tabCtrl_On_MOUSEWHEEL(hwnd.i, msg.l, wparam.i, lparam.i)
 	Protected.w dist
 	Protected.i hwUd
 	Protected.i pos, upLimit
-
+	
 	*td = tabCtrl_GetTabData(hwnd)
 	If *td
 		hwUd = tabCtrl_GetUpDownIfVisible(hwnd)

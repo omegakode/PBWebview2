@@ -319,13 +319,7 @@ Interface ICoreWebView2HttpHeadersCollectionIterator Extends IUnknown
 	GetCurrentHeader(name.i, value.i)
 	get_HasCurrentHeader(hasCurrent.i)
 	MoveNext(hasNext.i)
-EndInterface
-
-Structure ICoreWebView2HttpHeadersCollectionIteratorVtbl Extends IUnknownVtbl
-	GetCurrentHeader.i
-	get_HasCurrentHeader.i
-	MoveNext.i
-EndStructure
+EndInterface 
 
 ;- ICoreWebView2ContentLoadingEventHandler
 
@@ -846,16 +840,6 @@ Interface ICoreWebView2WebResourceResponse Extends IUnknown
 	put_ReasonPhrase(ReasonPhrase.s)
 EndInterface 
 
-Structure ICoreWebView2WebResourceResponseVtbl Extends IUnknownVtbl
-	get_Content.i
-	put_Content.i
-	get_Headers.i
-	get_StatusCode.i
-	put_StatusCode.i
-	get_ReasonPhrase.i
-	put_ReasonPhrase.i
-EndStructure
-
 ;- ICoreWebView2HttpResponseHeaders
 
 DataSection
@@ -872,14 +856,6 @@ Interface ICoreWebView2HttpResponseHeaders Extends IUnknown
 	GetHeaders(name.s, iterator.i)
 	GetIterator(iterator.i)
 EndInterface 
-
-Structure ICoreWebView2HttpResponseHeadersVtbl Extends IUnknownVtbl
-	AppendHeader.i
-	Contains.i
-	GetHeader.i
-	GetHeaders.i
-	GetIterator.i
-EndStructure
 
 ;- Enum COREWEBVIEW2_WEB_RESOURCE_CONTEXT
 #COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL = 0
