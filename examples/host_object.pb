@@ -60,13 +60,13 @@ Procedure.s page1_Create()
 	"<body>" +
 	
 	"addNum() Procedure:</br>" + 
-	"Param1 (number):" + ~"<input type=\"text\" id=\"addNumP1\" value=\"10\"></br>" + 
-	"Param2 (number):" + ~"<input type=\"text\" id=\"addNumP2\" value=\"20\"></br>" + 
+	"Param1 (number):" + ~"<input type=\"text\" spellcheck=\"false\" id=\"addNumP1\" value=\"10\"></br>" + 
+	"Param2 (number):" + ~"<input type=\"text\" spellcheck=\"false\" id=\"addNumP2\" value=\"20\"></br>" + 
 	~"<button type=\"button\" onclick=\"alert('addNum() Result: ' + purebasic.callRTProcNum('addNum', Number(document.getElementById('addNumP1').value), Number(document.getElementById('addNumP2').value)))\">Call PB addNum()</button>" +
 	"</br>" + "</br>" +
 	"addStr() Procedure:</br>" + 
-	"Param1 (string):" + ~"<input type=\"text\" id=\"addStrP1\" value=\"pure\"></br>" + 
-	"Param2 (string):" + ~"<input type=\"text\" id=\"addStrP2\" value=\"basic\"></br>" + 
+	"Param1 (string):" + ~"<input type=\"text\" spellcheck=\"false\" id=\"addStrP1\" value=\"pure\"></br>" + 
+	"Param2 (string):" + ~"<input type=\"text\" spellcheck=\"false\" id=\"addStrP2\" value=\"basic\"></br>" + 
 	~"<button type=\"button\" onclick=\"alert('addStr() Result: ' + purebasic.callRTProcStr('addStr', document.getElementById('addStrP1').value, document.getElementById('addStrP2').value))\">Call PB addStr()</button>" +
 	
 	"</body>" +

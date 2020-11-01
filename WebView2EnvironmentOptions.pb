@@ -1,5 +1,5 @@
 ﻿XIncludeFile "windows\Unknwn.pbi"
-XIncludeFile "WebView2.pbi"
+; XIncludeFile "WebView2.pbi"
 XIncludeFile "string.pb"
 
 EnableExplicit

@@ -413,7 +413,7 @@ Procedure.s page1_Create()
 	ProcedureReturn PeekS(?page1Start, -1, #PB_UTF8)
 EndProcedure
 
-Procedure main()	
+Procedure main()		
 	If wv2_GetBrowserVersion("") = ""
 		MessageRequester("Error", "MS Edge not found, install MS Edge Runtime.")
 		End 

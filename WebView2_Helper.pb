@@ -1,8 +1,8 @@
-﻿XIncludeFile "windows\Unknwn.pbi"
-XIncludeFile "windows\objidl.pbi"
-
-XIncludeFile "WebView2.pbi"
-XIncludeFile "WebView2Loader.pbi"
+﻿; XIncludeFile "windows\Unknwn.pbi"
+; XIncludeFile "windows\objidl.pbi"
+; 
+; XIncludeFile "WebView2.pbi"
+; XIncludeFile "WebView2Loader.pbi"
 
 EnableExplicit
 

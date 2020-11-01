@@ -1,8 +1,11 @@
-﻿XIncludeFile "stream.pb"
+﻿XIncludeFile "windows\windows.pbi"
+
+XIncludeFile "stream.pb"
 XIncludeFile "resource.pb"
 XIncludeFile "json.pb"
 XIncludeFile "keyboard.pb"
 XIncludeFile "enum.pb"
+XIncludeFile "VCall.pb"
 
 IncludeFile "WebView2.pbi"
 IncludeFile "WebView2EnvironmentOptions.pb"

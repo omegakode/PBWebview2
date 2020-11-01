@@ -1,9 +1,9 @@
 ﻿;PB_Host_Object.pb
 ;Copyright(c) Justin 2020
 
-XIncludeFile "windows\oaidl.pbi"
-XIncludeFile "vector.pbi"
-XIncludeFile "VCall.pb"
+; XIncludeFile "windows\oaidl.pbi"
+; XIncludeFile "vector.pbi"
+; XIncludeFile "VCall.pb"
 
 EnableExplicit
 

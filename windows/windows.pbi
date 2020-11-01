@@ -1,0 +1,5 @@
+﻿XIncludeFile "commctrl.pbi"
+XIncludeFile "oaidl.pbi"
+XIncludeFile "objidl.pbi"
+XIncludeFile "unknwn.pbi"
+XIncludeFile "windef.pbi"
