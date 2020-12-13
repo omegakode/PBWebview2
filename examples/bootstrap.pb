@@ -1,6 +1,7 @@
-﻿;bootstrap_app.pb
+﻿;bootstrap.pb
 
 IncludeFile "..\PBWebView2.pb"
+; IncludeFile "..\prerelease\PBWebView2.pb"
 
 EnableExplicit
 

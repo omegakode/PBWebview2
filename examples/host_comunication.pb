@@ -65,7 +65,7 @@ Procedure.s page1_Create()
 	page1 = "<!DOCTYPE html>" +
 	"<html>" +
 	"<body>" +
-	"Message:" + ~"<input type=\"text\" id=\"msg\" value=\"hello from web content\">" + 
+	"Message:" + ~"<input type=\"text\" spellcheck=\"false\" id=\"msg\" value=\"hello from web content\">" + 
 	~"<button type=\"button\" onclick=\"window.chrome.webview.postMessage(document.getElementById('msg').value)\">Send To PB</button>" +
 	"</body>" +
 	"</html>"

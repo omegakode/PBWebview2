@@ -4,16 +4,18 @@ XIncludeFile "string.pb"
 
 EnableExplicit
 
-#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "86.0.622.22"
+#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "87.0.664.37"
 
 ;- WV2_ENVIRONMENT_OPTIONS
 Structure WV2_ENVIRONMENT_OPTIONS
 	vt.i
 	refCount.l
 	mutex.i
+	;Properties
 	additionalBrowserArguments.s
 	language.s
 	targetCompatibleBrowserVersion.s
+	allowSingleSignOnUsingOSPrimaryAccount.l
 EndStructure
 
 Global.ICoreWebView2EnvironmentOptionsVtbl WV2_ENVIRONMENT_OPTIONS_VTABLE
@@ -24,6 +26,7 @@ Procedure wv2_EnvironmentOptions_New()
 	*this = AllocateMemory(SizeOf(WV2_ENVIRONMENT_OPTIONS))
 	*this\vt = @WV2_ENVIRONMENT_OPTIONS_VTABLE
 	*this\targetCompatibleBrowserVersion = #CORE_WEBVIEW_TARGET_PRODUCT_VERSION
+	*this\allowSingleSignOnUsingOSPrimaryAccount = #False
 	*this\refCount = 1
 	
 	ProcedureReturn *this
@@ -99,6 +102,18 @@ Procedure wv2_EnvironmentOptions_put_TargetCompatibleBrowserVersion(*this.WV2_EN
 	ProcedureReturn #S_OK
 EndProcedure
 
+Procedure wv2_EnvironmentOptions_get_AllowSingleSignOnUsingOSPrimaryAccount(*this.WV2_ENVIRONMENT_OPTIONS, *value.LONG)
+	*value\l = *this\allowSingleSignOnUsingOSPrimaryAccount
+	
+	ProcedureReturn #S_OK
+EndProcedure
+
+Procedure wv2_EnvironmentOptions_put_AllowSingleSignOnUsingOSPrimaryAccount(*this.WV2_ENVIRONMENT_OPTIONS, value.l)
+	*this\allowSingleSignOnUsingOSPrimaryAccount = value
+	
+	ProcedureReturn #S_OK
+EndProcedure
+
 ;- VTABLE_CONSTRUCTION
 WV2_ENVIRONMENT_OPTIONS_VTABLE\QueryInterface = @wv2_EnvironmentOptions_QueryInterface()
 WV2_ENVIRONMENT_OPTIONS_VTABLE\AddRef = @wv2_EnvironmentOptions_AddRef()
@@ -109,3 +124,5 @@ WV2_ENVIRONMENT_OPTIONS_VTABLE\get_Language = @wv2_EnvironmentOptions_get_Langua
 WV2_ENVIRONMENT_OPTIONS_VTABLE\put_Language = @wv2_EnvironmentOptions_put_Language()
 WV2_ENVIRONMENT_OPTIONS_VTABLE\get_TargetCompatibleBrowserVersion = @wv2_EnvironmentOptions_get_TargetCompatibleBrowserVersion()
 WV2_ENVIRONMENT_OPTIONS_VTABLE\put_TargetCompatibleBrowserVersion = @wv2_EnvironmentOptions_put_TargetCompatibleBrowserVersion()
+WV2_ENVIRONMENT_OPTIONS_VTABLE\get_AllowSingleSignOnUsingOSPrimaryAccount = @wv2_EnvironmentOptions_get_AllowSingleSignOnUsingOSPrimaryAccount()
+WV2_ENVIRONMENT_OPTIONS_VTABLE\put_AllowSingleSignOnUsingOSPrimaryAccount = @wv2_EnvironmentOptions_put_AllowSingleSignOnUsingOSPrimaryAccount()

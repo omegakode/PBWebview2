@@ -1,6 +1,6 @@
 ﻿;Ohm.pb
 
-XIncludeFile "..\..\PBWebView2.pb"
+XIncludeFile "..\..\prerelease\PBWebView2.pb"
 
 XIncludeFile "..\..\windows\commctrl.pbi"
 XIncludeFile "..\..\windows\windef.pbi"

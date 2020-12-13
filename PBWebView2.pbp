@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2020-11-01 11:23" user="carlos" host="DESKTOP-JICP41J"/>
+    <lastopen date="2020-11-04 14:59" user="carlos" host="DESKTOP-JICP41J"/>
   </section>
   <section name="files">
     <file name="enum.pb">
@@ -24,7 +24,19 @@
     </file>
     <file name="examples\bootstrap.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="2ecda759fe3f745f8ca55ee0bc69c195"/>
+      <fingerprint md5="dd597a4f5ff4bb0e2a1a84edd35fce7f"/>
+    </file>
+    <file name="examples\chartist.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="fa655b4e20da7cd31d212da78b6177d0"/>
+    </file>
+    <file name="examples\host_comunication.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="f8594f9a759fae557743c8b4a4cf1112"/>
+    </file>
+    <file name="examples\host_object.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="ee383ed66c97a620916b5995be61e855"/>
     </file>
     <file name="examples\Ohm Browser\button.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++-"/>
@@ -79,7 +91,7 @@
       <fingerprint md5="1c2f6190d7a1f7a1a89a214c416be954"/>
     </file>
     <file name="examples\resources.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="cfc64ab84fadc34bd8768194ade89b74"/>
     </file>
     <file name="json.pb">
@@ -135,7 +147,7 @@
       <fingerprint md5="7f483b5c7e105ec6bf35846fdc76cda7"/>
     </file>
     <file name="WebView2Loader.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="efd2e6bf760b907c750cc6a89ad63482"/>
     </file>
     <file name="windows\commctrl.pbi">
@@ -165,10 +177,6 @@
     <file name="windows\windows.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="bba722e56126e8edafc9d94f753c45fa"/>
-    </file>
-    <file name="examples\host_object.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="ee383ed66c97a620916b5995be61e855"/>
     </file>
   </section>
   <section name="targets">
