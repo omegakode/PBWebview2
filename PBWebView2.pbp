@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2020-11-04 14:59" user="carlos" host="DESKTOP-JICP41J"/>
+    <lastopen date="2021-01-30 22:52" user="carlos" host="DESKTOP-JICP41J"/>
   </section>
   <section name="files">
     <file name="enum.pb">
@@ -15,16 +15,12 @@
       <fingerprint md5="cf1f4c6bfdd3fb5978464976b989c500"/>
     </file>
     <file name="examples\basic_browser_async.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="93f7f7c077b82e732ff729c4a4d6e8c9"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="fd975b5efe3f04fd6b913ab5360dfa17"/>
     </file>
     <file name="examples\basic_browser_sync.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="1f66ab1eb6aaa1b7adfc32cbce4239a6"/>
-    </file>
-    <file name="examples\bootstrap.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="dd597a4f5ff4bb0e2a1a84edd35fce7f"/>
+      <fingerprint md5="1f66ab1eb6aaa1b7adfc32cbce4239a6"/>
     </file>
     <file name="examples\chartist.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
@@ -71,11 +67,11 @@
       <fingerprint md5="16f4e51a629f5cd87594fd65d24e1c57"/>
     </file>
     <file name="examples\Ohm Browser\Ohm.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++-"/>
-      <fingerprint md5="b99d35b7dd72b0442aa896732d693837"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++-"/>
+      <fingerprint md5="a7b5eaceb171a13bbdbb27fdab696536"/>
     </file>
     <file name="examples\Ohm Browser\Ohm.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++-"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++-"/>
       <fingerprint md5="a60f27691417050e0753ae02211c3fa6"/>
     </file>
     <file name="examples\Ohm Browser\tabCtrl.pb">
@@ -110,9 +106,17 @@
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="d9dd07f90256acf279a14089a2954319"/>
     </file>
+    <file name="prerelease\WebView2.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="9980899983073145f7211888aba0af39"/>
+    </file>
+    <file name="prerelease\WebView2EnvironmentOptions.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="b5fd5a621a6c4c866986f40507fe43a4"/>
+    </file>
     <file name="prerelease\WebView2Experimental.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="56cc97e9f360c86a96e92ccaf4807c26"/>
+      <fingerprint md5="0511f8b1b59d00f61803396e2e67eaa8"/>
     </file>
     <file name="resource.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -136,7 +140,7 @@
     </file>
     <file name="WebView2.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="457ac804a20aac600529fd1163aae4a5"/>
+      <fingerprint md5="3b62692cbe8e5ff4e4688f960223abc9"/>
     </file>
     <file name="WebView2_Helper.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -144,7 +148,7 @@
     </file>
     <file name="WebView2EnvironmentOptions.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="7f483b5c7e105ec6bf35846fdc76cda7"/>
+      <fingerprint md5="53a3c3ed063cb36ec7612931ce7daed7"/>
     </file>
     <file name="WebView2Loader.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -177,6 +181,10 @@
     <file name="windows\windows.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="bba722e56126e8edafc9d94f753c45fa"/>
+    </file>
+    <file name="examples\bootstrap.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
+      <fingerprint md5="5250b5aa75864e798eedb353e405068e"/>
     </file>
   </section>
   <section name="targets">

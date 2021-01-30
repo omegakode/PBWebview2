@@ -1647,9 +1647,39 @@ Procedure window_On_NOTIFY(hwnd.i, msg.l, wparam.i, *nmh.NMHDR)
 	ProcedureReturn #PB_ProcessPureBasicEvents
 EndProcedure
 
+Procedure window_On_SYSCOMMAND(hwnd.i, msg.l, wparam.i, lparam.i)
+	Protected.BROWSER *browser
+	Protected.ICoreWebView2_3 core3
+	
+	*browser = tab_GetCurrentBrowser()
+	If *browser = #Null Or *browser\core = #Null Or *browser\controller = #Null
+		ProcedureReturn #PB_ProcessPureBasicEvents
+	EndIf 
+
+	If wParam = #SC_MINIMIZE
+		If *browser\core\QueryInterface(?IID_ICoreWebView2_3, @core3) = #S_OK
+			*browser\controller\put_IsVisible(#False)
+
+			core3\TrySuspend(#Null)
+			core3\Release()
+		EndIf 
+		
+	ElseIf wParam = #SC_RESTORE
+		If *browser\core\QueryInterface(?IID_ICoreWebView2_3, @core3) = #S_OK
+			core3\Resume()
+			*browser\controller\put_IsVisible(#True)
+			core3\Release()
+		EndIf 
+	EndIf 
+	
+	ProcedureReturn #PB_ProcessPureBasicEvents
+EndProcedure
+
 Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	Select msg
 		Case #WM_MOVE, #WM_MOVING : window_On_MOVE_MOVING()
+		
+		Case #WM_SYSCOMMAND : ProcedureReturn window_On_SYSCOMMAND(hwnd, msg, wparam, lparam)
 		
 		Case #WM_NOTIFY : ProcedureReturn window_On_NOTIFY(hwnd, msg, wparam, lparam)
 				

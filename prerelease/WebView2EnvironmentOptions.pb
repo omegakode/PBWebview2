@@ -1,10 +1,10 @@
-﻿XIncludeFile "windows\Unknwn.pbi"
+﻿XIncludeFile "..\windows\Unknwn.pbi"
 ; XIncludeFile "WebView2.pbi"
-XIncludeFile "string.pb"
+XIncludeFile "..\string.pb"
 
 EnableExplicit
 
-#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "88.0.705.50"
+#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "90.0.781.0"
 
 ;- WV2_ENVIRONMENT_OPTIONS
 Structure WV2_ENVIRONMENT_OPTIONS

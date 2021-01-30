@@ -274,11 +274,44 @@ Procedure window_Close()
 	ProcedureReturn #True ;Exit message loop.
 EndProcedure
 
+;Experimental API must be used with the prerelease SDK.
+Procedure window_On_SYSCOMMAND(hwnd.i, msg.l, wparam.i, lparam.i)
+	CompilerIf Defined(ICoreWebView2_3, #PB_Interface)
+	Protected.ICoreWebView2_3 core3
+	
+	If app\wvCore = #Null Or app\wvController = #Null
+		ProcedureReturn #PB_ProcessPureBasicEvents
+	EndIf 
+
+	If wParam = #SC_MINIMIZE
+		If app\wvCore\QueryInterface(?IID_ICoreWebView2_3, @core3) = #S_OK
+			app\wvController\put_IsVisible(#False)
+
+			core3\TrySuspend(#Null)
+			core3\Release()
+		EndIf 
+		
+	ElseIf wParam = #SC_RESTORE
+		If app\wvCore\QueryInterface(?IID_ICoreWebView2_3, @core3) = #S_OK
+			core3\Resume()
+			app\wvController\put_IsVisible(#True)
+			core3\Release()
+		EndIf 
+	EndIf 
+	CompilerEndIf
+	
+	ProcedureReturn #PB_ProcessPureBasicEvents
+EndProcedure
+
 Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	Select msg
 		;Required by webview2
 		Case #WM_MOVE, #WM_MOVING
 			wv2_Controller_On_WM_MOVE_MOVING(app\wvController)
+			
+		Case #WM_SYSCOMMAND 
+			window_On_SYSCOMMAND(hwnd, msg, wparam, lparam)
+		
 	EndSelect
 	
 	ProcedureReturn #PB_ProcessPureBasicEvents

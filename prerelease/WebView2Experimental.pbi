@@ -15,58 +15,39 @@ Interface ICoreWebView2ExperimentalCompositionControllerInterop Extends IUnknown
 	put_RootVisualTarget(target.i)
 EndInterface 
 
-;- ICoreWebView2ExperimentalCompositionController
+;- ICoreWebView2ExperimentalCompositionController3
 
 DataSection
-	IID_ICoreWebView2ExperimentalCompositionController:
-	Data.l $584903B6
-	Data.w $F79F, $4037
-	Data.b $86, $76, $1B, $13, $D6, $78, $16, $3A
+	IID_ICoreWebView2ExperimentalCompositionController3:
+	Data.l $B134916B
+	Data.w $A104, $4D2A
+	Data.b $95, $67, $C2, $FD, $53, $71, $43, $50
 EndDataSection
 
-Interface ICoreWebView2ExperimentalCompositionController Extends IUnknown
+Interface ICoreWebView2ExperimentalCompositionController3 Extends IUnknown
+	DragEnter(dataObject.i, keyState.l, point.q, effect.i)
+	DragLeave()
+	DragOver(keyState.l, point.q, effect.i)
+	Drop(dataObject.i, keyState.l, point.q, effect.i)
+EndInterface 
+
+;- ICoreWebView2ExperimentalCompositionController4
+
+DataSection
+	IID_ICoreWebView2ExperimentalCompositionController4:
+	Data.l $E6041D7F
+	Data.w $18AC, $4654
+	Data.b $A0, $4E, $8B, $3F, $81, $25, $1C, $33
+EndDataSection
+
+Interface ICoreWebView2ExperimentalCompositionController4 Extends IUnknown
 	get_UIAProvider(provider.i)
-	get_RootVisualTarget(target.i)
-	put_RootVisualTarget(target.i)
-	SendMouseInput(eventKind.l, virtualKeys.l, mouseData.l, point.q)
 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
 		CreateCoreWebView2PointerInfoFromPointerId(PointerId.l, parentWindow.i, transform.i, pointerInfo.i)
 	CompilerElse
 		CreateCoreWebView2PointerInfoFromPointerId(PointerId.l, parentWindow.i, transform_COREWEBVIEW2_MATRIX_4X4__11.f, transform_COREWEBVIEW2_MATRIX_4X4__12.f, transform_COREWEBVIEW2_MATRIX_4X4__13.f, transform_COREWEBVIEW2_MATRIX_4X4__14.f, transform_COREWEBVIEW2_MATRIX_4X4__21.f, transform_COREWEBVIEW2_MATRIX_4X4__22.f, transform_COREWEBVIEW2_MATRIX_4X4__23.f, transform_COREWEBVIEW2_MATRIX_4X4__24.f, transform_COREWEBVIEW2_MATRIX_4X4__31.f, transform_COREWEBVIEW2_MATRIX_4X4__32.f, transform_COREWEBVIEW2_MATRIX_4X4__33.f, transform_COREWEBVIEW2_MATRIX_4X4__34.f, transform_COREWEBVIEW2_MATRIX_4X4__41.f, transform_COREWEBVIEW2_MATRIX_4X4__42.f, transform_COREWEBVIEW2_MATRIX_4X4__43.f, transform_COREWEBVIEW2_MATRIX_4X4__44.f, pointerInfo.i)
 	CompilerEndIf
-	SendPointerInput(eventKind.l, pointerInfo.i)
-	get_Cursor(Cursor.i)
-	add_CursorChanged(eventHandler.i, token.i)
-	remove_CursorChanged(token.q)
 EndInterface 
-
-;- Enum COREWEBVIEW2_MOUSE_EVENT_KIND
-#COREWEBVIEW2_MOUSE_EVENT_KIND_HORIZONTAL_WHEEL = 526
-#COREWEBVIEW2_MOUSE_EVENT_KIND_LEFT_BUTTON_DOUBLE_CLICK = 515
-#COREWEBVIEW2_MOUSE_EVENT_KIND_LEFT_BUTTON_DOWN = 513
-#COREWEBVIEW2_MOUSE_EVENT_KIND_LEFT_BUTTON_UP = 514
-#COREWEBVIEW2_MOUSE_EVENT_KIND_LEAVE = 675
-#COREWEBVIEW2_MOUSE_EVENT_KIND_MIDDLE_BUTTON_DOUBLE_CLICK = 521
-#COREWEBVIEW2_MOUSE_EVENT_KIND_MIDDLE_BUTTON_DOWN = 519
-#COREWEBVIEW2_MOUSE_EVENT_KIND_MIDDLE_BUTTON_UP = 520
-#COREWEBVIEW2_MOUSE_EVENT_KIND_MOVE = 512
-#COREWEBVIEW2_MOUSE_EVENT_KIND_RIGHT_BUTTON_DOUBLE_CLICK = 518
-#COREWEBVIEW2_MOUSE_EVENT_KIND_RIGHT_BUTTON_DOWN = 516
-#COREWEBVIEW2_MOUSE_EVENT_KIND_RIGHT_BUTTON_UP = 517
-#COREWEBVIEW2_MOUSE_EVENT_KIND_WHEEL = 522
-#COREWEBVIEW2_MOUSE_EVENT_KIND_X_BUTTON_DOUBLE_CLICK = 525
-#COREWEBVIEW2_MOUSE_EVENT_KIND_X_BUTTON_DOWN = 523
-#COREWEBVIEW2_MOUSE_EVENT_KIND_X_BUTTON_UP = 524
-
-;- Enum COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_NONE = 0
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_LEFT_BUTTON = 1
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_RIGHT_BUTTON = 2
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_SHIFT = 4
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_CONTROL = 8
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_MIDDLE_BUTTON = 16
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_X_BUTTON1 = 32
-#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_X_BUTTON2 = 64
 
 ;- COREWEBVIEW2_MATRIX_4X4
 Structure COREWEBVIEW2_MATRIX_4X4 Align #PB_Structure_AlignC
@@ -88,139 +69,89 @@ Structure COREWEBVIEW2_MATRIX_4X4 Align #PB_Structure_AlignC
 	_44.f
 EndStructure
 
-;- ICoreWebView2ExperimentalPointerInfo
+;- ICoreWebView2PointerInfo
 
-DataSection
-	IID_ICoreWebView2ExperimentalPointerInfo:
-	Data.l $4BB4E46D
-	Data.w $7D78, $47BD
-	Data.b $BD, $D2, $4B, $77, $28, $8D, $C9, $49
-EndDataSection
-
-Interface ICoreWebView2ExperimentalPointerInfo Extends IUnknown
-	get_PointerKind(PointerKind.i)
-	put_PointerKind(PointerKind.l)
-	get_PointerId(PointerId.i)
-	put_PointerId(PointerId.l)
-	get_FrameId(FrameId.i)
-	put_FrameId(FrameId.l)
-	get_PointerFlags(PointerFlags.i)
-	put_PointerFlags(PointerFlags.l)
-	get_PointerDeviceRect(PointerDeviceRect.i)
-	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-		put_PointerDeviceRect(PointerDeviceRect.i)
-	CompilerElse
-		put_PointerDeviceRect(PointerDeviceRect_tagRECT_left.l, PointerDeviceRect_tagRECT_top.l, PointerDeviceRect_tagRECT_right.l, PointerDeviceRect_tagRECT_bottom.l)
-	CompilerEndIf
-	get_DisplayRect(DisplayRect.i)
-	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-		put_DisplayRect(DisplayRect.i)
-	CompilerElse
-		put_DisplayRect(DisplayRect_tagRECT_left.l, DisplayRect_tagRECT_top.l, DisplayRect_tagRECT_right.l, DisplayRect_tagRECT_bottom.l)
-	CompilerEndIf
-	get_PixelLocation(PixelLocation.i)
-	put_PixelLocation(PixelLocation.q)
-	get_HimetricLocation(HimetricLocation.i)
-	put_HimetricLocation(HimetricLocation.q)
-	get_PixelLocationRaw(PixelLocationRaw.i)
-	put_PixelLocationRaw(PixelLocationRaw.q)
-	get_HimetricLocationRaw(HimetricLocationRaw.i)
-	put_HimetricLocationRaw(HimetricLocationRaw.q)
-	get_Time(Time.i)
-	put_Time(Time.l)
-	get_HistoryCount(HistoryCount.i)
-	put_HistoryCount(HistoryCount.l)
-	get_InputData(InputData.i)
-	put_InputData(InputData.l)
-	get_KeyStates(KeyStates.i)
-	put_KeyStates(KeyStates.l)
-	get_PerformanceCount(PerformanceCount.i)
-	put_PerformanceCount(PerformanceCount.q)
-	get_ButtonChangeKind(ButtonChangeKind.i)
-	put_ButtonChangeKind(ButtonChangeKind.l)
-	get_PenFlags(PenFlags.i)
-	put_PenFlags(PenFlags.l)
-	get_PenMask(PenMask.i)
-	put_PenMask(PenMask.l)
-	get_PenPressure(PenPressure.i)
-	put_PenPressure(PenPressure.l)
-	get_PenRotation(PenRotation.i)
-	put_PenRotation(PenRotation.l)
-	get_PenTiltX(PenTiltX.i)
-	put_PenTiltX(PenTiltX.l)
-	get_PenTiltY(PenTiltY.i)
-	put_PenTiltY(PenTiltY.l)
-	get_TouchFlags(TouchFlags.i)
-	put_TouchFlags(TouchFlags.l)
-	get_TouchMask(TouchMask.i)
-	put_TouchMask(TouchMask.l)
-	get_TouchContact(TouchContact.i)
-	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-		put_TouchContact(TouchContact.i)
-	CompilerElse
-		put_TouchContact(TouchContact_tagRECT_left.l, TouchContact_tagRECT_top.l, TouchContact_tagRECT_right.l, TouchContact_tagRECT_bottom.l)
-	CompilerEndIf
-	get_TouchContactRaw(TouchContactRaw.i)
-	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-		put_TouchContactRaw(TouchContactRaw.i)
-	CompilerElse
-		put_TouchContactRaw(TouchContactRaw_tagRECT_left.l, TouchContactRaw_tagRECT_top.l, TouchContactRaw_tagRECT_right.l, TouchContactRaw_tagRECT_bottom.l)
-	CompilerEndIf
-	get_TouchOrientation(TouchOrientation.i)
-	put_TouchOrientation(TouchOrientation.l)
-	get_TouchPressure(TouchPressure.i)
-	put_TouchPressure(TouchPressure.l)
-EndInterface 
-
-;- Enum COREWEBVIEW2_POINTER_EVENT_KIND
-#COREWEBVIEW2_POINTER_EVENT_KIND_ACTIVATE = 587
-#COREWEBVIEW2_POINTER_EVENT_KIND_DOWN = 582
-#COREWEBVIEW2_POINTER_EVENT_KIND_ENTER = 585
-#COREWEBVIEW2_POINTER_EVENT_KIND_LEAVE = 586
-#COREWEBVIEW2_POINTER_EVENT_KIND_UP = 583
-#COREWEBVIEW2_POINTER_EVENT_KIND_UPDATE = 581
-
-;- ICoreWebView2ExperimentalCursorChangedEventHandler
-
-DataSection
-	IID_ICoreWebView2ExperimentalCursorChangedEventHandler:
-	Data.l $9DA43CCC
-	Data.w $26E1, $4DAD
-	Data.b $B5, $6C, $D8, $96, $1C, $94, $C5, $71
-EndDataSection
-
-Interface ICoreWebView2ExperimentalCursorChangedEventHandler Extends IUnknown
-	Invoke(sender.i, args.i)
-EndInterface 
-
-;- ICoreWebView2ExperimentalCompositionController2
-
-DataSection
-	IID_ICoreWebView2ExperimentalCompositionController2:
-	Data.l $279AE616
-	Data.w $B7CB, $4946
-	Data.b $8D, $A3, $DC, $85, $36, $45, $D2, $BA
-EndDataSection
-
-Interface ICoreWebView2ExperimentalCompositionController2 Extends IUnknown
-	get_SystemCursorId(SystemCursorId.i)
-EndInterface 
-
-;- ICoreWebView2ExperimentalCompositionController3
-
-DataSection
-	IID_ICoreWebView2ExperimentalCompositionController3:
-	Data.l $B134916B
-	Data.w $A104, $4D2A
-	Data.b $95, $67, $C2, $FD, $53, $71, $43, $50
-EndDataSection
-
-Interface ICoreWebView2ExperimentalCompositionController3 Extends IUnknown
-	DragEnter(dataObject.i, keyState.l, point.q, effect.i)
-	DragLeave()
-	DragOver(keyState.l, point.q, effect.i)
-	Drop(dataObject.i, keyState.l, point.q, effect.i)
-EndInterface 
+; DataSection
+; 	IID_ICoreWebView2PointerInfo:
+; 	Data.l $E6995887
+; 	Data.w $D10D, $4F5D
+; 	Data.b $93, $59, $4C, $E4, $6E, $4F, $96, $B9
+; EndDataSection
+; 
+; Interface ICoreWebView2PointerInfo Extends IUnknown
+; 	get_PointerKind(PointerKind.i)
+; 	put_PointerKind(PointerKind.l)
+; 	get_PointerId(PointerId.i)
+; 	put_PointerId(PointerId.l)
+; 	get_FrameId(FrameId.i)
+; 	put_FrameId(FrameId.l)
+; 	get_PointerFlags(PointerFlags.i)
+; 	put_PointerFlags(PointerFlags.l)
+; 	get_PointerDeviceRect(PointerDeviceRect.i)
+; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+; 		put_PointerDeviceRect(PointerDeviceRect.i)
+; 	CompilerElse
+; 		put_PointerDeviceRect(PointerDeviceRect_tagRECT_left.l, PointerDeviceRect_tagRECT_top.l, PointerDeviceRect_tagRECT_right.l, PointerDeviceRect_tagRECT_bottom.l)
+; 	CompilerEndIf
+; 	get_DisplayRect(DisplayRect.i)
+; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+; 		put_DisplayRect(DisplayRect.i)
+; 	CompilerElse
+; 		put_DisplayRect(DisplayRect_tagRECT_left.l, DisplayRect_tagRECT_top.l, DisplayRect_tagRECT_right.l, DisplayRect_tagRECT_bottom.l)
+; 	CompilerEndIf
+; 	get_PixelLocation(PixelLocation.i)
+; 	put_PixelLocation(PixelLocation.q)
+; 	get_HimetricLocation(HimetricLocation.i)
+; 	put_HimetricLocation(HimetricLocation.q)
+; 	get_PixelLocationRaw(PixelLocationRaw.i)
+; 	put_PixelLocationRaw(PixelLocationRaw.q)
+; 	get_HimetricLocationRaw(HimetricLocationRaw.i)
+; 	put_HimetricLocationRaw(HimetricLocationRaw.q)
+; 	get_Time(Time.i)
+; 	put_Time(Time.l)
+; 	get_HistoryCount(HistoryCount.i)
+; 	put_HistoryCount(HistoryCount.l)
+; 	get_InputData(InputData.i)
+; 	put_InputData(InputData.l)
+; 	get_KeyStates(KeyStates.i)
+; 	put_KeyStates(KeyStates.l)
+; 	get_PerformanceCount(PerformanceCount.i)
+; 	put_PerformanceCount(PerformanceCount.q)
+; 	get_ButtonChangeKind(ButtonChangeKind.i)
+; 	put_ButtonChangeKind(ButtonChangeKind.l)
+; 	get_PenFlags(PenFlags.i)
+; 	put_PenFlags(PenFlags.l)
+; 	get_PenMask(PenMask.i)
+; 	put_PenMask(PenMask.l)
+; 	get_PenPressure(PenPressure.i)
+; 	put_PenPressure(PenPressure.l)
+; 	get_PenRotation(PenRotation.i)
+; 	put_PenRotation(PenRotation.l)
+; 	get_PenTiltX(PenTiltX.i)
+; 	put_PenTiltX(PenTiltX.l)
+; 	get_PenTiltY(PenTiltY.i)
+; 	put_PenTiltY(PenTiltY.l)
+; 	get_TouchFlags(TouchFlags.i)
+; 	put_TouchFlags(TouchFlags.l)
+; 	get_TouchMask(TouchMask.i)
+; 	put_TouchMask(TouchMask.l)
+; 	get_TouchContact(TouchContact.i)
+; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+; 		put_TouchContact(TouchContact.i)
+; 	CompilerElse
+; 		put_TouchContact(TouchContact_tagRECT_left.l, TouchContact_tagRECT_top.l, TouchContact_tagRECT_right.l, TouchContact_tagRECT_bottom.l)
+; 	CompilerEndIf
+; 	get_TouchContactRaw(TouchContactRaw.i)
+; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+; 		put_TouchContactRaw(TouchContactRaw.i)
+; 	CompilerElse
+; 		put_TouchContactRaw(TouchContactRaw_tagRECT_left.l, TouchContactRaw_tagRECT_top.l, TouchContactRaw_tagRECT_right.l, TouchContactRaw_tagRECT_bottom.l)
+; 	CompilerEndIf
+; 	get_TouchOrientation(TouchOrientation.i)
+; 	put_TouchOrientation(TouchOrientation.l)
+; 	get_TouchPressure(TouchPressure.i)
+; 	put_TouchPressure(TouchPressure.l)
+; EndInterface 
 
 ;- ICoreWebView2ExperimentalController
 
@@ -255,21 +186,26 @@ Interface ICoreWebView2ExperimentalRasterizationScaleChangedEventHandler Extends
 	Invoke(sender.i, args.i)
 EndInterface 
 
+;- EventRegistrationToken
+; Structure EventRegistrationToken Align #PB_Structure_AlignC
+; 	value.q
+; EndStructure
+
 ;- Enum COREWEBVIEW2_BOUNDS_MODE
 #COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS = 0
 #COREWEBVIEW2_BOUNDS_MODE_USE_RASTERIZATION_SCALE = 1
 
-;- ICoreWebView2ExperimentalCreateCoreWebView2CompositionControllerCompletedHandler
+;- ICoreWebView2ExperimentalEnvironment2
 
 DataSection
-	IID_ICoreWebView2ExperimentalCreateCoreWebView2CompositionControllerCompletedHandler:
-	Data.l $34B35AB6
-	Data.w $3E59, $4FC4
-	Data.b $A7, $23, $C, $4, $95, $3E, $3E, $13
+	IID_ICoreWebView2ExperimentalEnvironment2:
+	Data.l $37B54FD4
+	Data.w $1AD9, $4C1F
+	Data.b $BD, $14, $9D, $AB, $A9, $FD, $EB, $26
 EndDataSection
 
-Interface ICoreWebView2ExperimentalCreateCoreWebView2CompositionControllerCompletedHandler Extends IUnknown
-	Invoke(errorCode.l, webView.i)
+Interface ICoreWebView2ExperimentalEnvironment2 Extends IUnknown
+	GetProviderForHwnd(hwnd.i, provider.i)
 EndInterface 
 
 ;- ICoreWebView2ExperimentalEnvironmentInterop
@@ -285,38 +221,17 @@ Interface ICoreWebView2ExperimentalEnvironmentInterop Extends IUnknown
 	GetProviderForHwnd(hwnd.i, provider.i)
 EndInterface 
 
-;- Enum COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND
-#COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_DENY = 0
-#COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW = 1
-#COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_DENY_CORS = 2
-
-;- ICoreWebView2Experimental2
+;- ICoreWebView2ExperimentalSettings
 
 DataSection
-	IID_ICoreWebView2Experimental2:
-	Data.l $CDAA2FCB
-	Data.w $C2C0, $44F1
-	Data.b $85, $7, $88, $A8, $59, $D7, $C3, $7D
+	IID_ICoreWebView2ExperimentalSettings:
+	Data.l $684CBEEF
+	Data.w $47BA, $4D4A
+	Data.b $99, $F4, $97, $61, $13, $F9, $F1, $A
 EndDataSection
 
-Interface ICoreWebView2Experimental2 Extends IUnknown
-	SetVirtualHostNameToFolderMapping(hostName.s, folderPath.s, accessKind.l)
-	ClearVirtualHostNameToFolderMapping(hostName.s)
-EndInterface 
-
-;- ICoreWebView2ExperimentalEnvironment
-
-DataSection
-	IID_ICoreWebView2ExperimentalEnvironment:
-	Data.l $427A8887
-	Data.w $1AB4, $4017
-	Data.b $AE, $6E, $C6, $E6, $EB, $16, $C6, $64
-EndDataSection
-
-Interface ICoreWebView2ExperimentalEnvironment Extends IUnknown
-	CreateCoreWebView2CompositionController(parentWindow.i, handler.i)
-	CreateCoreWebView2PointerInfo(pointerInfo.i)
-	GetProviderForHwnd(hwnd.i, provider.i)
-	CreateWebResourceRequestDeprecated(Uri.s, Method.s, postData.i, Headers.s, request.i)
+Interface ICoreWebView2ExperimentalSettings Extends IUnknown
+	get_UserAgent(UserAgent.i)
+	put_UserAgent(UserAgent.s)
 EndInterface 
 

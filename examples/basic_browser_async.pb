@@ -40,9 +40,9 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 	If result = #S_OK
 		environment\QueryInterface(?IID_ICoreWebView2Environment, @app\wvEnvironment)
 		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @wvController_Created()))
+
 		wv2_EventHandler_Release(*this)
 		app\wvEnvironment\Release()
-		
 	Else
 		MessageRequester("Error", "Failed to create WebView2Environment.")
 		End 
@@ -50,6 +50,8 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 EndProcedure
 
 Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)	
+	Protected.i wait, work, hEvent, t
+
 	If result = #S_OK
 		controller\QueryInterface(?IID_ICoreWebView2Controller, @app\wvController)
 		app\wvController\get_CoreWebView2(@app\wvCore)
@@ -61,7 +63,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 		window_Resize()
 		
 		app\wvCore\Navigate("https://duckduckgo.com")
-		
+
 		wv2_EventHandler_Release(*this)
 		
 	Else
