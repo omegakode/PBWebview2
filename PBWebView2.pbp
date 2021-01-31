@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-01-30 22:52" user="carlos" host="DESKTOP-JICP41J"/>
+    <lastopen date="2021-01-31 15:41" user="carlos" host="DESKTOP-JICP41J"/>
   </section>
   <section name="files">
     <file name="enum.pb">
@@ -16,7 +16,7 @@
     </file>
     <file name="examples\basic_browser_async.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="fd975b5efe3f04fd6b913ab5360dfa17"/>
+      <fingerprint md5="56b3527283cd92a269caa89f4a4ec3bc"/>
     </file>
     <file name="examples\basic_browser_sync.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
@@ -107,15 +107,15 @@
       <fingerprint md5="d9dd07f90256acf279a14089a2954319"/>
     </file>
     <file name="prerelease\WebView2.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
       <fingerprint md5="9980899983073145f7211888aba0af39"/>
     </file>
     <file name="prerelease\WebView2EnvironmentOptions.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
       <fingerprint md5="b5fd5a621a6c4c866986f40507fe43a4"/>
     </file>
     <file name="prerelease\WebView2Experimental.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+-"/>
       <fingerprint md5="0511f8b1b59d00f61803396e2e67eaa8"/>
     </file>
     <file name="resource.pb">

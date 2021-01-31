@@ -13,6 +13,7 @@ Structure APP_TAG
 	wvController.ICoreWebView2Controller
 	wvCore.ICoreWebView2
 	*eventNavigationCompleted.WV2_EVENT_HANDLER
+	*eventNavigationSarting.WV2_EVENT_HANDLER
 EndStructure
 Global.APP_TAG app
 
@@ -26,6 +27,7 @@ Declare window_ProcessEvents(ev.l)
 Declare wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)	
 Declare wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
 Declare wv_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Declare wv_NavigationStarting(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
 
 Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	Select msg
@@ -60,6 +62,9 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 		app\eventNavigationCompleted = wv2_EventHandler_New(?IID_ICoreWebView2NavigationCompletedEventHandler, @wv_NavigationCompleted())
 		app\wvCore\add_NavigationCompleted(app\eventNavigationCompleted, #Null)
 		
+		app\eventNavigationSarting = wv2_EventHandler_New(?IID_ICoreWebView2NavigationStartingEventHandler, @wv_NavigationStarting())
+		app\wvCore\add_NavigationStarting(app\eventNavigationSarting, #Null)
+		
 		window_Resize()
 		
 		app\wvCore\Navigate("https://duckduckgo.com")
@@ -77,6 +82,24 @@ Procedure wv_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, 
 
 EndProcedure
 
+Procedure wv_NavigationStarting(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
+	Protected.i uri
+	Protected.s suri
+	
+	Debug "Event NavigationStarting"
+
+	If args\get_uri(@uri) = #S_OK
+		suri = PeekS(uri)
+		CoTaskMemFree_(uri)
+
+		;CANCEL NAVIGATION
+		If LCase(StringField(GetURLPart(suri, #PB_URL_Site), 2, ".")) = "google"
+			MessageRequester("Purebasic", "Sorry google is banned.")
+			args\put_Cancel(#True)
+		EndIf 
+	EndIf 
+EndProcedure
+
 Procedure window_Close()
 	If app\wvController
 		app\wvController\Close()
@@ -87,6 +110,10 @@ Procedure window_Close()
 	
 	If app\eventNavigationCompleted
 		wv2_EventHandler_Release(app\eventNavigationCompleted)
+	EndIf 
+	
+	If app\eventNavigationSarting
+		wv2_EventHandler_Release(app\eventNavigationSarting)
 	EndIf 
 	
 	ProcedureReturn #True ;Exit message loop.
