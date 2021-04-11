@@ -882,209 +882,24 @@ Interface ICoreWebView2WindowCloseRequestedEventHandler Extends IUnknown
 	Invoke(sender.i, args.i)
 EndInterface 
 
-;- ICoreWebView2Cookie
+;- ICoreWebView2_2
 
 DataSection
-	IID_ICoreWebView2Cookie:
-	Data.l $AD26D6BE
-	Data.w $1486, $43E6
-	Data.b $BF, $87, $A2, $3, $40, $6, $CA, $21
+	IID_ICoreWebView2_2:
+	Data.l $9E8F0CF8
+	Data.w $E670, $4B5E
+	Data.b $B2, $BC, $73, $E0, $61, $E3, $18, $4C
 EndDataSection
 
-Interface ICoreWebView2Cookie Extends IUnknown
-	get_name(name.i)
-	get_value(value.i)
-	put_value(value.s)
-	get_Domain(Domain.i)
-	get_Path(Path.i)
-	get_Expires(Expires.i)
-	put_Expires(Expires.d)
-	get_IsHttpOnly(IsHttpOnly.i)
-	put_IsHttpOnly(IsHttpOnly.l)
-	get_SameSite(SameSite.i)
-	put_SameSite(SameSite.l)
-	get_IsSecure(IsSecure.i)
-	put_IsSecure(IsSecure.l)
-	get_IsSession(IsSession.i)
+Interface ICoreWebView2_2 Extends ICoreWebView2
+	add_WebResourceResponseReceived(eventHandler.i, token.i)
+	remove_WebResourceResponseReceived(token.q)
+	NavigateWithWebResourceRequest(Request.i)
+	add_DOMContentLoaded(eventHandler.i, token.i)
+	remove_DOMContentLoaded(token.q)
+	get_CookieManager(CookieManager.i)
+	get_Environment(Environment.i)
 EndInterface 
-
-;- Enum COREWEBVIEW2_COOKIE_SAME_SITE_KIND
-#COREWEBVIEW2_COOKIE_SAME_SITE_KIND_NONE = 0
-#COREWEBVIEW2_COOKIE_SAME_SITE_KIND_LAX = 1
-#COREWEBVIEW2_COOKIE_SAME_SITE_KIND_STRICT = 2
-
-;- ICoreWebView2CookieList
-
-DataSection
-	IID_ICoreWebView2CookieList:
-	Data.l $F7F6F714
-	Data.w $5D2A, $43C6
-	Data.b $95, $3, $34, $6E, $CE, $2, $D1, $86
-EndDataSection
-
-Interface ICoreWebView2CookieList Extends IUnknown
-	get_Count(Count.i)
-	GetValueAtIndex(index.l, cookie.i)
-EndInterface 
-
-;- ICoreWebView2CookieManager
-
-DataSection
-	IID_ICoreWebView2CookieManager:
-	Data.l $177CD9E7
-	Data.w $B6F5, $451A
-	Data.b $94, $A0, $5D, $7A, $3A, $4C, $41, $41
-EndDataSection
-
-Interface ICoreWebView2CookieManager Extends IUnknown
-	CreateCookie(name.s, value.s, Domain.s, Path.s, cookie.i)
-	CreateCookieWithCookie(cookieParam.i, cookie.i)
-	GetCookies(uri.s, handler.i)
-	AddOrUpdateCookie(cookie.i)
-	DeleteCookie(cookie.i)
-	DeleteCookies(name.s, uri.s)
-	DeleteCookiesWithDomainAndPath(name.s, Domain.s, Path.s)
-	DeleteAllCookies()
-EndInterface 
-
-;- ICoreWebView2GetCookiesCompletedHandler
-
-DataSection
-	IID_ICoreWebView2GetCookiesCompletedHandler:
-	Data.l $5A4F5069
-	Data.w $5C15, $47C3
-	Data.b $86, $46, $F4, $DE, $1C, $11, $66, $70
-EndDataSection
-
-Interface ICoreWebView2GetCookiesCompletedHandler Extends IUnknown
-	Invoke(result.l, cookieList.i)
-EndInterface 
-
-;- ICoreWebView2DOMContentLoadedEventArgs
-
-DataSection
-	IID_ICoreWebView2DOMContentLoadedEventArgs:
-	Data.l $16B1E21A
-	Data.w $C503, $44F2
-	Data.b $84, $C9, $70, $AB, $A5, $3, $12, $83
-EndDataSection
-
-Interface ICoreWebView2DOMContentLoadedEventArgs Extends IUnknown
-	get_NavigationId(NavigationId.i)
-EndInterface 
-
-;- ICoreWebView2DOMContentLoadedEventHandler
-
-DataSection
-	IID_ICoreWebView2DOMContentLoadedEventHandler:
-	Data.l $4BAC7E9C
-	Data.w $199E, $49ED
-	Data.b $87, $ED, $24, $93, $3, $AC, $F0, $19
-EndDataSection
-
-Interface ICoreWebView2DOMContentLoadedEventHandler Extends IUnknown
-	Invoke(sender.i, args.i)
-EndInterface 
-
-;- ICoreWebView2CreateCoreWebView2ControllerCompletedHandler
-
-DataSection
-	IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler:
-	Data.l $6C4819F3
-	Data.w $C9B7, $4260
-	Data.b $81, $27, $C9, $F5, $BD, $E7, $F6, $8C
-EndDataSection
-
-Interface ICoreWebView2CreateCoreWebView2ControllerCompletedHandler Extends IUnknown
-	Invoke(errorCode.l, createdController.i)
-EndInterface 
-
-;- ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler
-
-DataSection
-	IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler:
-	Data.l $4E8A3389
-	Data.w $C9D8, $4BD2
-	Data.b $B6, $B5, $12, $4F, $EE, $6C, $C1, $4D
-EndDataSection
-
-Interface ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler Extends IUnknown
-	Invoke(errorCode.l, createdEnvironment.i)
-EndInterface 
-
-;- ICoreWebView2Environment
-
-DataSection
-	IID_ICoreWebView2Environment:
-	Data.l $B96D755E
-	Data.w $319, $4E92
-	Data.b $A2, $96, $23, $43, $6F, $46, $A1, $FC
-EndDataSection
-
-Interface ICoreWebView2Environment Extends IUnknown
-	CreateCoreWebView2Controller(ParentWindow.i, handler.i)
-	CreateWebResourceResponse(Content.i, StatusCode.l, ReasonPhrase.s, Headers.s, Response.i)
-	get_BrowserVersionString(versionInfo.i)
-	add_NewBrowserVersionAvailable(eventHandler.i, token.i)
-	remove_NewBrowserVersionAvailable(token.q)
-EndInterface 
-
-;- ICoreWebView2NewBrowserVersionAvailableEventHandler
-
-DataSection
-	IID_ICoreWebView2NewBrowserVersionAvailableEventHandler:
-	Data.l $F9A2976E
-	Data.w $D34E, $44FC
-	Data.b $AD, $EE, $81, $B6, $B5, $7C, $A9, $14
-EndDataSection
-
-Interface ICoreWebView2NewBrowserVersionAvailableEventHandler Extends IUnknown
-	Invoke(sender.i, args.i)
-EndInterface 
-
-;- ICoreWebView2Environment2
-
-DataSection
-	IID_ICoreWebView2Environment2:
-	Data.l $41F3632B
-	Data.w $5EF4, $404F
-	Data.b $AD, $82, $2D, $60, $6C, $5A, $9A, $21
-EndDataSection
-
-Interface ICoreWebView2Environment2 Extends ICoreWebView2Environment
-	CreateWebResourceRequest(uri.s, Method.s, postData.i, Headers.s, Request.i)
-EndInterface 
-
-;- ICoreWebView2EnvironmentOptions
-
-DataSection
-	IID_ICoreWebView2EnvironmentOptions:
-	Data.l $2FDE08A8
-	Data.w $1E9A, $4766
-	Data.b $8C, $5, $95, $A9, $CE, $B9, $D1, $C5
-EndDataSection
-
-Interface ICoreWebView2EnvironmentOptions Extends IUnknown
-	get_AdditionalBrowserArguments(value.i)
-	put_AdditionalBrowserArguments(value.s)
-	get_Language(value.i)
-	put_Language(value.s)
-	get_TargetCompatibleBrowserVersion(value.i)
-	put_TargetCompatibleBrowserVersion(value.s)
-	get_AllowSingleSignOnUsingOSPrimaryAccount(allow.i)
-	put_AllowSingleSignOnUsingOSPrimaryAccount(allow.l)
-EndInterface 
-
-Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
-	get_AdditionalBrowserArguments.i
-	put_AdditionalBrowserArguments.i
-	get_Language.i
-	put_Language.i
-	get_TargetCompatibleBrowserVersion.i
-	put_TargetCompatibleBrowserVersion.i
-	get_AllowSingleSignOnUsingOSPrimaryAccount.i
-	put_AllowSingleSignOnUsingOSPrimaryAccount.i
-Endstructure
 
 ;- ICoreWebView2WebResourceResponseReceivedEventHandler
 
@@ -1142,22 +957,548 @@ Interface ICoreWebView2WebResourceResponseViewGetContentCompletedHandler Extends
 	Invoke(errorCode.l, Content.i)
 EndInterface 
 
-;- ICoreWebView2_2
+;- ICoreWebView2DOMContentLoadedEventHandler
 
 DataSection
-	IID_ICoreWebView2_2:
-	Data.l $9E8F0CF8
-	Data.w $E670, $4B5E
-	Data.b $B2, $BC, $73, $E0, $61, $E3, $18, $4C
+	IID_ICoreWebView2DOMContentLoadedEventHandler:
+	Data.l $4BAC7E9C
+	Data.w $199E, $49ED
+	Data.b $87, $ED, $24, $93, $3, $AC, $F0, $19
 EndDataSection
 
-Interface ICoreWebView2_2 Extends ICoreWebView2
-	add_WebResourceResponseReceived(eventHandler.i, token.i)
-	remove_WebResourceResponseReceived(token.q)
-	NavigateWithWebResourceRequest(Request.i)
-	add_DOMContentLoaded(eventHandler.i, token.i)
-	remove_DOMContentLoaded(token.q)
-	get_CookieManager(CookieManager.i)
-	get_Environment(Environment.i)
+Interface ICoreWebView2DOMContentLoadedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2DOMContentLoadedEventArgs
+
+DataSection
+	IID_ICoreWebView2DOMContentLoadedEventArgs:
+	Data.l $16B1E21A
+	Data.w $C503, $44F2
+	Data.b $84, $C9, $70, $AB, $A5, $3, $12, $83
+EndDataSection
+
+Interface ICoreWebView2DOMContentLoadedEventArgs Extends IUnknown
+	get_NavigationId(NavigationId.i)
+EndInterface 
+
+;- ICoreWebView2CookieManager
+
+DataSection
+	IID_ICoreWebView2CookieManager:
+	Data.l $177CD9E7
+	Data.w $B6F5, $451A
+	Data.b $94, $A0, $5D, $7A, $3A, $4C, $41, $41
+EndDataSection
+
+Interface ICoreWebView2CookieManager Extends IUnknown
+	CreateCookie(name.s, value.s, Domain.s, Path.s, cookie.i)
+	CopyCookie(cookieParam.i, cookie.i)
+	GetCookies(uri.s, handler.i)
+	AddOrUpdateCookie(cookie.i)
+	DeleteCookie(cookie.i)
+	DeleteCookies(name.s, uri.s)
+	DeleteCookiesWithDomainAndPath(name.s, Domain.s, Path.s)
+	DeleteAllCookies()
+EndInterface 
+
+;- ICoreWebView2Cookie
+
+DataSection
+	IID_ICoreWebView2Cookie:
+	Data.l $AD26D6BE
+	Data.w $1486, $43E6
+	Data.b $BF, $87, $A2, $3, $40, $6, $CA, $21
+EndDataSection
+
+Interface ICoreWebView2Cookie Extends IUnknown
+	get_name(name.i)
+	get_value(value.i)
+	put_value(value.s)
+	get_Domain(Domain.i)
+	get_Path(Path.i)
+	get_Expires(Expires.i)
+	put_Expires(Expires.d)
+	get_IsHttpOnly(IsHttpOnly.i)
+	put_IsHttpOnly(IsHttpOnly.l)
+	get_SameSite(SameSite.i)
+	put_SameSite(SameSite.l)
+	get_IsSecure(IsSecure.i)
+	put_IsSecure(IsSecure.l)
+	get_IsSession(IsSession.i)
+EndInterface 
+
+;- Enum COREWEBVIEW2_COOKIE_SAME_SITE_KIND
+#COREWEBVIEW2_COOKIE_SAME_SITE_KIND_NONE = 0
+#COREWEBVIEW2_COOKIE_SAME_SITE_KIND_LAX = 1
+#COREWEBVIEW2_COOKIE_SAME_SITE_KIND_STRICT = 2
+
+;- ICoreWebView2GetCookiesCompletedHandler
+
+DataSection
+	IID_ICoreWebView2GetCookiesCompletedHandler:
+	Data.l $5A4F5069
+	Data.w $5C15, $47C3
+	Data.b $86, $46, $F4, $DE, $1C, $11, $66, $70
+EndDataSection
+
+Interface ICoreWebView2GetCookiesCompletedHandler Extends IUnknown
+	Invoke(result.l, cookieList.i)
+EndInterface 
+
+;- ICoreWebView2CookieList
+
+DataSection
+	IID_ICoreWebView2CookieList:
+	Data.l $F7F6F714
+	Data.w $5D2A, $43C6
+	Data.b $95, $3, $34, $6E, $CE, $2, $D1, $86
+EndDataSection
+
+Interface ICoreWebView2CookieList Extends IUnknown
+	get_Count(Count.i)
+	GetValueAtIndex(index.l, cookie.i)
+EndInterface 
+
+;- ICoreWebView2Environment
+
+DataSection
+	IID_ICoreWebView2Environment:
+	Data.l $B96D755E
+	Data.w $319, $4E92
+	Data.b $A2, $96, $23, $43, $6F, $46, $A1, $FC
+EndDataSection
+
+Interface ICoreWebView2Environment Extends IUnknown
+	CreateCoreWebView2Controller(ParentWindow.i, handler.i)
+	CreateWebResourceResponse(Content.i, StatusCode.l, ReasonPhrase.s, Headers.s, Response.i)
+	get_BrowserVersionString(versionInfo.i)
+	add_NewBrowserVersionAvailable(eventHandler.i, token.i)
+	remove_NewBrowserVersionAvailable(token.q)
+EndInterface 
+
+;- ICoreWebView2CreateCoreWebView2ControllerCompletedHandler
+
+DataSection
+	IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler:
+	Data.l $6C4819F3
+	Data.w $C9B7, $4260
+	Data.b $81, $27, $C9, $F5, $BD, $E7, $F6, $8C
+EndDataSection
+
+Interface ICoreWebView2CreateCoreWebView2ControllerCompletedHandler Extends IUnknown
+	Invoke(errorCode.l, createdController.i)
+EndInterface 
+
+;- ICoreWebView2NewBrowserVersionAvailableEventHandler
+
+DataSection
+	IID_ICoreWebView2NewBrowserVersionAvailableEventHandler:
+	Data.l $F9A2976E
+	Data.w $D34E, $44FC
+	Data.b $AD, $EE, $81, $B6, $B5, $7C, $A9, $14
+EndDataSection
+
+Interface ICoreWebView2NewBrowserVersionAvailableEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2_3
+
+DataSection
+	IID_ICoreWebView2_3:
+	Data.l $A0D6DF20
+	Data.w $3B92, $416D
+	Data.b $AA, $C, $43, $7A, $9C, $72, $78, $57
+EndDataSection
+
+Interface ICoreWebView2_3 Extends ICoreWebView2_2
+	TrySuspend(handler.i)
+	Resume()
+	get_IsSuspended(IsSuspended.i)
+	SetVirtualHostNameToFolderMapping(hostName.s, folderPath.s, accessKind.l)
+	ClearVirtualHostNameToFolderMapping(hostName.s)
+EndInterface 
+
+;- ICoreWebView2TrySuspendCompletedHandler
+
+DataSection
+	IID_ICoreWebView2TrySuspendCompletedHandler:
+	Data.l $F206A7
+	Data.w $9D17, $4605
+	Data.b $91, $F6, $4E, $8E, $4D, $E1, $92, $E3
+EndDataSection
+
+Interface ICoreWebView2TrySuspendCompletedHandler Extends IUnknown
+	Invoke(errorCode.l, isSuccessful.l)
+EndInterface 
+
+;- Enum COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND
+#COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_DENY = 0
+#COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW = 1
+#COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_DENY_CORS = 2
+
+;- ICoreWebView2CompositionController
+
+DataSection
+	IID_ICoreWebView2CompositionController:
+	Data.l $3DF9B733
+	Data.w $B9AE, $4A15
+	Data.b $86, $B4, $EB, $9E, $E9, $82, $64, $69
+EndDataSection
+
+Interface ICoreWebView2CompositionController Extends IUnknown
+	get_RootVisualTarget(target.i)
+	put_RootVisualTarget(target.i)
+	SendMouseInput(eventKind.l, virtualKeys.l, mouseData.l, point.q)
+	SendPointerInput(eventKind.l, pointerInfo.i)
+	get_Cursor(Cursor.i)
+	get_SystemCursorId(SystemCursorId.i)
+	add_CursorChanged(eventHandler.i, token.i)
+	remove_CursorChanged(token.q)
+EndInterface 
+
+;- Enum COREWEBVIEW2_MOUSE_EVENT_KIND
+#COREWEBVIEW2_MOUSE_EVENT_KIND_HORIZONTAL_WHEEL = 526
+#COREWEBVIEW2_MOUSE_EVENT_KIND_LEFT_BUTTON_DOUBLE_CLICK = 515
+#COREWEBVIEW2_MOUSE_EVENT_KIND_LEFT_BUTTON_DOWN = 513
+#COREWEBVIEW2_MOUSE_EVENT_KIND_LEFT_BUTTON_UP = 514
+#COREWEBVIEW2_MOUSE_EVENT_KIND_LEAVE = 675
+#COREWEBVIEW2_MOUSE_EVENT_KIND_MIDDLE_BUTTON_DOUBLE_CLICK = 521
+#COREWEBVIEW2_MOUSE_EVENT_KIND_MIDDLE_BUTTON_DOWN = 519
+#COREWEBVIEW2_MOUSE_EVENT_KIND_MIDDLE_BUTTON_UP = 520
+#COREWEBVIEW2_MOUSE_EVENT_KIND_MOVE = 512
+#COREWEBVIEW2_MOUSE_EVENT_KIND_RIGHT_BUTTON_DOUBLE_CLICK = 518
+#COREWEBVIEW2_MOUSE_EVENT_KIND_RIGHT_BUTTON_DOWN = 516
+#COREWEBVIEW2_MOUSE_EVENT_KIND_RIGHT_BUTTON_UP = 517
+#COREWEBVIEW2_MOUSE_EVENT_KIND_WHEEL = 522
+#COREWEBVIEW2_MOUSE_EVENT_KIND_X_BUTTON_DOUBLE_CLICK = 525
+#COREWEBVIEW2_MOUSE_EVENT_KIND_X_BUTTON_DOWN = 523
+#COREWEBVIEW2_MOUSE_EVENT_KIND_X_BUTTON_UP = 524
+
+;- Enum COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_NONE = 0
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_LEFT_BUTTON = 1
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_RIGHT_BUTTON = 2
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_SHIFT = 4
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_CONTROL = 8
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_MIDDLE_BUTTON = 16
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_X_BUTTON1 = 32
+#COREWEBVIEW2_MOUSE_EVENT_VIRTUAL_KEYS_X_BUTTON2 = 64
+
+;- Enum COREWEBVIEW2_POINTER_EVENT_KIND
+#COREWEBVIEW2_POINTER_EVENT_KIND_ACTIVATE = 587
+#COREWEBVIEW2_POINTER_EVENT_KIND_DOWN = 582
+#COREWEBVIEW2_POINTER_EVENT_KIND_ENTER = 585
+#COREWEBVIEW2_POINTER_EVENT_KIND_LEAVE = 586
+#COREWEBVIEW2_POINTER_EVENT_KIND_UP = 583
+#COREWEBVIEW2_POINTER_EVENT_KIND_UPDATE = 581
+
+;- ICoreWebView2PointerInfo
+
+DataSection
+	IID_ICoreWebView2PointerInfo:
+	Data.l $E6995887
+	Data.w $D10D, $4F5D
+	Data.b $93, $59, $4C, $E4, $6E, $4F, $96, $B9
+EndDataSection
+
+Interface ICoreWebView2PointerInfo Extends IUnknown
+	get_PointerKind(PointerKind.i)
+	put_PointerKind(PointerKind.l)
+	get_PointerId(PointerId.i)
+	put_PointerId(PointerId.l)
+	get_FrameId(FrameId.i)
+	put_FrameId(FrameId.l)
+	get_PointerFlags(PointerFlags.i)
+	put_PointerFlags(PointerFlags.l)
+	get_PointerDeviceRect(PointerDeviceRect.i)
+	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+		put_PointerDeviceRect(PointerDeviceRect.i)
+	CompilerElse
+		put_PointerDeviceRect(PointerDeviceRect_tagRECT_left.l, PointerDeviceRect_tagRECT_top.l, PointerDeviceRect_tagRECT_right.l, PointerDeviceRect_tagRECT_bottom.l)
+	CompilerEndIf
+	get_DisplayRect(DisplayRect.i)
+	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+		put_DisplayRect(DisplayRect.i)
+	CompilerElse
+		put_DisplayRect(DisplayRect_tagRECT_left.l, DisplayRect_tagRECT_top.l, DisplayRect_tagRECT_right.l, DisplayRect_tagRECT_bottom.l)
+	CompilerEndIf
+	get_PixelLocation(PixelLocation.i)
+	put_PixelLocation(PixelLocation.q)
+	get_HimetricLocation(HimetricLocation.i)
+	put_HimetricLocation(HimetricLocation.q)
+	get_PixelLocationRaw(PixelLocationRaw.i)
+	put_PixelLocationRaw(PixelLocationRaw.q)
+	get_HimetricLocationRaw(HimetricLocationRaw.i)
+	put_HimetricLocationRaw(HimetricLocationRaw.q)
+	get_Time(Time.i)
+	put_Time(Time.l)
+	get_HistoryCount(HistoryCount.i)
+	put_HistoryCount(HistoryCount.l)
+	get_InputData(InputData.i)
+	put_InputData(InputData.l)
+	get_KeyStates(KeyStates.i)
+	put_KeyStates(KeyStates.l)
+	get_PerformanceCount(PerformanceCount.i)
+	put_PerformanceCount(PerformanceCount.q)
+	get_ButtonChangeKind(ButtonChangeKind.i)
+	put_ButtonChangeKind(ButtonChangeKind.l)
+	get_PenFlags(PenFlags.i)
+	put_PenFlags(PenFlags.l)
+	get_PenMask(PenMask.i)
+	put_PenMask(PenMask.l)
+	get_PenPressure(PenPressure.i)
+	put_PenPressure(PenPressure.l)
+	get_PenRotation(PenRotation.i)
+	put_PenRotation(PenRotation.l)
+	get_PenTiltX(PenTiltX.i)
+	put_PenTiltX(PenTiltX.l)
+	get_PenTiltY(PenTiltY.i)
+	put_PenTiltY(PenTiltY.l)
+	get_TouchFlags(TouchFlags.i)
+	put_TouchFlags(TouchFlags.l)
+	get_TouchMask(TouchMask.i)
+	put_TouchMask(TouchMask.l)
+	get_TouchContact(TouchContact.i)
+	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+		put_TouchContact(TouchContact.i)
+	CompilerElse
+		put_TouchContact(TouchContact_tagRECT_left.l, TouchContact_tagRECT_top.l, TouchContact_tagRECT_right.l, TouchContact_tagRECT_bottom.l)
+	CompilerEndIf
+	get_TouchContactRaw(TouchContactRaw.i)
+	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+		put_TouchContactRaw(TouchContactRaw.i)
+	CompilerElse
+		put_TouchContactRaw(TouchContactRaw_tagRECT_left.l, TouchContactRaw_tagRECT_top.l, TouchContactRaw_tagRECT_right.l, TouchContactRaw_tagRECT_bottom.l)
+	CompilerEndIf
+	get_TouchOrientation(TouchOrientation.i)
+	put_TouchOrientation(TouchOrientation.l)
+	get_TouchPressure(TouchPressure.i)
+	put_TouchPressure(TouchPressure.l)
+EndInterface 
+
+;- ICoreWebView2CursorChangedEventHandler
+
+DataSection
+	IID_ICoreWebView2CursorChangedEventHandler:
+	Data.l $9DA43CCC
+	Data.w $26E1, $4DAD
+	Data.b $B5, $6C, $D8, $96, $1C, $94, $C5, $71
+EndDataSection
+
+Interface ICoreWebView2CursorChangedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2CompositionController2
+
+DataSection
+	IID_ICoreWebView2CompositionController2:
+	Data.l $B6A3D24
+	Data.w $49CB, $4806
+	Data.b $BA, $20, $B5, $E0, $73, $4A, $7B, $26
+EndDataSection
+
+Interface ICoreWebView2CompositionController2 Extends ICoreWebView2CompositionController
+	get_UIAProvider(provider.i)
+EndInterface 
+
+;- ICoreWebView2Controller2
+
+DataSection
+	IID_ICoreWebView2Controller2:
+	Data.l $C979903E
+	Data.w $D4CA, $4228
+	Data.b $92, $EB, $47, $EE, $3F, $A9, $6E, $AB
+EndDataSection
+
+Interface ICoreWebView2Controller2 Extends ICoreWebView2Controller
+	get_DefaultBackgroundColor(backgroundColor.i)
+	put_DefaultBackgroundColor()
+EndInterface 
+
+;- COREWEBVIEW2_COLOR
+Structure COREWEBVIEW2_COLOR Align #PB_Structure_AlignC
+	A.a
+	R.a
+	G.a
+	B.a
+EndStructure
+
+;- ICoreWebView2Controller3
+
+DataSection
+	IID_ICoreWebView2Controller3:
+	Data.l $F9614724
+	Data.w $5D2B, $41DC
+	Data.b $AE, $F7, $73, $D6, $2B, $51, $54, $3B
+EndDataSection
+
+Interface ICoreWebView2Controller3 Extends ICoreWebView2Controller2
+	get_RasterizationScale(scale.i)
+	put_RasterizationScale(scale.d)
+	get_ShouldDetectMonitorScaleChanges(value.i)
+	put_ShouldDetectMonitorScaleChanges(value.l)
+	add_RasterizationScaleChanged(eventHandler.i, token.i)
+	remove_RasterizationScaleChanged(token.q)
+	get_BoundsMode(BoundsMode.i)
+	put_BoundsMode(BoundsMode.l)
+EndInterface 
+
+;- ICoreWebView2RasterizationScaleChangedEventHandler
+
+DataSection
+	IID_ICoreWebView2RasterizationScaleChangedEventHandler:
+	Data.l $9C98C8B1
+	Data.w $AC53, $427E
+	Data.b $A3, $45, $30, $49, $B5, $52, $4B, $BE
+EndDataSection
+
+Interface ICoreWebView2RasterizationScaleChangedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- Enum COREWEBVIEW2_BOUNDS_MODE
+#COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS = 0
+#COREWEBVIEW2_BOUNDS_MODE_USE_RASTERIZATION_SCALE = 1
+
+;- ICoreWebView2CreateCoreWebView2CompositionControllerCompletedHandler
+
+DataSection
+	IID_ICoreWebView2CreateCoreWebView2CompositionControllerCompletedHandler:
+	Data.l $2FAB84B
+	Data.w $1428, $4FB7
+	Data.b $AD, $45, $1B, $2E, $64, $73, $61, $84
+EndDataSection
+
+Interface ICoreWebView2CreateCoreWebView2CompositionControllerCompletedHandler Extends IUnknown
+	Invoke(errorCode.l, webView.i)
+EndInterface 
+
+;- ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler
+
+DataSection
+	IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler:
+	Data.l $4E8A3389
+	Data.w $C9D8, $4BD2
+	Data.b $B6, $B5, $12, $4F, $EE, $6C, $C1, $4D
+EndDataSection
+
+Interface ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler Extends IUnknown
+	Invoke(errorCode.l, createdEnvironment.i)
+EndInterface 
+
+;- ICoreWebView2Environment2
+
+DataSection
+	IID_ICoreWebView2Environment2:
+	Data.l $41F3632B
+	Data.w $5EF4, $404F
+	Data.b $AD, $82, $2D, $60, $6C, $5A, $9A, $21
+EndDataSection
+
+Interface ICoreWebView2Environment2 Extends ICoreWebView2Environment
+	CreateWebResourceRequest(uri.s, Method.s, postData.i, Headers.s, Request.i)
+EndInterface 
+
+;- ICoreWebView2Environment3
+
+DataSection
+	IID_ICoreWebView2Environment3:
+	Data.l $80A22AE3
+	Data.w $BE7C, $4CE2
+	Data.b $AF, $E1, $5A, $50, $5, $6C, $DE, $EB
+EndDataSection
+
+Interface ICoreWebView2Environment3 Extends ICoreWebView2Environment2
+	CreateCoreWebView2CompositionController(ParentWindow.i, handler.i)
+	CreateCoreWebView2PointerInfo(pointerInfo.i)
+EndInterface 
+
+;- ICoreWebView2Environment4
+
+DataSection
+	IID_ICoreWebView2Environment4:
+	Data.l $20944379
+	Data.w $6DCF, $41D6
+	Data.b $A0, $A0, $AB, $C0, $FC, $50, $DE, $D
+EndDataSection
+
+Interface ICoreWebView2Environment4 Extends ICoreWebView2Environment3
+	GetProviderForHwnd(hwnd.i, provider.i)
+EndInterface 
+
+;- ICoreWebView2EnvironmentOptions
+
+DataSection
+	IID_ICoreWebView2EnvironmentOptions:
+	Data.l $2FDE08A8
+	Data.w $1E9A, $4766
+	Data.b $8C, $5, $95, $A9, $CE, $B9, $D1, $C5
+EndDataSection
+
+Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
+	get_AdditionalBrowserArguments.i
+	put_AdditionalBrowserArguments.i
+	get_Language.i
+	put_Language.i
+	get_TargetCompatibleBrowserVersion.i
+	put_TargetCompatibleBrowserVersion.i
+	get_AllowSingleSignOnUsingOSPrimaryAccount.i
+	put_AllowSingleSignOnUsingOSPrimaryAccount.i
+EndStructure
+
+Interface ICoreWebView2EnvironmentOptions Extends IUnknown
+	get_AdditionalBrowserArguments(value.i)
+	put_AdditionalBrowserArguments(value.s)
+	get_Language(value.i)
+	put_Language(value.s)
+	get_TargetCompatibleBrowserVersion(value.i)
+	put_TargetCompatibleBrowserVersion(value.s)
+	get_AllowSingleSignOnUsingOSPrimaryAccount(allow.i)
+	put_AllowSingleSignOnUsingOSPrimaryAccount(allow.l)
+EndInterface 
+
+;- ICoreWebView2Interop
+
+DataSection
+	IID_ICoreWebView2Interop:
+	Data.l $912B34A7
+	Data.w $D10B, $49C4
+	Data.b $AF, $18, $7C, $B7, $E6, $4, $E0, $1A
+EndDataSection
+
+Interface ICoreWebView2Interop Extends IUnknown
+	AddHostObjectToScript(name.s, object.i)
+EndInterface 
+
+;- ICoreWebView2CompositionControllerInterop
+
+DataSection
+	IID_ICoreWebView2CompositionControllerInterop:
+	Data.l $8E9922CE
+	Data.w $9C80, $42E6
+	Data.b $BA, $D7, $FC, $EB, $F2, $91, $A4, $95
+EndDataSection
+
+Interface ICoreWebView2CompositionControllerInterop Extends IUnknown
+	get_UIAProvider(provider.i)
+	get_RootVisualTarget(target.i)
+	put_RootVisualTarget(target.i)
+EndInterface 
+
+;- ICoreWebView2EnvironmentInterop
+
+DataSection
+	IID_ICoreWebView2EnvironmentInterop:
+	Data.l $EE503A63
+	Data.w $C1E2, $4FBF
+	Data.b $8A, $4D, $82, $4E, $95, $F8, $BB, $13
+EndDataSection
+
+Interface ICoreWebView2EnvironmentInterop Extends IUnknown
+	GetProviderForHwnd(hwnd.i, provider.i)
 EndInterface 
 

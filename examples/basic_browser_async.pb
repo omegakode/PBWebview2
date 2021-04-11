@@ -52,8 +52,6 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 EndProcedure
 
 Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)	
-	Protected.i wait, work, hEvent, t
-
 	If result = #S_OK
 		controller\QueryInterface(?IID_ICoreWebView2Controller, @app\wvController)
 		app\wvController\get_CoreWebView2(@app\wvCore)

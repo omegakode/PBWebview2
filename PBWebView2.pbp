@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.72 (Windows - x64)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.73 LTS (Windows - x64)">
   <section name="config">
     <options closefiles="1" openmode="0" name="PBWebView2"/>
   </section>
   <section name="data">
     <explorer view="" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2021-01-31 15:41" user="carlos" host="DESKTOP-JICP41J"/>
+    <lastopen date="2021-04-04 00:02" user="carlos" host="DESKTOP-FT2FV12"/>
   </section>
   <section name="files">
     <file name="enum.pb">
@@ -16,11 +16,15 @@
     </file>
     <file name="examples\basic_browser_async.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="56b3527283cd92a269caa89f4a4ec3bc"/>
+      <fingerprint md5="c9fd04e7b1213fcc1212955ec88ddfe8"/>
     </file>
     <file name="examples\basic_browser_sync.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
       <fingerprint md5="1f66ab1eb6aaa1b7adfc32cbce4239a6"/>
+    </file>
+    <file name="examples\bootstrap.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="2490153c3154e8f498ef73b628ece6e0"/>
     </file>
     <file name="examples\chartist.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
@@ -91,7 +95,7 @@
       <fingerprint md5="cfc64ab84fadc34bd8768194ade89b74"/>
     </file>
     <file name="json.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="fb1555c14f7bb1077776a63a9b97e0bc"/>
     </file>
     <file name="keyboard.pb">
@@ -127,7 +131,7 @@
       <fingerprint md5="f1a18297d1b13892ef354a4eff756085"/>
     </file>
     <file name="string.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="f624b71198f49d5ec701d4c378126d28"/>
     </file>
     <file name="VCall.pb">
@@ -143,7 +147,7 @@
       <fingerprint md5="3b62692cbe8e5ff4e4688f960223abc9"/>
     </file>
     <file name="WebView2_Helper.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
       <fingerprint md5="8c3c6af821fd409dc1a74925a52372c8"/>
     </file>
     <file name="WebView2EnvironmentOptions.pb">
@@ -181,10 +185,6 @@
     <file name="windows\windows.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+-"/>
       <fingerprint md5="bba722e56126e8edafc9d94f753c45fa"/>
-    </file>
-    <file name="examples\bootstrap.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="++"/>
-      <fingerprint md5="5250b5aa75864e798eedb353e405068e"/>
     </file>
   </section>
   <section name="targets">

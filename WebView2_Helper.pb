@@ -158,6 +158,41 @@ Procedure.s wv2_GetBrowserVersion(browserExecutableFolder.s)
 	ProcedureReturn vs
 EndProcedure
 
+Procedure.s wv2_GetRuntimeVersionFromRegistry()
+	Protected.i buf, hkey
+	Protected.s subkey, rtVersion
+	Protected.l bufLen, type
+		
+	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
+		subkey = "SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
+		
+	CompilerElse
+	
+		subkey = "SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
+	CompilerEndIf
+	
+	If RegOpenKey_(#HKEY_LOCAL_MACHINE, subkey, @hkey) = 0
+		;Get len
+		If RegQueryValueEx_(hkey, "pv", #Null, @type, #Null, @bufLen) = 0
+			If bufLen > 0 And type = #REG_SZ
+				bufLen = bufLen + SizeOf(CHARACTER)
+				buf = AllocateMemory(buflen)
+
+				;Get data
+				If RegQueryValueEx_(hkey, "pv", #Null, #Null, buf, @bufLen) = 0
+					rtVersion = PeekS(buf)
+				EndIf
+				
+				FreeMemory(buf)
+			EndIf 
+		EndIf 
+		
+		RegCloseKey_(hkey)
+	EndIf 
+	
+	ProcedureReturn rtVersion
+EndProcedure
+
 Procedure wv2_Controller_put_Bounds(wvc.ICoreWebView2Controller, *bounds.RECT)
 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
 		wvc\put_Bounds(*bounds)

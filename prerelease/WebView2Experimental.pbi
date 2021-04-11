@@ -69,90 +69,6 @@ Structure COREWEBVIEW2_MATRIX_4X4 Align #PB_Structure_AlignC
 	_44.f
 EndStructure
 
-;- ICoreWebView2PointerInfo
-
-; DataSection
-; 	IID_ICoreWebView2PointerInfo:
-; 	Data.l $E6995887
-; 	Data.w $D10D, $4F5D
-; 	Data.b $93, $59, $4C, $E4, $6E, $4F, $96, $B9
-; EndDataSection
-; 
-; Interface ICoreWebView2PointerInfo Extends IUnknown
-; 	get_PointerKind(PointerKind.i)
-; 	put_PointerKind(PointerKind.l)
-; 	get_PointerId(PointerId.i)
-; 	put_PointerId(PointerId.l)
-; 	get_FrameId(FrameId.i)
-; 	put_FrameId(FrameId.l)
-; 	get_PointerFlags(PointerFlags.i)
-; 	put_PointerFlags(PointerFlags.l)
-; 	get_PointerDeviceRect(PointerDeviceRect.i)
-; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-; 		put_PointerDeviceRect(PointerDeviceRect.i)
-; 	CompilerElse
-; 		put_PointerDeviceRect(PointerDeviceRect_tagRECT_left.l, PointerDeviceRect_tagRECT_top.l, PointerDeviceRect_tagRECT_right.l, PointerDeviceRect_tagRECT_bottom.l)
-; 	CompilerEndIf
-; 	get_DisplayRect(DisplayRect.i)
-; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-; 		put_DisplayRect(DisplayRect.i)
-; 	CompilerElse
-; 		put_DisplayRect(DisplayRect_tagRECT_left.l, DisplayRect_tagRECT_top.l, DisplayRect_tagRECT_right.l, DisplayRect_tagRECT_bottom.l)
-; 	CompilerEndIf
-; 	get_PixelLocation(PixelLocation.i)
-; 	put_PixelLocation(PixelLocation.q)
-; 	get_HimetricLocation(HimetricLocation.i)
-; 	put_HimetricLocation(HimetricLocation.q)
-; 	get_PixelLocationRaw(PixelLocationRaw.i)
-; 	put_PixelLocationRaw(PixelLocationRaw.q)
-; 	get_HimetricLocationRaw(HimetricLocationRaw.i)
-; 	put_HimetricLocationRaw(HimetricLocationRaw.q)
-; 	get_Time(Time.i)
-; 	put_Time(Time.l)
-; 	get_HistoryCount(HistoryCount.i)
-; 	put_HistoryCount(HistoryCount.l)
-; 	get_InputData(InputData.i)
-; 	put_InputData(InputData.l)
-; 	get_KeyStates(KeyStates.i)
-; 	put_KeyStates(KeyStates.l)
-; 	get_PerformanceCount(PerformanceCount.i)
-; 	put_PerformanceCount(PerformanceCount.q)
-; 	get_ButtonChangeKind(ButtonChangeKind.i)
-; 	put_ButtonChangeKind(ButtonChangeKind.l)
-; 	get_PenFlags(PenFlags.i)
-; 	put_PenFlags(PenFlags.l)
-; 	get_PenMask(PenMask.i)
-; 	put_PenMask(PenMask.l)
-; 	get_PenPressure(PenPressure.i)
-; 	put_PenPressure(PenPressure.l)
-; 	get_PenRotation(PenRotation.i)
-; 	put_PenRotation(PenRotation.l)
-; 	get_PenTiltX(PenTiltX.i)
-; 	put_PenTiltX(PenTiltX.l)
-; 	get_PenTiltY(PenTiltY.i)
-; 	put_PenTiltY(PenTiltY.l)
-; 	get_TouchFlags(TouchFlags.i)
-; 	put_TouchFlags(TouchFlags.l)
-; 	get_TouchMask(TouchMask.i)
-; 	put_TouchMask(TouchMask.l)
-; 	get_TouchContact(TouchContact.i)
-; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-; 		put_TouchContact(TouchContact.i)
-; 	CompilerElse
-; 		put_TouchContact(TouchContact_tagRECT_left.l, TouchContact_tagRECT_top.l, TouchContact_tagRECT_right.l, TouchContact_tagRECT_bottom.l)
-; 	CompilerEndIf
-; 	get_TouchContactRaw(TouchContactRaw.i)
-; 	CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-; 		put_TouchContactRaw(TouchContactRaw.i)
-; 	CompilerElse
-; 		put_TouchContactRaw(TouchContactRaw_tagRECT_left.l, TouchContactRaw_tagRECT_top.l, TouchContactRaw_tagRECT_right.l, TouchContactRaw_tagRECT_bottom.l)
-; 	CompilerEndIf
-; 	get_TouchOrientation(TouchOrientation.i)
-; 	put_TouchOrientation(TouchOrientation.l)
-; 	get_TouchPressure(TouchPressure.i)
-; 	put_TouchPressure(TouchPressure.l)
-; EndInterface 
-
 ;- ICoreWebView2ExperimentalController
 
 DataSection
@@ -185,11 +101,6 @@ EndDataSection
 Interface ICoreWebView2ExperimentalRasterizationScaleChangedEventHandler Extends IUnknown
 	Invoke(sender.i, args.i)
 EndInterface 
-
-;- EventRegistrationToken
-; Structure EventRegistrationToken Align #PB_Structure_AlignC
-; 	value.q
-; EndStructure
 
 ;- Enum COREWEBVIEW2_BOUNDS_MODE
 #COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS = 0
@@ -233,5 +144,19 @@ EndDataSection
 Interface ICoreWebView2ExperimentalSettings Extends IUnknown
 	get_UserAgent(UserAgent.i)
 	put_UserAgent(UserAgent.s)
+EndInterface 
+
+;- ICoreWebView2ExperimentalSettings2
+
+DataSection
+	IID_ICoreWebView2ExperimentalSettings2:
+	Data.l $6CC748D4
+	Data.w $51C5, $415C
+	Data.b $AC, $97, $77, $A1, $5F, $FE, $D9, $39
+EndDataSection
+
+Interface ICoreWebView2ExperimentalSettings2 Extends IUnknown
+	get_AreBrowserAcceleratorKeysEnabled(AreBrowserAcceleratorKeysEnabled.i)
+	put_AreBrowserAcceleratorKeysEnabled(AreBrowserAcceleratorKeysEnabled.l)
 EndInterface 
 

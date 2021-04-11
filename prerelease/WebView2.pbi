@@ -559,6 +559,13 @@ EndInterface
 #COREWEBVIEW2_PROCESS_FAILED_KIND_BROWSER_PROCESS_EXITED = 0
 #COREWEBVIEW2_PROCESS_FAILED_KIND_RENDER_PROCESS_EXITED = 1
 #COREWEBVIEW2_PROCESS_FAILED_KIND_RENDER_PROCESS_UNRESPONSIVE = 2
+#COREWEBVIEW2_PROCESS_FAILED_KIND_FRAME_RENDER_PROCESS_EXITED = 3
+#COREWEBVIEW2_PROCESS_FAILED_KIND_UTILITY_PROCESS_EXITED = 4
+#COREWEBVIEW2_PROCESS_FAILED_KIND_SANDBOX_HELPER_PROCESS_EXITED = 5
+#COREWEBVIEW2_PROCESS_FAILED_KIND_GPU_PROCESS_EXITED = 6
+#COREWEBVIEW2_PROCESS_FAILED_KIND_PPAPI_PLUGIN_PROCESS_EXITED = 7
+#COREWEBVIEW2_PROCESS_FAILED_KIND_PPAPI_BROKER_PROCESS_EXITED = 8
+#COREWEBVIEW2_PROCESS_FAILED_KIND_UNKNOWN_PROCESS_EXITED = 9
 
 ;- ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler
 
@@ -1292,6 +1299,78 @@ Interface ICoreWebView2CursorChangedEventHandler Extends IUnknown
 	Invoke(sender.i, args.i)
 EndInterface 
 
+;- ICoreWebView2CompositionController2
+
+DataSection
+	IID_ICoreWebView2CompositionController2:
+	Data.l $B6A3D24
+	Data.w $49CB, $4806
+	Data.b $BA, $20, $B5, $E0, $73, $4A, $7B, $26
+EndDataSection
+
+Interface ICoreWebView2CompositionController2 Extends ICoreWebView2CompositionController
+	get_UIAProvider(provider.i)
+EndInterface 
+
+;- ICoreWebView2Controller2
+
+DataSection
+	IID_ICoreWebView2Controller2:
+	Data.l $C979903E
+	Data.w $D4CA, $4228
+	Data.b $92, $EB, $47, $EE, $3F, $A9, $6E, $AB
+EndDataSection
+
+Interface ICoreWebView2Controller2 Extends ICoreWebView2Controller
+	get_DefaultBackgroundColor(backgroundColor.i)
+	put_DefaultBackgroundColor()
+EndInterface 
+
+;- COREWEBVIEW2_COLOR
+Structure COREWEBVIEW2_COLOR Align #PB_Structure_AlignC
+	A.a
+	R.a
+	G.a
+	B.a
+EndStructure
+
+;- ICoreWebView2Controller3
+
+DataSection
+	IID_ICoreWebView2Controller3:
+	Data.l $F9614724
+	Data.w $5D2B, $41DC
+	Data.b $AE, $F7, $73, $D6, $2B, $51, $54, $3B
+EndDataSection
+
+Interface ICoreWebView2Controller3 Extends ICoreWebView2Controller2
+	get_RasterizationScale(scale.i)
+	put_RasterizationScale(scale.d)
+	get_ShouldDetectMonitorScaleChanges(value.i)
+	put_ShouldDetectMonitorScaleChanges(value.l)
+	add_RasterizationScaleChanged(eventHandler.i, token.i)
+	remove_RasterizationScaleChanged(token.q)
+	get_BoundsMode(BoundsMode.i)
+	put_BoundsMode(BoundsMode.l)
+EndInterface 
+
+;- ICoreWebView2RasterizationScaleChangedEventHandler
+
+DataSection
+	IID_ICoreWebView2RasterizationScaleChangedEventHandler:
+	Data.l $9C98C8B1
+	Data.w $AC53, $427E
+	Data.b $A3, $45, $30, $49, $B5, $52, $4B, $BE
+EndDataSection
+
+Interface ICoreWebView2RasterizationScaleChangedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- Enum COREWEBVIEW2_BOUNDS_MODE
+#COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS = 0
+#COREWEBVIEW2_BOUNDS_MODE_USE_RASTERIZATION_SCALE = 1
+
 ;- ICoreWebView2CreateCoreWebView2CompositionControllerCompletedHandler
 
 DataSection
@@ -1345,6 +1424,19 @@ Interface ICoreWebView2Environment3 Extends ICoreWebView2Environment2
 	CreateCoreWebView2PointerInfo(pointerInfo.i)
 EndInterface 
 
+;- ICoreWebView2Environment4
+
+DataSection
+	IID_ICoreWebView2Environment4:
+	Data.l $20944379
+	Data.w $6DCF, $41D6
+	Data.b $A0, $A0, $AB, $C0, $FC, $50, $DE, $D
+EndDataSection
+
+Interface ICoreWebView2Environment4 Extends ICoreWebView2Environment3
+	GetProviderForHwnd(hwnd.i, provider.i)
+EndInterface 
+
 ;- ICoreWebView2EnvironmentOptions
 
 DataSection
@@ -1353,6 +1445,17 @@ DataSection
 	Data.w $1E9A, $4766
 	Data.b $8C, $5, $95, $A9, $CE, $B9, $D1, $C5
 EndDataSection
+
+Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
+	get_AdditionalBrowserArguments.i
+	put_AdditionalBrowserArguments.i
+	get_Language.i
+	put_Language.i
+	get_TargetCompatibleBrowserVersion.i
+	put_TargetCompatibleBrowserVersion.i
+	get_AllowSingleSignOnUsingOSPrimaryAccount.i
+	put_AllowSingleSignOnUsingOSPrimaryAccount.i
+EndStructure
 
 Interface ICoreWebView2EnvironmentOptions Extends IUnknown
 	get_AdditionalBrowserArguments(value.i)
@@ -1365,36 +1468,124 @@ Interface ICoreWebView2EnvironmentOptions Extends IUnknown
 	put_AllowSingleSignOnUsingOSPrimaryAccount(allow.l)
 EndInterface 
 
-Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
-	get_AdditionalBrowserArguments.i
-	put_AdditionalBrowserArguments.i
-	get_Language.i
-	put_Language.i
-	get_TargetCompatibleBrowserVersion.i
-	put_TargetCompatibleBrowserVersion.i
-	get_AllowSingleSignOnUsingOSPrimaryAccount.i
-	put_AllowSingleSignOnUsingOSPrimaryAccount.i
-Endstructure
-
-;- COREWEBVIEW2_COLOR
-Structure COREWEBVIEW2_COLOR Align #PB_Structure_AlignC
-	A.a
-	R.a
-	G.a
-	B.a
-EndStructure
-
-;- ICoreWebView2Controller2
+;- ICoreWebView2FrameInfo
 
 DataSection
-	IID_ICoreWebView2Controller2:
-	Data.l $C979903E
-	Data.w $D4CA, $4228
-	Data.b $92, $EB, $47, $EE, $3F, $A9, $6E, $AB
+	IID_ICoreWebView2FrameInfo:
+	Data.l $DA86B8A1
+	Data.w $BDF3, $4F11
+	Data.b $99, $55, $52, $8C, $EF, $A5, $97, $27
 EndDataSection
 
-Interface ICoreWebView2Controller2 Extends ICoreWebView2Controller
-	get_DefaultBackgroundColor(backgroundColor.i)
-	put_DefaultBackgroundColor()
+Interface ICoreWebView2FrameInfo Extends IUnknown
+	get_name(name.i)
+	get_Source(Source.i)
+EndInterface 
+
+;- ICoreWebView2FrameInfoCollection
+
+DataSection
+	IID_ICoreWebView2FrameInfoCollection:
+	Data.l $8F834154
+	Data.w $D38E, $4D90
+	Data.b $AF, $FB, $68, $0, $A7, $27, $28, $39
+EndDataSection
+
+Interface ICoreWebView2FrameInfoCollection Extends IUnknown
+	GetIterator(iterator.i)
+EndInterface 
+
+;- ICoreWebView2FrameInfoCollectionIterator
+
+DataSection
+	IID_ICoreWebView2FrameInfoCollectionIterator:
+	Data.l $1BF89E2D
+	Data.w $1B2B, $4629
+	Data.b $B2, $8F, $5, $9, $9B, $41, $BB, $3
+EndDataSection
+
+Interface ICoreWebView2FrameInfoCollectionIterator Extends IUnknown
+	get_hasCurrent(hasCurrent.i)
+	GetCurrent(frameInfo.i)
+	MoveNext(hasNext.i)
+EndInterface 
+
+;- ICoreWebView2Interop
+
+DataSection
+	IID_ICoreWebView2Interop:
+	Data.l $912B34A7
+	Data.w $D10B, $49C4
+	Data.b $AF, $18, $7C, $B7, $E6, $4, $E0, $1A
+EndDataSection
+
+Interface ICoreWebView2Interop Extends IUnknown
+	AddHostObjectToScript(name.s, object.i)
+EndInterface 
+
+;- ICoreWebView2ProcessFailedEventArgs2
+
+DataSection
+	IID_ICoreWebView2ProcessFailedEventArgs2:
+	Data.l $4DAB9422
+	Data.w $46FA, $4C3E
+	Data.b $A5, $D2, $41, $D2, $7, $1D, $36, $80
+EndDataSection
+
+Interface ICoreWebView2ProcessFailedEventArgs2 Extends ICoreWebView2ProcessFailedEventArgs
+	get_reason(reason.i)
+	get_ExitCode(ExitCode.i)
+	get_ProcessDescription(ProcessDescription.i)
+	get_FrameInfosForFailedProcess(frames.i)
+EndInterface 
+
+;- Enum COREWEBVIEW2_PROCESS_FAILED_REASON
+#COREWEBVIEW2_PROCESS_FAILED_REASON_UNEXPECTED = 0
+#COREWEBVIEW2_PROCESS_FAILED_REASON_UNRESPONSIVE = 1
+#COREWEBVIEW2_PROCESS_FAILED_REASON_TERMINATED = 2
+#COREWEBVIEW2_PROCESS_FAILED_REASON_CRASHED = 3
+#COREWEBVIEW2_PROCESS_FAILED_REASON_LAUNCH_FAILED = 4
+#COREWEBVIEW2_PROCESS_FAILED_REASON_OUT_OF_MEMORY = 5
+
+;- ICoreWebView2Settings2
+
+DataSection
+	IID_ICoreWebView2Settings2:
+	Data.l $EE9A0F68
+	Data.w $F46C, $4E32
+	Data.b $AC, $23, $EF, $8C, $AC, $22, $4D, $2A
+EndDataSection
+
+Interface ICoreWebView2Settings2 Extends ICoreWebView2Settings
+	get_UserAgent(UserAgent.i)
+	put_UserAgent(UserAgent.s)
+EndInterface 
+
+;- ICoreWebView2CompositionControllerInterop
+
+DataSection
+	IID_ICoreWebView2CompositionControllerInterop:
+	Data.l $8E9922CE
+	Data.w $9C80, $42E6
+	Data.b $BA, $D7, $FC, $EB, $F2, $91, $A4, $95
+EndDataSection
+
+Interface ICoreWebView2CompositionControllerInterop Extends IUnknown
+	get_UIAProvider(provider.i)
+	get_RootVisualTarget(target.i)
+	put_RootVisualTarget(target.i)
+EndInterface 
+
+;- ICoreWebView2EnvironmentInterop
+
+DataSection
+	IID_ICoreWebView2EnvironmentInterop:
+	Data.l $EE503A63
+	Data.w $C1E2, $4FBF
+	Data.b $8A, $4D, $82, $4E, $95, $F8, $BB, $13
+EndDataSection
+
+Interface ICoreWebView2EnvironmentInterop Extends IUnknown
+	GetProviderForHwnd(hwnd.i, provider.i)
 EndInterface 
 

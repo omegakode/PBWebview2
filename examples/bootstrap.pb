@@ -367,7 +367,7 @@ Procedure menu_GetPassword_Click()
 	Protected.s script, pwd
 	
 	script = "document.getElementById('inputPassword3').value"
-	
+
 	;Result is returned as json object, strings are quoted.
 	pwd = wv2_Core_ExecuteScriptSync(app\wvCore, script, @window_ProcessEvents())
 	
@@ -463,9 +463,9 @@ Procedure main()
 	BindEvent(#PB_Event_SizeWindow, @window_Resize())
 	
 	app\envOptions = wv2_EnvironmentOptions_New()
-	;This disables CORS errors
+	;This disables CORS errors 
 	app\envOptions\put_AdditionalBrowserArguments("--disable-web-security")
-	CreateCoreWebView2EnvironmentWithOptions("", "", 0, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
+	CreateCoreWebView2EnvironmentWithOptions("", "", app\envOptions, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
 	
 	Repeat		
 	Until window_ProcessEvents(WaitWindowEvent()) = #True
