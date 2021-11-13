@@ -1146,6 +1146,451 @@ EndInterface
 #COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW = 1
 #COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_DENY_CORS = 2
 
+;- ICoreWebView2_4
+
+DataSection
+	IID_ICoreWebView2_4:
+	Data.l $20D02D59
+	Data.w $6DF2, $42DC
+	Data.b $BD, $6, $F9, $8A, $69, $4B, $13, $2
+EndDataSection
+
+Interface ICoreWebView2_4 Extends ICoreWebView2_3
+	add_FrameCreated(eventHandler.i, token.i)
+	remove_FrameCreated(token.q)
+	add_DownloadStarting(eventHandler.i, token.i)
+	remove_DownloadStarting(token.q)
+EndInterface 
+
+;- ICoreWebView2FrameCreatedEventHandler
+
+DataSection
+	IID_ICoreWebView2FrameCreatedEventHandler:
+	Data.l $38059770
+	Data.w $9BAA, $11EB
+	Data.b $A8, $B3, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2FrameCreatedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2FrameCreatedEventArgs
+
+DataSection
+	IID_ICoreWebView2FrameCreatedEventArgs:
+	Data.l $4D6E7B5E
+	Data.w $9BAA, $11EB
+	Data.b $A8, $B3, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2FrameCreatedEventArgs Extends IUnknown
+	get_Frame(Frame.i)
+EndInterface 
+
+;- ICoreWebView2Frame
+
+DataSection
+	IID_ICoreWebView2Frame:
+	Data.l $F1131A5E
+	Data.w $9BA9, $11EB
+	Data.b $A8, $B3, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2Frame Extends IUnknown
+	get_name(name.i)
+	add_NameChanged(eventHandler.i, token.i)
+	remove_NameChanged(token.q)
+	AddHostObjectToScriptWithOrigins(name.s, object.i, originsCount.l, origins.i)
+	RemoveHostObjectFromScript(name.s)
+	add_Destroyed(eventHandler.i, token.i)
+	remove_Destroyed(token.q)
+	IsDestroyed(destroyed.i)
+EndInterface 
+
+;- ICoreWebView2FrameNameChangedEventHandler
+
+DataSection
+	IID_ICoreWebView2FrameNameChangedEventHandler:
+	Data.l $435C7DC8
+	Data.w $9BAA, $11EB
+	Data.b $A8, $B3, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2FrameNameChangedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2FrameDestroyedEventHandler
+
+DataSection
+	IID_ICoreWebView2FrameDestroyedEventHandler:
+	Data.l $59DD7B4C
+	Data.w $9BAA, $11EB
+	Data.b $A8, $B3, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2FrameDestroyedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2DownloadStartingEventHandler
+
+DataSection
+	IID_ICoreWebView2DownloadStartingEventHandler:
+	Data.l $EFEDC989
+	Data.w $C396, $41CA
+	Data.b $83, $F7, $7, $F8, $45, $A5, $57, $24
+EndDataSection
+
+Interface ICoreWebView2DownloadStartingEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2DownloadStartingEventArgs
+
+DataSection
+	IID_ICoreWebView2DownloadStartingEventArgs:
+	Data.l $E99BBE21
+	Data.w $43E9, $4544
+	Data.b $A7, $32, $28, $27, $64, $EA, $FA, $60
+EndDataSection
+
+Interface ICoreWebView2DownloadStartingEventArgs Extends IUnknown
+	get_DownloadOperation(DownloadOperation.i)
+	get_Cancel(Cancel.i)
+	put_Cancel(Cancel.l)
+	get_ResultFilePath(ResultFilePath.i)
+	put_ResultFilePath(ResultFilePath.s)
+	get_Handled(Handled.i)
+	put_Handled(Handled.l)
+	GetDeferral(deferral.i)
+EndInterface 
+
+;- ICoreWebView2DownloadOperation
+
+DataSection
+	IID_ICoreWebView2DownloadOperation:
+	Data.l $3D6B6CF2
+	Data.w $AFE1, $44C7
+	Data.b $A9, $95, $C6, $51, $17, $71, $43, $36
+EndDataSection
+
+Interface ICoreWebView2DownloadOperation Extends IUnknown
+	add_BytesReceivedChanged(eventHandler.i, token.i)
+	remove_BytesReceivedChanged(token.q)
+	add_EstimatedEndTimeChanged(eventHandler.i, token.i)
+	remove_EstimatedEndTimeChanged(token.q)
+	add_StateChanged(eventHandler.i, token.i)
+	remove_StateChanged(token.q)
+	get_uri(uri.i)
+	get_ContentDisposition(ContentDisposition.i)
+	get_MimeType(MimeType.i)
+	get_TotalBytesToReceive(TotalBytesToReceive.i)
+	get_BytesReceived(BytesReceived.i)
+	get_EstimatedEndTime(EstimatedEndTime.i)
+	get_ResultFilePath(ResultFilePath.i)
+	get_State(downloadState.i)
+	get_InterruptReason(InterruptReason.i)
+	Cancel()
+	Pause()
+	Resume()
+	get_CanResume(CanResume.i)
+EndInterface 
+
+;- ICoreWebView2BytesReceivedChangedEventHandler
+
+DataSection
+	IID_ICoreWebView2BytesReceivedChangedEventHandler:
+	Data.l $828E8AB6
+	Data.w $D94C, $4264
+	Data.b $9C, $EF, $52, $17, $17, $D, $62, $51
+EndDataSection
+
+Interface ICoreWebView2BytesReceivedChangedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2EstimatedEndTimeChangedEventHandler
+
+DataSection
+	IID_ICoreWebView2EstimatedEndTimeChangedEventHandler:
+	Data.l $28F0D425
+	Data.w $93FE, $4E63
+	Data.b $9F, $8D, $2A, $EE, $C6, $D3, $BA, $1E
+EndDataSection
+
+Interface ICoreWebView2EstimatedEndTimeChangedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2StateChangedEventHandler
+
+DataSection
+	IID_ICoreWebView2StateChangedEventHandler:
+	Data.l $81336594
+	Data.w $7EDE, $4BA9
+	Data.b $BF, $71, $AC, $F0, $A9, $5B, $58, $DD
+EndDataSection
+
+Interface ICoreWebView2StateChangedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- Enum COREWEBVIEW2_DOWNLOAD_STATE
+#COREWEBVIEW2_DOWNLOAD_STATE_IN_PROGRESS = 0
+#COREWEBVIEW2_DOWNLOAD_STATE_INTERRUPTED = 1
+#COREWEBVIEW2_DOWNLOAD_STATE_COMPLETED = 2
+
+;- Enum COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_NONE = 0
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_FAILED = 1
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_ACCESS_DENIED = 2
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_NO_SPACE = 3
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_NAME_TOO_LONG = 4
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_TOO_LARGE = 5
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_MALICIOUS = 6
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_TRANSIENT_ERROR = 7
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_BLOCKED_BY_POLICY = 8
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_SECURITY_CHECK_FAILED = 9
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_TOO_SHORT = 10
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_FILE_HASH_MISMATCH = 11
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_NETWORK_FAILED = 12
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_NETWORK_TIMEOUT = 13
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_NETWORK_DISCONNECTED = 14
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_NETWORK_SERVER_DOWN = 15
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_NETWORK_INVALID_REQUEST = 16
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_FAILED = 17
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_NO_RANGE = 18
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_BAD_CONTENT = 19
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_UNAUTHORIZED = 20
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_CERTIFICATE_PROBLEM = 21
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_FORBIDDEN = 22
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_UNEXPECTED_RESPONSE = 23
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_CONTENT_LENGTH_MISMATCH = 24
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_SERVER_CROSS_ORIGIN_REDIRECT = 25
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_USER_CANCELED = 26
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_USER_SHUTDOWN = 27
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_USER_PAUSED = 28
+#COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON_DOWNLOAD_PROCESS_CRASHED = 29
+
+;- ICoreWebView2_5
+
+DataSection
+	IID_ICoreWebView2_5:
+	Data.l $BEDB11B8
+	Data.w $D63C, $11EB
+	Data.b $B8, $BC, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2_5 Extends ICoreWebView2_4
+	add_ClientCertificateRequested(eventHandler.i, token.i)
+	remove_ClientCertificateRequested(token.q)
+EndInterface 
+
+;- ICoreWebView2ClientCertificateRequestedEventHandler
+
+DataSection
+	IID_ICoreWebView2ClientCertificateRequestedEventHandler:
+	Data.l $D7175BA2
+	Data.w $BCC3, $11EB
+	Data.b $85, $29, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2ClientCertificateRequestedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
+;- ICoreWebView2ClientCertificateRequestedEventArgs
+
+DataSection
+	IID_ICoreWebView2ClientCertificateRequestedEventArgs:
+	Data.l $BC59DB28
+	Data.w $BCC3, $11EB
+	Data.b $85, $29, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2ClientCertificateRequestedEventArgs Extends IUnknown
+	get_Host(value.i)
+	get_Port(value.i)
+	get_IsProxy(value.i)
+	get_AllowedCertificateAuthorities(value.i)
+	get_MutuallyTrustedCertificates(value.i)
+	get_SelectedCertificate(value.i)
+	put_SelectedCertificate(value.i)
+	get_Cancel(value.i)
+	put_Cancel(value.l)
+	get_Handled(value.i)
+	put_Handled(value.l)
+	GetDeferral(deferral.i)
+EndInterface 
+
+;- ICoreWebView2StringCollection
+
+DataSection
+	IID_ICoreWebView2StringCollection:
+	Data.l $F41F3F8A
+	Data.w $BCC3, $11EB
+	Data.b $85, $29, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2StringCollection Extends IUnknown
+	get_Count(value.i)
+	GetValueAtIndex(index.l, value.i)
+EndInterface 
+
+;- ICoreWebView2ClientCertificateCollection
+
+DataSection
+	IID_ICoreWebView2ClientCertificateCollection:
+	Data.l $EF5674D2
+	Data.w $BCC3, $11EB
+	Data.b $85, $29, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2ClientCertificateCollection Extends IUnknown
+	get_Count(value.i)
+	GetValueAtIndex(index.l, certificate.i)
+EndInterface 
+
+;- ICoreWebView2ClientCertificate
+
+DataSection
+	IID_ICoreWebView2ClientCertificate:
+	Data.l $E7188076
+	Data.w $BCC3, $11EB
+	Data.b $85, $29, $2, $42, $AC, $13, $0, $3
+EndDataSection
+
+Interface ICoreWebView2ClientCertificate Extends IUnknown
+	get_Subject(value.i)
+	get_Issuer(value.i)
+	get_ValidFrom(value.i)
+	get_ValidTo(value.i)
+	get_DerEncodedSerialNumber(value.i)
+	get_DisplayName(value.i)
+	ToPemEncoding(pemEncodedData.i)
+	get_PemEncodedIssuerCertificateChain(value.i)
+	get_Kind(value.i)
+EndInterface 
+
+;- Enum COREWEBVIEW2_CLIENT_CERTIFICATE_KIND
+#COREWEBVIEW2_CLIENT_CERTIFICATE_KIND_SMART_CARD = 0
+#COREWEBVIEW2_CLIENT_CERTIFICATE_KIND_PIN = 1
+#COREWEBVIEW2_CLIENT_CERTIFICATE_KIND_OTHER = 2
+
+;- ICoreWebView2_6
+
+DataSection
+	IID_ICoreWebView2_6:
+	Data.l $499AADAC
+	Data.w $D92C, $4589
+	Data.b $8A, $75, $11, $1B, $FC, $16, $77, $95
+EndDataSection
+
+Interface ICoreWebView2_6 Extends ICoreWebView2_5
+	OpenTaskManagerWindow()
+EndInterface 
+
+;- ICoreWebView2_7
+
+DataSection
+	IID_ICoreWebView2_7:
+	Data.l $79C24D83
+	Data.w $9A3, $45AE
+	Data.b $94, $18, $48, $7F, $32, $A5, $87, $40
+EndDataSection
+
+Interface ICoreWebView2_7 Extends ICoreWebView2_6
+	PrintToPdf(ResultFilePath.s, printSettings.i, handler.i)
+EndInterface 
+
+;- ICoreWebView2PrintSettings
+
+DataSection
+	IID_ICoreWebView2PrintSettings:
+	Data.l $377F3721
+	Data.w $C74E, $48CA
+	Data.b $8D, $B1, $DF, $68, $E5, $1D, $60, $E2
+EndDataSection
+
+Interface ICoreWebView2PrintSettings Extends IUnknown
+	get_Orientation(Orientation.i)
+	put_Orientation(Orientation.l)
+	get_ScaleFactor(ScaleFactor.i)
+	put_ScaleFactor(ScaleFactor.d)
+	get_PageWidth(PageWidth.i)
+	put_PageWidth(PageWidth.d)
+	get_PageHeight(PageHeight.i)
+	put_PageHeight(PageHeight.d)
+	get_MarginTop(MarginTop.i)
+	put_MarginTop(MarginTop.d)
+	get_MarginBottom(MarginBottom.i)
+	put_MarginBottom(MarginBottom.d)
+	get_MarginLeft(MarginLeft.i)
+	put_MarginLeft(MarginLeft.d)
+	get_MarginRight(MarginRight.i)
+	put_MarginRight(MarginRight.d)
+	get_ShouldPrintBackgrounds(ShouldPrintBackgrounds.i)
+	put_ShouldPrintBackgrounds(ShouldPrintBackgrounds.l)
+	get_ShouldPrintSelectionOnly(ShouldPrintSelectionOnly.i)
+	put_ShouldPrintSelectionOnly(ShouldPrintSelectionOnly.l)
+	get_ShouldPrintHeaderAndFooter(ShouldPrintHeaderAndFooter.i)
+	put_ShouldPrintHeaderAndFooter(ShouldPrintHeaderAndFooter.l)
+	get_HeaderTitle(HeaderTitle.i)
+	put_HeaderTitle(HeaderTitle.s)
+	get_FooterUri(FooterUri.i)
+	put_FooterUri(FooterUri.s)
+EndInterface 
+
+;- Enum COREWEBVIEW2_PRINT_ORIENTATION
+#COREWEBVIEW2_PRINT_ORIENTATION_PORTRAIT = 0
+#COREWEBVIEW2_PRINT_ORIENTATION_LANDSCAPE = 1
+
+;- ICoreWebView2PrintToPdfCompletedHandler
+
+DataSection
+	IID_ICoreWebView2PrintToPdfCompletedHandler:
+	Data.l $CCF1EF04
+	Data.w $FD8E, $4D5F
+	Data.b $B2, $DE, $9, $83, $E4, $1B, $8C, $36
+EndDataSection
+
+Interface ICoreWebView2PrintToPdfCompletedHandler Extends IUnknown
+	Invoke(errorCode.l, isSuccessful.l)
+EndInterface 
+
+;- ICoreWebView2BrowserProcessExitedEventArgs
+
+DataSection
+	IID_ICoreWebView2BrowserProcessExitedEventArgs:
+	Data.l $1F00663F
+	Data.w $AF8C, $4782
+	Data.b $9C, $DD, $DD, $1, $C5, $2E, $34, $CB
+EndDataSection
+
+Interface ICoreWebView2BrowserProcessExitedEventArgs Extends IUnknown
+	get_BrowserProcessExitKind(BrowserProcessExitKind.i)
+	get_BrowserProcessId(value.i)
+EndInterface 
+
+;- Enum COREWEBVIEW2_BROWSER_PROCESS_EXIT_KIND
+#COREWEBVIEW2_BROWSER_PROCESS_EXIT_KIND_NORMAL = 0
+#COREWEBVIEW2_BROWSER_PROCESS_EXIT_KIND_FAILED = 1
+
+;- ICoreWebView2BrowserProcessExitedEventHandler
+
+DataSection
+	IID_ICoreWebView2BrowserProcessExitedEventHandler:
+	Data.l $FA504257
+	Data.w $A216, $4911
+	Data.b $A8, $60, $FE, $88, $25, $71, $28, $61
+EndDataSection
+
+Interface ICoreWebView2BrowserProcessExitedEventHandler Extends IUnknown
+	Invoke(sender.i, args.i)
+EndInterface 
+
 ;- ICoreWebView2CompositionController
 
 DataSection
@@ -1437,6 +1882,46 @@ Interface ICoreWebView2Environment4 Extends ICoreWebView2Environment3
 	GetProviderForHwnd(hwnd.i, provider.i)
 EndInterface 
 
+;- ICoreWebView2Environment5
+
+DataSection
+	IID_ICoreWebView2Environment5:
+	Data.l $319E423D
+	Data.w $E0D7, $4B8D
+	Data.b $92, $54, $AE, $94, $75, $DE, $9B, $17
+EndDataSection
+
+Interface ICoreWebView2Environment5 Extends ICoreWebView2Environment4
+	add_BrowserProcessExited(eventHandler.i, token.i)
+	remove_BrowserProcessExited(token.q)
+EndInterface 
+
+;- ICoreWebView2Environment6
+
+DataSection
+	IID_ICoreWebView2Environment6:
+	Data.l $E59EE362
+	Data.w $ACBD, $4857
+	Data.b $9A, $8E, $D3, $64, $4D, $94, $59, $A9
+EndDataSection
+
+Interface ICoreWebView2Environment6 Extends ICoreWebView2Environment5
+	CreatePrintSettings(printSettings.i)
+EndInterface 
+
+;- ICoreWebView2Environment7
+
+DataSection
+	IID_ICoreWebView2Environment7:
+	Data.l $43C22296
+	Data.w $3BBD, $43A4
+	Data.b $9C, $0, $5C, $D, $F6, $DD, $29, $A2
+EndDataSection
+
+Interface ICoreWebView2Environment7 Extends ICoreWebView2Environment6
+	get_UserDataFolder(value.i)
+EndInterface 
+
 ;- ICoreWebView2EnvironmentOptions
 
 DataSection
@@ -1455,7 +1940,7 @@ Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
 	put_TargetCompatibleBrowserVersion.i
 	get_AllowSingleSignOnUsingOSPrimaryAccount.i
 	put_AllowSingleSignOnUsingOSPrimaryAccount.i
-EndStructure
+Endstructure
 
 Interface ICoreWebView2EnvironmentOptions Extends IUnknown
 	get_AdditionalBrowserArguments(value.i)
@@ -1510,17 +1995,17 @@ Interface ICoreWebView2FrameInfoCollectionIterator Extends IUnknown
 	MoveNext(hasNext.i)
 EndInterface 
 
-;- ICoreWebView2Interop
+;- ICoreWebView2NewWindowRequestedEventArgs2
 
 DataSection
-	IID_ICoreWebView2Interop:
-	Data.l $912B34A7
-	Data.w $D10B, $49C4
-	Data.b $AF, $18, $7C, $B7, $E6, $4, $E0, $1A
+	IID_ICoreWebView2NewWindowRequestedEventArgs2:
+	Data.l $BBC7BAED
+	Data.w $74C6, $4C92
+	Data.b $B6, $3A, $7F, $5A, $EA, $E0, $3D, $E3
 EndDataSection
 
-Interface ICoreWebView2Interop Extends IUnknown
-	AddHostObjectToScript(name.s, object.i)
+Interface ICoreWebView2NewWindowRequestedEventArgs2 Extends ICoreWebView2NewWindowRequestedEventArgs
+	get_name(value.i)
 EndInterface 
 
 ;- ICoreWebView2ProcessFailedEventArgs2
@@ -1561,31 +2046,61 @@ Interface ICoreWebView2Settings2 Extends ICoreWebView2Settings
 	put_UserAgent(UserAgent.s)
 EndInterface 
 
-;- ICoreWebView2CompositionControllerInterop
+;- ICoreWebView2Settings3
 
 DataSection
-	IID_ICoreWebView2CompositionControllerInterop:
-	Data.l $8E9922CE
-	Data.w $9C80, $42E6
-	Data.b $BA, $D7, $FC, $EB, $F2, $91, $A4, $95
+	IID_ICoreWebView2Settings3:
+	Data.l $FDB5AB74
+	Data.w $AF33, $4854
+	Data.b $84, $F0, $A, $63, $1D, $EB, $5E, $BA
 EndDataSection
 
-Interface ICoreWebView2CompositionControllerInterop Extends IUnknown
-	get_UIAProvider(provider.i)
-	get_RootVisualTarget(target.i)
-	put_RootVisualTarget(target.i)
+Interface ICoreWebView2Settings3 Extends ICoreWebView2Settings2
+	get_AreBrowserAcceleratorKeysEnabled(AreBrowserAcceleratorKeysEnabled.i)
+	put_AreBrowserAcceleratorKeysEnabled(AreBrowserAcceleratorKeysEnabled.l)
 EndInterface 
 
-;- ICoreWebView2EnvironmentInterop
+;- ICoreWebView2Settings4
 
 DataSection
-	IID_ICoreWebView2EnvironmentInterop:
-	Data.l $EE503A63
-	Data.w $C1E2, $4FBF
-	Data.b $8A, $4D, $82, $4E, $95, $F8, $BB, $13
+	IID_ICoreWebView2Settings4:
+	Data.l $CB56846C
+	Data.w $4168, $4D53
+	Data.b $B0, $4F, $3, $B6, $D6, $79, $6F, $F2
 EndDataSection
 
-Interface ICoreWebView2EnvironmentInterop Extends IUnknown
-	GetProviderForHwnd(hwnd.i, provider.i)
+Interface ICoreWebView2Settings4 Extends ICoreWebView2Settings3
+	get_IsPasswordAutosaveEnabled(value.i)
+	put_IsPasswordAutosaveEnabled(value.l)
+	get_IsGeneralAutofillEnabled(value.i)
+	put_IsGeneralAutofillEnabled(value.l)
+EndInterface 
+
+;- ICoreWebView2Settings5
+
+DataSection
+	IID_ICoreWebView2Settings5:
+	Data.l $183E7052
+	Data.w $1D03, $43A0
+	Data.b $AB, $99, $98, $E0, $43, $B6, $6B, $39
+EndDataSection
+
+Interface ICoreWebView2Settings5 Extends ICoreWebView2Settings4
+	get_IsPinchZoomEnabled(enabled.i)
+	put_IsPinchZoomEnabled(enabled.l)
+EndInterface 
+
+;- ICoreWebView2Settings6
+
+DataSection
+	IID_ICoreWebView2Settings6:
+	Data.l $11CB3ACD
+	Data.w $9BC8, $43B8
+	Data.b $83, $BF, $F4, $7, $53, $71, $4F, $87
+EndDataSection
+
+Interface ICoreWebView2Settings6 Extends ICoreWebView2Settings5
+	get_IsSwipeNavigationEnabled(enabled.i)
+	put_IsSwipeNavigationEnabled(enabled.l)
 EndInterface 
 
