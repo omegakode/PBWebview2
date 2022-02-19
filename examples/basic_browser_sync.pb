@@ -1,4 +1,4 @@
-﻿;basic_sync.pb
+﻿;basic_browser_sync.pb
 
 ;Basic browser synchronous creation.
 
@@ -46,14 +46,6 @@ Procedure window_Resize()
 	EndIf 
 EndProcedure
 
-Procedure window_ProcessEvent(ev.l)
-	Select ev
-		Case #PB_Event_CloseWindow : ProcedureReturn window_Close()
-	EndSelect
-	
-	ProcedureReturn #False
-EndProcedure
-
 Procedure main()
 	Protected.i ev
 	
@@ -67,18 +59,20 @@ Procedure main()
 
 	BindEvent(#PB_Event_SizeWindow, @window_Resize())
 	
-	app\wvEnvironment = wv2_CreateCoreWebView2EnvironmentWithOptionsSync("", "", #Null, @window_ProcessEvent())
+	app\wvEnvironment = wv2_CreateCoreWebView2EnvironmentWithOptionsSync("", "", #Null)
 	If app\wvEnvironment = 0
 		MessageRequester("Error", "Failed to create WebView2Environment.")
 		End
 	EndIf
+	Debug "Environment created"
 	
-	app\wvController = wv2_Environment_CreateCoreWebView2ControllerSync(app\wvEnvironment, WindowID(app\window), @window_ProcessEvent())
+	app\wvController = wv2_Environment_CreateCoreWebView2ControllerSync(app\wvEnvironment, WindowID(app\window))
 	If app\wvController = 0
 		MessageRequester("Error", "Failed to create WebView2Controller.")
 		End 
 	EndIf 
-	
+	Debug "Controller created"
+
 	app\wvController\get_CoreWebView2(@app\wvCore)
 	window_Resize()
 	app\wvCore\Navigate("https://duckduckgo.com/") 
@@ -86,7 +80,7 @@ Procedure main()
 	app\wvEnvironment\Release()
 	
 	Repeat
-	Until window_ProcessEvent(WaitWindowEvent()) = #True
+	Until WaitWindowEvent() = #PB_Event_CloseWindow
 EndProcedure
 
 main()

@@ -12,9 +12,9 @@ Structure APP_TAG
 	wvEnvironment.ICoreWebView2Environment
 	wvController.ICoreWebView2Controller
 	wvCore.ICoreWebView2
-	*eventNavigationCompleted.WV2_EVENT_HANDLER
-	*eventNavigationSarting.WV2_EVENT_HANDLER
-	*eventWebResourceRequested.WV2_EVENT_HANDLER
+	eventNavigationCompleted.IWV2EventHandler
+	eventNavigationSarting.IWV2EventHandler
+	eventWebResourceRequested.IWV2EventHandler
 EndStructure
 Global.APP_TAG app
 
@@ -23,13 +23,12 @@ Declare main()
 
 Declare window_Close()
 Declare window_Resize()
-Declare window_ProcessEvents(ev.l)
 
-Declare wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)	
-Declare wvController_Created(*this.WV2_EVENT_HANDLER, result.l=0, controller.ICoreWebView2Controller=0)
-Declare wv_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
-Declare wv_NavigationStarting(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
-Declare wv_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
+Declare wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)	
+Declare wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
+Declare wv_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Declare wv_NavigationStarting(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
+Declare wv_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
 
 Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	Select msg
@@ -40,12 +39,12 @@ Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	ProcedureReturn #PB_ProcessPureBasicEvents
 EndProcedure
 
-Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)	
+Procedure wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)	
 	If result = #S_OK
 		environment\QueryInterface(?IID_ICoreWebView2Environment, @app\wvEnvironment)
-		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @wvController_Created()))
+		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(@wvController_Created(), 0))
 
-		wv2_EventHandler_Release(*this)
+		this\Release()
 		app\wvEnvironment\Release()
 
 	Else
@@ -54,27 +53,27 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 	EndIf 
 EndProcedure
 
-Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l=0, controller.ICoreWebView2Controller=0)		
+Procedure wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)		
 	If result = #S_OK
 		controller\QueryInterface(?IID_ICoreWebView2Controller, @app\wvController)
 		app\wvController\get_CoreWebView2(@app\wvCore)
 		
 		;Setup events
-		app\eventNavigationCompleted = wv2_EventHandler_New(?IID_ICoreWebView2NavigationCompletedEventHandler, @wv_NavigationCompleted())
+		app\eventNavigationCompleted = wv2_EventHandler_New(@wv_NavigationCompleted(), 0)
 		app\wvCore\add_NavigationCompleted(app\eventNavigationCompleted, #Null)
 		
-		app\eventNavigationSarting = wv2_EventHandler_New(?IID_ICoreWebView2NavigationStartingEventHandler, @wv_NavigationStarting())
+		app\eventNavigationSarting = wv2_EventHandler_New(@wv_NavigationStarting(), 0)
 		app\wvCore\add_NavigationStarting(app\eventNavigationSarting, #Null)
 		
 		app\wvCore\AddWebResourceRequestedFilter("*", #COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL)
-		app\eventWebResourceRequested = wv2_EventHandler_New(?IID_ICoreWebView2WebResourceRequestedEventHandler, @wv_WebResourceRequested())
+		app\eventWebResourceRequested = wv2_EventHandler_New(@wv_WebResourceRequested(), 0)
 		app\wvCore\add_WebResourceRequested(app\eventWebResourceRequested, #Null)
 		
 		window_Resize()
 		
 		app\wvCore\Navigate("https://duckduckgo.com")
 		
-		wv2_EventHandler_Release(*this)
+		this\Release()
 
 	Else
 		MessageRequester("Error", "Failed to create WebView2Controller.")
@@ -82,7 +81,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l=0, controller.I
 	EndIf 
 EndProcedure
 
-Procedure wv_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
+Procedure wv_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
 	Protected.ICoreWebView2WebResourceRequest req
 	Protected.ICoreWebView2HttpRequestHeaders reqHeaders
 	
@@ -98,13 +97,13 @@ Procedure wv_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2,
 	EndIf 
 EndProcedure
 
-Procedure wv_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Procedure wv_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
 	Debug "Event NavigationCompleted"
 	
 EndProcedure
 
 
-Procedure wv_NavigationStarting(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
+Procedure wv_NavigationStarting(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
 	Protected.i uri
 	Protected.s suri
 	
@@ -130,17 +129,11 @@ Procedure window_Close()
 	
 	If app\wvCore : app\wvCore\Release() : EndIf 
 	
-	If app\eventNavigationCompleted
-		wv2_EventHandler_Release(app\eventNavigationCompleted)
-	EndIf 
+	If app\eventNavigationCompleted : app\eventNavigationCompleted\Release() : EndIf 
 	
-	If app\eventNavigationSarting
-		wv2_EventHandler_Release(app\eventNavigationSarting)
-	EndIf 
+	If app\eventNavigationSarting : app\eventNavigationSarting\Release() : EndIf 
 	
-	If app\eventWebResourceRequested
-		wv2_EventHandler_Release(app\eventWebResourceRequested)
-	EndIf 
+	If app\eventWebResourceRequested : app\eventWebResourceRequested\Release() : EndIf 
 	
 	ProcedureReturn #True ;Exit message loop.
 EndProcedure
@@ -154,15 +147,10 @@ Procedure window_Resize()
 	EndIf 
 EndProcedure
 
-Procedure window_ProcessEvents(ev.l)
-	Select ev
-		Case #PB_Event_CloseWindow : ProcedureReturn window_Close()
-	EndSelect
+Procedure main()
+	Protected.l ev
+	Protected.b quit
 	
-	ProcedureReturn #False 
-EndProcedure
-
-Procedure main()	
 	If wv2_GetBrowserVersion("") = ""
 		MessageRequester("Error", "MS Edge not found, install MS Edge runtime.")
 		End 
@@ -173,10 +161,16 @@ Procedure main()
 
 	BindEvent(#PB_Event_SizeWindow, @window_Resize())
 	
-	CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
+	CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(@wvEnvironment_Created(), 0))
 
+	quit = #False 
 	Repeat
-	Until window_ProcessEvents(WaitWindowEvent()) = #True 
+		ev = WaitWindowEvent()
+		Select ev
+			Case #PB_Event_CloseWindow
+				quit = window_Close()
+		EndSelect
+	Until quit
 EndProcedure
 
 main()

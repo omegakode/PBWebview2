@@ -1,20 +1,5 @@
 ﻿;- commctrl.pbi
 
-; XIncludeFile "lib.pb"
-
-;- Imports
-; CompilerIf #PB_Compiler_Processor = #PB_Processor_x64
-; 	Import "lib\64\comctl32.lib"
-; CompilerElse
-; 	Import "lib\32\comctl32.lib"
-; CompilerEndIf
-; 
-; 	SetWindowSubclass_(hwnd.i, pfnSubclass.i, uIdSubclass.i, dwRefData.i) As lib::IMP_NAME(SetWindowSubclass, 16)
-; 	DefSubclassProc_(hwnd.i, msg.i, wparam.i, lparam.i) As lib::IMP_NAME(DefSubclassProc, 16)
-; 	RemoveWindowSubclass_(hwnd.i, pfnSubclass.i, uIdSubclass.i) As lib::IMP_NAME(RemoveWindowSubclass, 12)
-; 	GetWindowSubclass_(hWnd.i, pfnSubclass.i, uIdSubclass.i, pdwRefData.i) As lib::IMP_NAME(GetWindowSubclass, 16)
-; EndImport
-
 ;- REBAR CONTROL
 #RBBS_USECHEVRON 	   = $00000200
 #RBBS_HIDETITLE      = $00000400

@@ -22,8 +22,8 @@ Global.APP_TAG app
 Declare main()
 Declare window_Close()
 Declare window_Resize()
-Declare wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)	
-Declare wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
+Declare wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)	
+Declare wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
 Declare.s page1_Create()
 Declare.d addNum(a.d, b.d)
 Declare.i addStr(a.i, b.i)
@@ -75,11 +75,11 @@ Procedure.s page1_Create()
 	ProcedureReturn page1
 EndProcedure
 
-Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)		
+Procedure wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)		
 	If result = #S_OK
 		environment\QueryInterface(?IID_ICoreWebView2Environment, @app\wvEnvironment)
-		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @wvController_Created()))
-		wv2_EventHandler_Release(*this)
+		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(@wvController_Created(), 0))
+		this\Release()
 		app\wvEnvironment\Release()
 		
 	Else
@@ -88,7 +88,7 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 	EndIf 
 EndProcedure
 
-Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
+Procedure wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
 	Protected.VARIANT vPBObj
 		
 	If result = #S_OK
@@ -106,7 +106,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 		
 		window_Resize()
 		app\wvCore\NavigateToString(app\page1)
-		wv2_EventHandler_Release(*this)
+		this\Release()
 		
 	Else
 		MessageRequester("Error", "Failed to create WebView2Controller.")
@@ -148,7 +148,7 @@ Procedure main()
 	BindEvent(#PB_Event_CloseWindow, @window_Close())
 	BindEvent(#PB_Event_SizeWindow, @window_Resize())
 	
-	CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
+	CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(@wvEnvironment_Created(), 0))
 	
 	Repeat
 		ev = WaitWindowEvent()

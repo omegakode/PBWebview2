@@ -16,13 +16,13 @@ Structure BROWSER
 	
 	;Events
 	;Core
-	*evNavigationCompleted.WV2_EVENT_HANDLER
-	*evNavigationStarting.WV2_EVENT_HANDLER
-	*evNewWindowRequested.WV2_EVENT_HANDLER
-	*evContainsFullScreenElementChanged.WV2_EVENT_HANDLER
-	*evHistoryChanged.WV2_EVENT_HANDLER
+	evNavigationCompleted.IWV2EventHandler
+	evNavigationStarting.IWV2EventHandler
+	evNewWindowRequested.IWV2EventHandler
+	evContainsFullScreenElementChanged.IWV2EventHandler
+	evHistoryChanged.IWV2EventHandler
 	;Controller
-	*evAccelKeyPressed.WV2_EVENT_HANDLER
+	evAccelKeyPressed.IWV2EventHandler
 
 	createParam.i
 	createUrl.s

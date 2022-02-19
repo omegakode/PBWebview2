@@ -14,7 +14,7 @@ Structure APP_TAG
 	wvEnvironment.ICoreWebView2Environment
 	wvController.ICoreWebView2Controller
 	wvCore.ICoreWebView2
-	*eventWebMessageReceived.WV2_EVENT_HANDLER
+	eventWebMessageReceived.IWV2EventHandler
 	page1.s
 	quit.b
 EndStructure
@@ -24,10 +24,10 @@ Global.APP_TAG app
 Declare main()
 Declare window_Close()
 Declare window_Resize()
-Declare wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)	
-Declare wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
+Declare wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)	
+Declare wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
 Declare.s page1_Create()
-Declare wv_WebMessageReceived(*this.WV2_EVENT_HANDLER, webview.ICoreWebView2, args.ICoreWebView2WebMessageReceivedEventArgs)
+Declare wv_WebMessageReceived(this.IWV2EventHandler, webview.ICoreWebView2, args.ICoreWebView2WebMessageReceivedEventArgs)
 Declare menu_Create(winId.i)
 Declare menu_SendMessage_Click()
 
@@ -73,7 +73,7 @@ Procedure.s page1_Create()
 	ProcedureReturn page1
 EndProcedure
 
-Procedure wv_WebMessageReceived(*this.WV2_EVENT_HANDLER, webview.ICoreWebView2, args.ICoreWebView2WebMessageReceivedEventArgs)
+Procedure wv_WebMessageReceived(this.IWV2EventHandler, webview.ICoreWebView2, args.ICoreWebView2WebMessageReceivedEventArgs)
 	Protected.i msg
 	
 	args\TryGetWebMessageAsString(@msg)
@@ -83,11 +83,11 @@ Procedure wv_WebMessageReceived(*this.WV2_EVENT_HANDLER, webview.ICoreWebView2, 
 	EndIf 
 EndProcedure
 
-Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)		
+Procedure wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)		
 	If result = #S_OK
 		environment\QueryInterface(?IID_ICoreWebView2Environment, @app\wvEnvironment)
-		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @wvController_Created()))
-		wv2_EventHandler_Release(*this)
+		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(@wvController_Created(), 0))
+		this\Release()
 		app\wvEnvironment\Release()
 		
 	Else
@@ -96,7 +96,7 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 	EndIf 
 EndProcedure
 
-Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)	
+Procedure wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)	
 	Protected.q evToken
 	
 	If result = #S_OK
@@ -110,7 +110,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 		
 		window_Resize()
 		app\wvCore\NavigateToString(app\page1)
-		wv2_EventHandler_Release(*this)
+		this\Release()
 		
 	Else
 		MessageRequester("Error", "Failed to create WebView2Controller.")
@@ -121,7 +121,7 @@ EndProcedure
 Procedure window_Close()
 	app\wvController\Close()
 	app\wvCore\Release()
-	wv2_EventHandler_Release(app\eventWebMessageReceived)
+	app\eventWebMessageReceived\Release()
 	
 	app\quit = #True
 EndProcedure
@@ -144,7 +144,7 @@ Procedure main()
 	EndIf
 	
 	app\page1 = page1_Create()
-	app\eventWebMessageReceived = wv2_EventHandler_New(?IID_ICoreWebView2WebMessageReceivedEventHandler, @wv_WebMessageReceived())
+	app\eventWebMessageReceived = wv2_EventHandler_New(@wv_WebMessageReceived(), 0)
 	
 	app\window = OpenWindow(#PB_Any, 10, 10, 600, 400, "PBWebView2 - Host Communication", #PB_Window_SystemMenu | #PB_Window_MinimizeGadget | #PB_Window_SizeGadget | #PB_Window_MaximizeGadget)
 	SetWindowCallback(@window_Proc(), app\window)	
@@ -154,7 +154,7 @@ Procedure main()
 	BindEvent(#PB_Event_CloseWindow, @window_Close())
 	BindEvent(#PB_Event_SizeWindow, @window_Resize())
 	
-	CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
+	CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(@wvEnvironment_Created(), 0))
 	
 	Repeat
 		ev = WaitWindowEvent()

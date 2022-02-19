@@ -45,11 +45,11 @@ Declare menu_Show()
 
 Declare url_Edit_SelectAll(url.i)
 
-Declare core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
-Declare core_NavigationStaring(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
-Declare core_NewWindowRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
-Declare core_ContainsFullScreenElementChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
-Declare core_HistoryChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
+Declare core_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Declare core_NavigationStaring(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
+Declare core_NewWindowRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
+Declare core_ContainsFullScreenElementChanged(this.IWV2EventHandler, sender.ICoreWebView2, args.IUnknown)
+Declare core_HistoryChanged(this.IWV2EventHandler, sender.ICoreWebView2, args.IUnknown)
 
 ;-
 Macro tab_GetBrowser(tabIndex)
@@ -710,11 +710,11 @@ Procedure btnReload_CallBack(btn.i, msg.l)
 EndProcedure
 
 ;-
-Procedure controller_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2Controller, args.ICoreWebView2AcceleratorKeyPressedEventArgs)
+Procedure controller_AccelKeyPressed(this.IWV2EventHandler, sender.ICoreWebView2Controller, args.ICoreWebView2AcceleratorKeyPressedEventArgs)
 	Protected.l keyEventKind, key, handled
 	Protected.b showMenu
 	
-	LockMutex(*this\mutex)
+	this\LockMutex()
 	args\get_KeyEventKind(@keyEventKind)
 
 	handled = #False
@@ -787,36 +787,36 @@ Procedure controller_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebVie
 	
 	args\put_Handled(handled)
 	
-	UnlockMutex(*this\mutex)
+	this\UnlockMutex()
 EndProcedure
 
-Procedure controller_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
+Procedure controller_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
 	Protected.BROWSER *browser
 	
-	LockMutex(*this\mutex)
-	*browser = *this\context
+	this\LockMutex()
+	*browser = this\GetContext()
 	
 	controller\QueryInterface(?IID_ICoreWebView2Controller, @*browser\controller)
 	*browser\controller\get_CoreWebView2(@*browser\core)
 	tabCtrl_SetItemUserData(app\tab, *browser\createParam, *browser)
 	
 	;Set zoom as dpi scaling
-	*browser\controller\put_ZoomFactor(DesktopResolutionX())
+; 	*browser\controller\put_ZoomFactor(DesktopResolutionX())
 
 	;Events
 	;Core
-	*browser\evNavigationStarting = wv2_EventHandler_New(?IID_ICoreWebView2NavigationStartingEventHandler, @core_NavigationStaring(), *browser)
+	*browser\evNavigationStarting = wv2_EventHandler_New(@core_NavigationStaring(), *browser)
 	*browser\core\add_NavigationStarting(*browser\evNavigationStarting, #Null)
-	*browser\evNavigationCompleted = wv2_EventHandler_New(?IID_ICoreWebView2NavigationCompletedEventHandler, @core_NavigationCompleted(), *browser)
+	*browser\evNavigationCompleted = wv2_EventHandler_New(@core_NavigationCompleted(), *browser)
 	*browser\core\add_NavigationCompleted(*browser\evNavigationCompleted, #Null)
-	*browser\evNewWindowRequested = wv2_EventHandler_New(?IID_ICoreWebView2NewWindowRequestedEventHandler, @core_NewWindowRequested(), *browser)
+	*browser\evNewWindowRequested = wv2_EventHandler_New(@core_NewWindowRequested(), *browser)
 	*browser\core\add_NewWindowRequested(*browser\evNewWindowRequested, #Null)
-	*browser\evContainsFullScreenElementChanged = wv2_EventHandler_New(?IID_ICoreWebView2ContainsFullScreenElementChangedEventHandler, @core_ContainsFullScreenElementChanged(), *browser)
+	*browser\evContainsFullScreenElementChanged = wv2_EventHandler_New(@core_ContainsFullScreenElementChanged(), *browser)
 	*browser\core\add_ContainsFullScreenElementChanged(*browser\evContainsFullScreenElementChanged, #Null)
-	*browser\evHistoryChanged = wv2_EventHandler_New(?IID_ICoreWebView2HistoryChangedEventHandler, @core_HistoryChanged(), *browser)
+	*browser\evHistoryChanged = wv2_EventHandler_New(@core_HistoryChanged(), *browser)
 	*browser\core\add_HistoryChanged(*browser\evHistoryChanged, #Null)
 	;Controller
-	*browser\evAccelKeyPressed = wv2_EventHandler_New(?IID_ICoreWebView2AcceleratorKeyPressedEventHandler, @controller_AccelKeyPressed(), *browser)
+	*browser\evAccelKeyPressed = wv2_EventHandler_New(@controller_AccelKeyPressed(), *browser)
 	*browser\controller\add_AcceleratorKeyPressed(*browser\evAccelKeyPressed, #Null)
 
 	;Show window after fisrt browser created
@@ -836,37 +836,37 @@ Procedure controller_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICore
 	tab_Select(*browser\createParam)
 	SetActiveGadget(app\url)
 	
-	UnlockMutex(*this\mutex)
+	this\UnlockMutex()
 EndProcedure
 
 ;-
-Procedure env_Created(*this.WV2_EVENT_HANDLER, result.l, env.ICoreWebView2Environment)	
+Procedure env_Created(this.IWV2EventHandler, result.l, env.ICoreWebView2Environment)	
 	env\QueryInterface(?IID_ICoreWebView2Environment, @app\env)
 	;First tab browser
 	browser_New(app\env, 0)
 		
-	wv2_EventHandler_Release(*this)
+	this\Release()
 EndProcedure
 
 ;-
-Procedure core_NavigationStaring(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
+Procedure core_NavigationStaring(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
 	Protected.i uri
 	Protected.s suri
 	Protected.BROWSER *browser
 	
-	LockMutex(*this\mutex)
-	*browser = *this\context
+	this\LockMutex()
+	*browser = this\GetContext()
 	
-	UnlockMutex(*this\mutex)
+	this\UnlockMutex()
 EndProcedure
 
-Procedure core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Procedure core_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
 	Protected.i uri, title
 	Protected.s suri, stitle, host, iconUrl
 	Protected.BROWSER *browser, *currBrowser
 	
-	LockMutex(*this\mutex)
-	*browser = *this\context
+	this\LockMutex()
+	*browser = this\GetContext()
 	
 	sender\get_Source(@uri)
 	If uri
@@ -878,7 +878,7 @@ Procedure core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2
 	If host
 		
 		;Get favicon	
-; 		*browser\core\ExecuteScript(#FAVICON_SCRIPT_GET_ICON, wv2_EventHandler_New(?IID_ICoreWebView2ExecuteScriptCompletedHandler, @favicon_ScriptExecuted(), *browser))
+; 		*browser\core\ExecuteScript(#FAVICON_SCRIPT_GET_ICON, wv2_EventHandler_New(@favicon_ScriptExecuted(), *browser))
 	EndIf 
 	
 	sender\get_DocumentTitle(@title)
@@ -895,14 +895,14 @@ Procedure core_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2
 	
 	tabCtrl_SetItemText2(app\tab, browser_GetTabIndex(*browser), stitle, #TAB_MAX_ITEM_WIDTH)
 
-	UnlockMutex(*this\mutex)
+	this\UnlockMutex()
 EndProcedure
 
-Procedure core_NewWindowRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
+Procedure core_NewWindowRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
 	Protected.i uriBuf
 	Protected.s uriStr
 	
-	LockMutex(*this\mutex)
+	this\LockMutex()
 		args\get_uri(@uriBuf)
 		If uriBuf
 			uriStr = PeekS(uriBuf)
@@ -913,13 +913,13 @@ Procedure core_NewWindowRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2,
 			
 			str_FreeCoMemString(uriBuf)
 		EndIf 
-	UnlockMutex(*this\mutex)
+	this\UnlockMutex()
 EndProcedure
 
-Procedure core_ContainsFullScreenElementChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
+Procedure core_ContainsFullScreenElementChanged(this.IWV2EventHandler, sender.ICoreWebView2, args.IUnknown)
 	Protected.l cfs
 	
-	LockMutex(*this\mutex)
+	this\LockMutex()
 	sender\get_ContainsFullScreenElement(@cfs)
 	If cfs 
 		window_SetFullScreen(#True)
@@ -927,22 +927,22 @@ Procedure core_ContainsFullScreenElementChanged(*this.WV2_EVENT_HANDLER, sender.
 	Else
 		window_SetFullScreen(#False)
 	EndIf 
-	UnlockMutex(*this\mutex)
+	this\UnlockMutex()
 EndProcedure
 
-Procedure core_HistoryChanged(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.IUnknown)
+Procedure core_HistoryChanged(this.IWV2EventHandler, sender.ICoreWebView2, args.IUnknown)
 	Protected.BROWSER *browser
 	
-	LockMutex(*this\mutex)
+	this\LockMutex()
 	
-	*browser = *this\context
+	*browser = this\GetContext()
 	
 	;Nav buttons
 	If *browser = tab_GetCurrentBrowser()
 		toolBar_UpdateNavButtons(*browser)
 	EndIf 
 	
-	UnlockMutex(*this\mutex)
+	this\UnlockMutex()
 EndProcedure
 
 ;-
@@ -963,7 +963,7 @@ Procedure browser_New(env.ICoreWebView2Environment, tabIndex.l, url.s = "")
 	app\browsers()\createParam = tabIndex
 	app\browsers()\createUrl = url
 	
-	env\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @controller_Created(), @app\browsers()))
+	env\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(@controller_Created(), @app\browsers()))
 EndProcedure
 
 Procedure browser_Free(*browser.BROWSER)
@@ -981,12 +981,12 @@ Procedure browser_Free(*browser.BROWSER)
 		 *browser\controller\Release()
 	EndIf
 	
-	If *browser\evNavigationCompleted : wv2_EventHandler_Release(*browser\evNavigationCompleted) : EndIf
-	If *browser\evNavigationStarting : wv2_EventHandler_Release(*browser\evNavigationStarting) : EndIf
-	If *browser\evAccelKeyPressed : wv2_EventHandler_Release(*browser\evAccelKeyPressed) : EndIf 
-	If *browser\evContainsFullScreenElementChanged : wv2_EventHandler_Release(*browser\evContainsFullScreenElementChanged) : EndIf
-	If *browser\evHistoryChanged : wv2_EventHandler_Release(*browser\evHistoryChanged) : EndIf 
-	If *browser\evNewWindowRequested : wv2_EventHandler_Free(*browser\evNewWindowRequested) : EndIf 
+	If *browser\evNavigationCompleted : *browser\evNavigationCompleted\Release() : EndIf
+	If *browser\evNavigationStarting : *browser\evNavigationStarting\Release() : EndIf
+	If *browser\evAccelKeyPressed : *browser\evAccelKeyPressed\Release() : EndIf 
+	If *browser\evContainsFullScreenElementChanged : *browser\evContainsFullScreenElementChanged\Release() : EndIf
+	If *browser\evHistoryChanged : *browser\evHistoryChanged\Release() : EndIf 
+	If *browser\evNewWindowRequested : *browser\evNewWindowRequested\Release() : EndIf 
 
 	ChangeCurrentElement(app\browsers(), *browser)
 	DeleteElement(app\browsers())
@@ -1311,8 +1311,6 @@ Procedure url_Edit_On_KILLFOCUS(hwnd.i, msg.l, wparam.i, lparam.i)
 	EndIf 
 EndProcedure
 
-
-
 Procedure url_Edit_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	Select msg
 		Case #WM_CHAR : ProcedureReturn url_Edit_On_CHAR(hwnd, msg, wparam, lparam)
@@ -1481,7 +1479,7 @@ Procedure window_ProcessEvents(ev.l)
 					btn_OnLeftClickOrSpace(EventGadget())
 					
 				Case #PB_EventType_DragStart
-					Debug "ds"
+					
 			EndSelect
 			
 		Case #PB_Event_Menu
@@ -1784,7 +1782,7 @@ Procedure main()
 	app\tabMenu = tabMenu_Create()
 	accel_Add(app\window)
 	
-	If CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @env_Created())) <> #S_OK
+	If CreateCoreWebView2EnvironmentWithOptions("", "", #Null, wv2_EventHandler_New(@env_Created(), 0)) <> #S_OK
 		MessageRequester(#APP_NAME, "Error, failed to created WebView2 Environment.")
 		End
 	EndIf 

@@ -28,10 +28,9 @@ Structure APP_TAG
 	pbHostObject.IDispatch
 	
 	;Events
-	*evWebResourceRequested.WV2_EVENT_HANDLER
-	*eventNavigationCompleted.WV2_EVENT_HANDLER
-	*evAccelKeyPressed.WV2_EVENT_HANDLER
-	*evDevProtocol.WV2_EVENT_HANDLER
+	evWebResourceRequested.IWV2EventHandler
+	eventNavigationCompleted.IWV2EventHandler
+	evAccelKeyPressed.IWV2EventHandler
 
 	;Resources
 	page1.s
@@ -62,13 +61,13 @@ Declare menu_ZoomIn_Click()
 Declare menu_ZoomOut_Click()
 Declare menu_ZoomReset_Click()
 
-Declare wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)	
+Declare wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)	
 
-Declare wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
-Declare wvController_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2Controller, args.ICoreWebView2AcceleratorKeyPressedEventArgs)
+Declare wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
+Declare wvController_AccelKeyPressed(this.IWV2EventHandler, sender.ICoreWebView2Controller, args.ICoreWebView2AcceleratorKeyPressedEventArgs)
 
-Declare wvCore_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
-Declare wvCore_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Declare wvCore_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
+Declare wvCore_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
 
 Declare.s page1_Create()
 
@@ -91,12 +90,12 @@ Runtime Procedure switch_Change(id.i, state.i)
 EndProcedure
 
 ;- 
-Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)		
+Procedure wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICoreWebView2Environment)		
 	If result = #S_OK
 		environment\QueryInterface(?IID_ICoreWebView2Environment, @app\wvEnvironment)
-		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2ControllerCompletedHandler, @wvController_Created()))
+		app\wvEnvironment\CreateCoreWebView2Controller(WindowID(app\window), wv2_EventHandler_New(@wvController_Created(), 0))
 		
-		wv2_EventHandler_Release(*this)
+		this\Release()
 			
 	Else
 		MessageRequester("Error", "Failed to create WebView2Environment.")
@@ -105,7 +104,7 @@ Procedure wvEnvironment_Created(*this.WV2_EVENT_HANDLER, result.l, environment.I
 EndProcedure
 
 ;-
-Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
+Procedure wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
 	Protected.VARIANT vPBObj
 	Protected.ICoreWebView2Settings sett
 	Protected.s file, currDir
@@ -143,7 +142,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 		
 		app\wvCore\NavigateToString(app\page1)
 
-		wv2_EventHandler_Release(*this)
+		this\Release()
 		
 	Else
 		MessageRequester("Error", "Failed to create WebView2Controller.")
@@ -151,7 +150,7 @@ Procedure wvController_Created(*this.WV2_EVENT_HANDLER, result.l, controller.ICo
 	EndIf 
 EndProcedure
 
-Procedure wvController_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2Controller, args.ICoreWebView2AcceleratorKeyPressedEventArgs)
+Procedure wvController_AccelKeyPressed(this.IWV2EventHandler, sender.ICoreWebView2Controller, args.ICoreWebView2AcceleratorKeyPressedEventArgs)
 	Protected.l keyEventKind, key
 		
 	;Disable webview2 accelerator keys.
@@ -181,13 +180,13 @@ Procedure wvController_AccelKeyPressed(*this.WV2_EVENT_HANDLER, sender.ICoreWebV
 EndProcedure 
 
 ;-
-Procedure wvCore_NavigationCompleted(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
+Procedure wvCore_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
 	HideWindow(app\window, #False)
 	app\wvController\put_IsVisible(#True)
 	
 EndProcedure
 
-Procedure wvCore_WebResourceRequested(*this.WV2_EVENT_HANDLER, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
+Procedure wvCore_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
 	Protected.ICoreWebView2WebResourceRequest req
 	Protected.ICoreWebView2WebResourceResponse resp
 	Protected.s uri, contentType
@@ -349,7 +348,7 @@ Procedure menu_GetCheck1State_Click()
 	;jquery
 	script = "$('#gridCheck1').is(':checked')"
 
-	res = wv2_Core_ExecuteScriptSync(app\wvCore, script, @window_ProcessEvents())
+	res = wv2_Core_ExecuteScriptSync(app\wvCore, script)
 	
 	Debug "Checkbox state: " + res
 EndProcedure
@@ -369,10 +368,11 @@ Procedure menu_GetPassword_Click()
 	script = "document.getElementById('inputPassword3').value"
 
 	;Result is returned as json object, strings are quoted.
-	pwd = wv2_Core_ExecuteScriptSync(app\wvCore, script, @window_ProcessEvents())
+	pwd = wv2_Core_ExecuteScriptSync(app\wvCore, script)
 	
-	Debug json_GetString(pwd)
-	
+	If pwd
+		Debug json_GetString(pwd)
+	EndIf 
 EndProcedure
 
 Procedure menu_SetEmail_Click()
@@ -432,14 +432,18 @@ Procedure app_Init()
 	app\stmPopper = stm_CreateStream(?popperStart, ?popperEnd - ?popperStart)
 	
 	;Events
-	app\evWebResourceRequested = wv2_EventHandler_New(?IID_ICoreWebView2WebResourceRequestedEventHandler, @wvCore_WebResourceRequested())
-	app\eventNavigationCompleted = wv2_EventHandler_New(?IID_ICoreWebView2NavigationCompletedEventHandler, @wvCore_NavigationCompleted())
-	app\evAccelKeyPressed = wv2_EventHandler_New(?IID_ICoreWebView2AcceleratorKeyPressedEventHandler, @wvController_AccelKeyPressed())
+	app\evWebResourceRequested = wv2_EventHandler_New(@wvCore_WebResourceRequested(), 0)
+	app\eventNavigationCompleted = wv2_EventHandler_New(@wvCore_NavigationCompleted(), 0)
+	app\evAccelKeyPressed = wv2_EventHandler_New(@wvController_AccelKeyPressed(), 0)
 EndProcedure
 
 Procedure app_Free()
 	If app\wvEnvironment : app\wvEnvironment\Release() : EndIf 
 	If app\envOptions : app\envOptions\Release() : EndIf 
+	
+	If app\eventNavigationCompleted : app\eventNavigationCompleted\Release() : EndIf 
+	If app\evAccelKeyPressed : app\evAccelKeyPressed\Release() : EndIf 
+	If app\evWebResourceRequested : app\evWebResourceRequested\Release() : EndIf 
 EndProcedure
 
 ;-
@@ -465,7 +469,7 @@ Procedure main()
 	app\envOptions = wv2_EnvironmentOptions_New()
 	;This disables CORS errors 
 	app\envOptions\put_AdditionalBrowserArguments("--disable-web-security")
-	CreateCoreWebView2EnvironmentWithOptions("", "", app\envOptions, wv2_EventHandler_New(?IID_ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler, @wvEnvironment_Created()))
+	CreateCoreWebView2EnvironmentWithOptions("", "", app\envOptions, wv2_EventHandler_New(@wvEnvironment_Created(), 0))
 	
 	Repeat		
 	Until window_ProcessEvents(WaitWindowEvent()) = #True
