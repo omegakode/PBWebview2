@@ -37,7 +37,6 @@ Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	ProcedureReturn #PB_ProcessPureBasicEvents
 EndProcedure
 
-
 Runtime Procedure.d addNum(a.d, b.d)
 	ProcedureReturn a + b
 EndProcedure
@@ -63,6 +62,7 @@ Procedure.s page1_Create()
 	"Param1 (number):" + ~"<input type=\"text\" spellcheck=\"false\" id=\"addNumP1\" value=\"10\"></br>" + 
 	"Param2 (number):" + ~"<input type=\"text\" spellcheck=\"false\" id=\"addNumP2\" value=\"20\"></br>" + 
 	~"<button type=\"button\" onclick=\"alert('addNum() Result: ' + purebasic.callRTProcNum('addNum', Number(document.getElementById('addNumP1').value), Number(document.getElementById('addNumP2').value)))\">Call PB addNum()</button>" +
+
 	"</br>" + "</br>" +
 	"addStr() Procedure:</br>" + 
 	"Param1 (string):" + ~"<input type=\"text\" spellcheck=\"false\" id=\"addStrP1\" value=\"pure\"></br>" + 
