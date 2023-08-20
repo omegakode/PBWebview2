@@ -14,8 +14,14 @@ CompilerElseIf #PB_Compiler_Backend = #PB_Backend_C
 	XIncludeFile "ffitarget.pbi"
 CompilerEndIf
 
+IncludeFile "WebView2Loader.pbi"
 IncludeFile "WebView2.pbi"
 IncludeFile "WebView2EnvironmentOptions.pb"
-IncludeFile "WebView2Loader.pbi"
 IncludeFile "WebView2_Helper.pb"
 IncludeFile "PB_Host_Object.pb"
+
+; IDE Options = PureBasic 6.03 beta 5 LTS (Windows - x86)
+; CursorPosition = 16
+; Folding = -
+; EnableXP
+; DPIAware

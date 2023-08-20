@@ -480,5 +480,3 @@ Procedure.s wv2_Core_ExecuteScriptSync(wvCore.ICoreWebView2, script.s, *errorCod
 	
 	ProcedureReturn ret
 EndProcedure
-
-
