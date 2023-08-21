@@ -8,7 +8,13 @@ CompilerElse
 CompilerEndIf
 
 ;- imports
-ImportC #LIB_PATH + "libffi-6.lib"
+;asm backend needs libgcc.a
+CompilerIf #PB_Compiler_Backend = #PB_Backend_Asm
+	Import #LIB_PATH + "libgcc.a"
+	EndImport
+CompilerEndIf
+
+ImportC #LIB_PATH + "libffi.a"
 	ffi_call(cif.i, fn.i, rvalue.i, avalue.i)
 	ffi_prep_cif(cif.i, ffi_abi.l, nargs.l, rtype.i, atypes.i)
 EndImport

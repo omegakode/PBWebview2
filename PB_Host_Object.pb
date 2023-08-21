@@ -191,70 +191,70 @@ Procedure wv2_PBObj_Invoke_CallRTProc(retType.w, *pDispParams.DISPPARAMS_, *pVar
 		ProcedureReturn #E_INVALIDARG
 	EndIf 
 	
-	CompilerIf #PB_Compiler_Backend = #PB_Backend_Asm
-		Protected.s vcTypes
-		Protected.l pVCArgs, iArgVC, iArg
-		
-		;Args
-		vcTypes = ""
-		If *pDispParams\cArgs > 1
-			Dim vcArgs.VCall::VCArgument(*pDispParams\cArgs - 2)
-			iArgVC = 0
-			
-			For iArg = *pDispParams\cArgs - 2 To 0 Step -1 ;Params are in reverse order.
-				Select *pDispParams\rgvarg\item[iArg]\vt
-					Case #VT_I4
-						vcTypes + "d"
-						vcArgs(iArgVC)\d = *pDispParams\rgvarg\item[iArg]\lVal
-						
-					Case #VT_BOOL
-						vcTypes + "i"
-						If *pDispParams\rgvarg\item[iArg]\boolVal = #VARIANT_TRUE
-							vcArgs(iArgVC)\i = #True
-							
-						Else
-							vcArgs(iArgVC)\i = #False
-						EndIf 
-						
-					Case #VT_R8
-						vcTypes + "d"
-						vcArgs(iArgVC)\d = *pDispParams\rgvarg\item[iArg]\dblVal
-						
-					Case #VT_BSTR
-						vcTypes + "i"
-						vcArgs(iArgVC)\i = *pDispParams\rgvarg\item[iArg]\bstrVal
-						
-					Case #VT_DISPATCH
-						vcTypes + "i"
-						vcArgs(iArgVC)\i = *pDispParams\rgvarg\item[iArg]\pdispVal
-				EndSelect
-				
-				iArgVC + 1
-			Next 
-			
-			pVCArgs = @vcArgs()
-			
-		Else ;No args
-			pVCArgs = #Null
-		EndIf 
-		
-		;Result
-		*pVarResult\vt = retType
-		Select retType
-			Case #VT_R8
-				*pVarResult\dblVal = VCall::VCallD(procAddr, pVCArgs, @vcTypes)
-		
-			Case #VT_BSTR
-				*pVarResult\bstrVal = VCall::VCall(procAddr, pVCArgs, @vcTypes)
-				
-			Case #VT_DISPATCH
-				*pVarResult\pdispVal = VCall::VCall(procAddr, pVCArgs, @vcTypes)
-				
-			Case #VT_EMPTY
-				VCall::VCall(procAddr, pVCArgs, @vcTypes)
-		EndSelect
-	
-	CompilerElseIf #PB_Compiler_Backend = #PB_Backend_C
+; 	CompilerIf #PB_Compiler_Backend = #PB_Backend_Asm
+; 		Protected.s vcTypes
+; 		Protected.l pVCArgs, iArgVC, iArg
+; 		
+; 		;Args
+; 		vcTypes = ""
+; 		If *pDispParams\cArgs > 1
+; 			Dim vcArgs.VCall::VCArgument(*pDispParams\cArgs - 2)
+; 			iArgVC = 0
+; 			
+; 			For iArg = *pDispParams\cArgs - 2 To 0 Step -1 ;Params are in reverse order.
+; 				Select *pDispParams\rgvarg\item[iArg]\vt
+; 					Case #VT_I4
+; 						vcTypes + "d"
+; 						vcArgs(iArgVC)\d = *pDispParams\rgvarg\item[iArg]\lVal
+; 						
+; 					Case #VT_BOOL
+; 						vcTypes + "i"
+; 						If *pDispParams\rgvarg\item[iArg]\boolVal = #VARIANT_TRUE
+; 							vcArgs(iArgVC)\i = #True
+; 							
+; 						Else
+; 							vcArgs(iArgVC)\i = #False
+; 						EndIf 
+; 						
+; 					Case #VT_R8
+; 						vcTypes + "d"
+; 						vcArgs(iArgVC)\d = *pDispParams\rgvarg\item[iArg]\dblVal
+; 						
+; 					Case #VT_BSTR
+; 						vcTypes + "i"
+; 						vcArgs(iArgVC)\i = *pDispParams\rgvarg\item[iArg]\bstrVal
+; 						
+; 					Case #VT_DISPATCH
+; 						vcTypes + "i"
+; 						vcArgs(iArgVC)\i = *pDispParams\rgvarg\item[iArg]\pdispVal
+; 				EndSelect
+; 				
+; 				iArgVC + 1
+; 			Next 
+; 			
+; 			pVCArgs = @vcArgs()
+; 			
+; 		Else ;No args
+; 			pVCArgs = #Null
+; 		EndIf 
+; 		
+; 		;Result
+; 		*pVarResult\vt = retType
+; 		Select retType
+; 			Case #VT_R8
+; 				*pVarResult\dblVal = VCall::VCallD(procAddr, pVCArgs, @vcTypes)
+; 		
+; 			Case #VT_BSTR
+; 				*pVarResult\bstrVal = VCall::VCall(procAddr, pVCArgs, @vcTypes)
+; 				
+; 			Case #VT_DISPATCH
+; 				*pVarResult\pdispVal = VCall::VCall(procAddr, pVCArgs, @vcTypes)
+; 				
+; 			Case #VT_EMPTY
+; 				VCall::VCall(procAddr, pVCArgs, @vcTypes)
+; 		EndSelect
+; 	
+; 	CompilerElseIf #PB_Compiler_Backend = #PB_Backend_C
 		Protected.ffi_cif cif
 		Protected.d result
 		Protected.l iArgFFI, iArg
@@ -331,7 +331,7 @@ Procedure wv2_PBObj_Invoke_CallRTProc(retType.w, *pDispParams.DISPPARAMS_, *pVar
 		If ffi_prep_cif(@cif, #FFI_DEFAULT_ABI, ffiArgsCount, ffiRetType, pArgTypes) = #FFI_OK
 			ffi_call(@cif, procAddr, ffiRetVal, @*arg_values())
 		EndIf 
-	CompilerEndIf
+; 	CompilerEndIf
 	
 	ProcedureReturn #S_OK
 EndProcedure

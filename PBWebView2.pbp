@@ -7,7 +7,7 @@
   <section name="data">
     <explorer view="" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2023-08-20 20:04" user="Carlos" host="CARLOS-PC"/>
+    <lastopen date="2023-08-21 12:05" user="Carlos" host="CARLOS-PC"/>
   </section>
   <section name="files">
     <file name="string.pb">
@@ -48,7 +48,7 @@
     </file>
     <file name="PBWebView2.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="10" panelstate="+"/>
-      <fingerprint md5="ebb972eb1d279eb83ba23f2d33f70f7c"/>
+      <fingerprint md5="617ece8458828689de7266f910f32383"/>
     </file>
     <file name="vector.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="11" panelstate="+"/>
@@ -60,7 +60,7 @@
     </file>
     <file name="WebView2_Helper.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="13" panelstate="+"/>
-      <fingerprint md5="d2943a2b335e25de20cb762e0778b06d"/>
+      <fingerprint md5="5b962d46f39c7d52c174b93ff035dd22"/>
     </file>
     <file name="WebView2EnvironmentOptions.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="14" panelstate="+"/>
@@ -80,19 +80,23 @@
     </file>
     <file name="PB_Host_Object.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="18" panelstate="+"/>
-      <fingerprint md5="9074567050fb0c1dd50f681fc829ea9b"/>
+      <fingerprint md5="8a25916f81be627422ad0c414b0f89a4"/>
     </file>
     <file name="WebView2Loader.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="19" panelstate="+"/>
-      <fingerprint md5="d858aac61e8db95f50f0c50e5af9d663"/>
+      <fingerprint md5="46b4b40e9825ff425202f47b48df1d37"/>
     </file>
     <file name="ffi.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="20" panelstate="+"/>
-      <fingerprint md5="4404a742dc8dc736c549cb76575836cf"/>
+      <fingerprint md5="4383d2c9113892bf30e478dca90a3d54"/>
     </file>
     <file name="ffitarget.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="21" panelstate="+"/>
       <fingerprint md5="194ee86ec7654a4a8730a5bd490218d6"/>
+    </file>
+    <file name="examples\basic_browser_async.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="22" panelstate="++"/>
+      <fingerprint md5="5d4c9fbbebce8ddd1d8f57bd7f8bf876"/>
     </file>
     <file name="enum.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" sortindex="999" panelstate="+"/>
@@ -159,7 +163,7 @@
       <fingerprint md5="09d8715f6c135033f87701107a07a358"/>
     </file>
     <file name="resource.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" sortindex="999" panelstate="+"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="24" panelstate="+"/>
       <fingerprint md5="961fa323689996eb7a01010872a7f01f"/>
     </file>
     <file name="stream.pb">
@@ -191,12 +195,8 @@
       <fingerprint md5="d5ca0a63eaf0bbcf06b079fd76221bd4"/>
     </file>
     <file name="examples\host_object.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="22" panelstate="++"/>
-      <fingerprint md5="3cfe10558c7f053a2a59ba7f9f5c5c08"/>
-    </file>
-    <file name="examples\basic_browser_async.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" sortindex="23" panelstate="++"/>
-      <fingerprint md5="5d4c9fbbebce8ddd1d8f57bd7f8bf876"/>
+      <fingerprint md5="37ab182a9c008046024acdb7c858e098"/>
     </file>
   </section>
   <section name="targets">
