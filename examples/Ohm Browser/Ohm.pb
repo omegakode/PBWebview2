@@ -1,6 +1,8 @@
 ﻿;Ohm.pb
 
+; XIncludeFile "..\..\PBWebView2.pb"
 XIncludeFile "..\..\prerelease\PBWebView2.pb"
+
 
 XIncludeFile "..\..\windows\commctrl.pbi"
 XIncludeFile "..\..\windows\windef.pbi"
@@ -15,8 +17,6 @@ XIncludeFile "Ohm.pbi"
 XIncludeFile "favIcon.pb"
 
 EnableExplicit
-
-
 
 ;- DECLARES
 Declare browser_New(env.ICoreWebView2Environment, tanIndex.l, url.s = "")
@@ -50,6 +50,7 @@ Declare core_NavigationStaring(this.IWV2EventHandler, sender.ICoreWebView2, args
 Declare core_NewWindowRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NewWindowRequestedEventArgs)
 Declare core_ContainsFullScreenElementChanged(this.IWV2EventHandler, sender.ICoreWebView2, args.IUnknown)
 Declare core_HistoryChanged(this.IWV2EventHandler, sender.ICoreWebView2, args.IUnknown)
+Declare core_SourceChanged(this.IWV2EventHandler, sender.ICoreWebView2, *args.ICoreWebView2SourceChangedEventArgs)
 
 ;-
 Macro tab_GetBrowser(tabIndex)
@@ -815,6 +816,8 @@ Procedure controller_Created(this.IWV2EventHandler, result.l, controller.ICoreWe
 	*browser\core\add_ContainsFullScreenElementChanged(*browser\evContainsFullScreenElementChanged, #Null)
 	*browser\evHistoryChanged = wv2_EventHandler_New(@core_HistoryChanged(), *browser)
 	*browser\core\add_HistoryChanged(*browser\evHistoryChanged, #Null)
+	*browser\evSourceChanged = wv2_EventHandler_New(@core_SourceChanged(), *browser)
+	*browser\core\add_SourceChanged(*browser\evSourceChanged, #Null)
 	;Controller
 	*browser\evAccelKeyPressed = wv2_EventHandler_New(@controller_AccelKeyPressed(), *browser)
 	*browser\controller\add_AcceleratorKeyPressed(*browser\evAccelKeyPressed, #Null)
@@ -887,7 +890,7 @@ Procedure core_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, 
 		str_FreeCoMemString(title)
 	EndIf 
 	
-	url_Edit_SetText(app\url, suri)
+; 	url_Edit_SetText(app\url, suri)
 	
 	If stitle = ""
 		stitle = "New tab"
@@ -945,6 +948,23 @@ Procedure core_HistoryChanged(this.IWV2EventHandler, sender.ICoreWebView2, args.
 	this\UnlockMutex()
 EndProcedure
 
+Procedure core_SourceChanged(this.IWV2EventHandler, sender.ICoreWebView2, *args.ICoreWebView2SourceChangedEventArgs)
+	Protected.BROWSER *browser
+	Protected.i uri
+	Protected.s suri
+	
+	this\LockMutex()
+	sender\get_Source(@uri)
+	If uri
+		suri = PeekS(uri)
+		str_FreeCoMemString(uri)
+		
+		url_Edit_SetText(app\url, suri)
+	EndIf 
+	
+	this\UnlockMutex()
+EndProcedure
+
 ;-
 Procedure browser_GetTabIndex(*browser.BROWSER)
 	Protected.l item
@@ -986,6 +1006,7 @@ Procedure browser_Free(*browser.BROWSER)
 	If *browser\evAccelKeyPressed : *browser\evAccelKeyPressed\Release() : EndIf 
 	If *browser\evContainsFullScreenElementChanged : *browser\evContainsFullScreenElementChanged\Release() : EndIf
 	If *browser\evHistoryChanged : *browser\evHistoryChanged\Release() : EndIf 
+	If *browser\evSourceChanged : *browser\evSourceChanged\Release() : EndIf 
 	If *browser\evNewWindowRequested : *browser\evNewWindowRequested\Release() : EndIf 
 
 	ChangeCurrentElement(app\browsers(), *browser)

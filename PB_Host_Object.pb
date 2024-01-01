@@ -5,6 +5,8 @@
 ; XIncludeFile "vector.pbi"
 ; XIncludeFile "VCall.pb"
 
+XIncludeFile "ffi.pbi"
+
 EnableExplicit
 
 ;- CONSTANTS

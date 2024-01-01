@@ -21,6 +21,7 @@ Structure BROWSER
 	evNewWindowRequested.IWV2EventHandler
 	evContainsFullScreenElementChanged.IWV2EventHandler
 	evHistoryChanged.IWV2EventHandler
+	evSourceChanged.IWV2EventHandler
 	;Controller
 	evAccelKeyPressed.IWV2EventHandler
 

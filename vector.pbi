@@ -12,3 +12,8 @@ EndStructure
 Structure VECTOR_INT
 	item.i[0]
 EndStructure
+
+;- VECTOR_IUNKNOWN
+Structure VECTOR_IUNKNOWN
+	item.IUnknown[0]
+EndStructure

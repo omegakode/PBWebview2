@@ -1,10 +1,17 @@
-﻿;basic_browser_async.pb
+﻿;misc.pb
 
-;Basic browser asyncrhonous creation.
+;Placeholder for various examples:
+;Custom scheme registration / Environment Options
 
 IncludeFile "..\PBWebView2.pb"
 
 EnableExplicit
+
+;- PAGE1
+#PAGE1 = "<!DOCTYPE html><html><body>" +
+"Custom scheme:" + "</br>" +
+~"<a href=\"wv2rocks://www.test.com/\">Visit wv2rocks://www.test.com/</a>" + 
+"</body></html>"
 
 ;- APP_TAG
 Structure APP_TAG
@@ -15,6 +22,7 @@ Structure APP_TAG
 	eventNavigationCompleted.IWV2EventHandler
 	eventNavigationSarting.IWV2EventHandler
 	eventWebResourceRequested.IWV2EventHandler
+	
 EndStructure
 Global.APP_TAG app
 
@@ -28,7 +36,7 @@ Declare wvEnvironment_Created(this.IWV2EventHandler, result.l, environment.ICore
 Declare wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWebView2Controller)
 Declare wv_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationCompletedEventArgs)
 Declare wv_NavigationStarting(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
-Declare wv_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
+Declare wv_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)
 
 Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
 	Select msg
@@ -71,7 +79,7 @@ Procedure wvController_Created(this.IWV2EventHandler, result.l, controller.ICore
 		
 		window_Resize()
 		
-		app\wvCore\Navigate("https://duckduckgo.com")
+		app\wvCore\NavigateToString(#PAGE1)
 		
 		this\Release()
 
@@ -84,13 +92,19 @@ EndProcedure
 Procedure wv_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)	
 	Protected.ICoreWebView2WebResourceRequest req
 	Protected.ICoreWebView2HttpRequestHeaders reqHeaders
+	Protected.i uri
+	Protected.s suri
 	
-	;SET CUSTOM HEADER
+	Debug #PB_Compiler_Procedure
+	
 	If args\get_Request(@req) = #S_OK
-		If req\get_Headers(@reqHeaders) = #S_OK
-			reqHeaders\SetHeader("myheader", "myvalue")
-			
-			reqHeaders\Release()
+		req\get_uri(@uri)
+		If uri
+			suri = PeekS(uri)
+			str_FreeCoMemString(uri)
+			If GetURLPart(suri, #PB_URL_Protocol) = "wv2rocks"
+				MessageRequester("WebView2", "wv2rocks scheme requested")
+			EndIf 
 		EndIf 
 		
 		req\Release()
@@ -101,7 +115,6 @@ Procedure wv_NavigationCompleted(this.IWV2EventHandler, sender.ICoreWebView2, ar
 	Debug "Event NavigationCompleted"
 	
 EndProcedure
-
 
 Procedure wv_NavigationStarting(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2NavigationStartingEventArgs)
 	Protected.i uri
@@ -151,26 +164,54 @@ Procedure main()
 	Protected.l ev
 	Protected.b quit
 	Protected.ICoreWebView2EnvironmentOptions opt
-	Protected.ICoreWebView2EnvironmentOptions2 opt2
-
+	Protected.ICoreWebView2EnvironmentOptions4 opt4
+	Protected.i allowedOrigins
+	Protected.ICoreWebView2CustomSchemeRegistration customSchemeRegistration, customSchemeRegistration2, customSchemeRegistration3
+	Protected.WV2_VECTOR_ICUSTOM_SCHEME_REGISTRATION *registrations
 	
 	If wv2_GetBrowserVersion("") = ""
 		MessageRequester("Error", "MS Edge not found, install MS Edge runtime.")
 		End 
 	EndIf
 
-	app\window = OpenWindow(#PB_Any, 10, 10, 600, 400, "PBWebView2 - Basic Browser Asynchronous Creation", #PB_Window_SystemMenu | #PB_Window_MinimizeGadget | #PB_Window_SizeGadget | #PB_Window_MaximizeGadget)
+	app\window = OpenWindow(#PB_Any, 10, 10, 600, 400, "PBWebView2 - Misc Examples", #PB_Window_SystemMenu | #PB_Window_MinimizeGadget | #PB_Window_SizeGadget | #PB_Window_MaximizeGadget)
 	SetWindowCallback(@window_Proc(), app\window)
 
 	BindEvent(#PB_Event_SizeWindow, @window_Resize())
 	
-	opt = wv2_EnvironmentOptions_New()
-	opt\QueryInterface(?IID_ICoreWebView2EnvironmentOptions2, @opt2)
-	opt2\put_ExclusiveUserDataFolderAccess(#True)
-	opt2\Release()
+	;- CUSTOM SCHEME REGISTRATION / ENV OPTIONS
+	;To set Environment Options create an EnvironmentOptions base class,
+	;QueryInterface for the desired options, set it, and release when needed.
+	;Custom scheme registration from msdn example:
+	;https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions4?view=webview2-1.0.2210.55#setcustomschemeregistrations
 	
+	opt = wv2_EnvironmentOptions_New()
+	opt\QueryInterface(?IID_ICoreWebView2EnvironmentOptions4, @opt4)
+	allowedOrigins = str_MakeStringArray(1)
+	str_PutStringArrayElement(allowedOrigins, 0, "https://*.example.com")
+	
+	customSchemeRegistration = wv2_CustomSchemeRegistration_New("custom-scheme")
+	customSchemeRegistration\SetAllowedOrigins(1, allowedOrigins)
+	
+	customSchemeRegistration2 = wv2_CustomSchemeRegistration_New("wv2rocks")
+	customSchemeRegistration2\put_TreatAsSecure(#True)
+	customSchemeRegistration2\SetAllowedOrigins(1, allowedOrigins)
+	customSchemeRegistration2\put_HasAuthorityComponent(#True)
+
+	customSchemeRegistration3 = wv2_CustomSchemeRegistration_New("custom-scheme-not-in-allowed-origins")
+	
+	*registrations = wv2_CustomSchemeRegistration_MakeArray(3)
+	*registrations\item[0] = customSchemeRegistration
+	*registrations\item[1] = customSchemeRegistration2
+	*registrations\item[2] = customSchemeRegistration3
+	
+	opt4\SetCustomSchemeRegistrations(3, *registrations)
+	wv2_CustomSchemeRegistration_ReleaseArray(*registrations, 3)
+	str_FreeStringArray(allowedOrigins, 1)
+
 	CreateCoreWebView2EnvironmentWithOptions("", "", opt, wv2_EventHandler_New(@wvEnvironment_Created(), 0))
 	
+	opt4\Release()
 	opt\Release()
 
 	quit = #False 

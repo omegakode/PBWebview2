@@ -2,7 +2,7 @@
 
 WebView2 control for Purebasic.
 
-Current WebView2 SDK: 1.0.1020.30 / 1.0.1056-prerelease
+Current WebView2 SDK: 1.0.2210.55 / 1.0.2194-prerelease
 
 PureBasic forum thread: [PBWebView2](https://www.purebasic.fr/english/viewtopic.php?f=7&t=75898)
 
