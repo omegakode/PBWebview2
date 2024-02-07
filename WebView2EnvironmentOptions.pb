@@ -1,6 +1,9 @@
-﻿XIncludeFile "windows\Unknwn.pbi"
+﻿;WebView2EnvironmentOptions.pb
+
+XIncludeFile "windows\Unknwn.pbi"
 ; XIncludeFile "WebView2.pbi"
 XIncludeFile "string.pb"
+XIncludeFile "WebView2EnvironmentOptions.pbi"
 
 EnableExplicit
 
@@ -576,6 +579,8 @@ Procedure wv2_EnvironmentOptions4_Free(*this.WV2_ENVIRONMENT_OPTIONS4)
 EndProcedure
 
 Procedure wv2_EnvironmentOptions4_QueryInterface(*this.WV2_ENVIRONMENT_OPTIONS4, *id.IID, *obj.INTEGER)
+	Debug #PB_Compiler_Procedure
+	
 	If *id = #Null Or *obj = #Null : ProcedureReturn #E_POINTER : EndIf
 	
 	If CompareMemory(*id, ?IID_IUnknown, SizeOf(IID)) Or CompareMemory(*id, ?IID_ICoreWebView2EnvironmentOptions4, SizeOf(IID))

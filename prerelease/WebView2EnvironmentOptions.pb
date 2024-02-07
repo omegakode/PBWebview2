@@ -1,7 +1,9 @@
-﻿XIncludeFile "..\windows\Unknwn.pbi"
+﻿;WebView2EnvironmentOptions.pb
+
+XIncludeFile "..\windows\Unknwn.pbi"
 ; XIncludeFile "WebView2.pbi"
 XIncludeFile "..\string.pb"
-
+XIncludeFile "..\WebView2EnvironmentOptions.pbi"
 EnableExplicit
 
 ;- DECLARES

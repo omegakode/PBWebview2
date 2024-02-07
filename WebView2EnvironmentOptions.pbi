@@ -1,0 +1,54 @@
+﻿;WebView2EnvironmentOptions.pbi
+
+;- ICoreWebView2CustomSchemeRegistrationVtbl
+Structure ICoreWebView2CustomSchemeRegistrationVtbl Extends IUnknownVtbl
+	get_SchemeName.i
+	get_TreatAsSecure.i
+	put_TreatAsSecure.i
+	GetAllowedOrigins.i
+	SetAllowedOrigins.i
+	get_HasAuthorityComponent.i
+	put_HasAuthorityComponent.i
+EndStructure
+
+;- ICoreWebView2EnvironmentOptionsVtbl
+Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
+	get_AdditionalBrowserArguments.i
+	put_AdditionalBrowserArguments.i
+	get_Language.i
+	put_Language.i
+	get_TargetCompatibleBrowserVersion.i
+	put_TargetCompatibleBrowserVersion.i
+	get_AllowSingleSignOnUsingOSPrimaryAccount.i
+	put_AllowSingleSignOnUsingOSPrimaryAccount.i
+EndStructure
+
+;- ICoreWebView2EnvironmentOptions2Vtbl
+Structure ICoreWebView2EnvironmentOptions2Vtbl Extends IUnknownVtbl
+	get_ExclusiveUserDataFolderAccess.i
+	put_ExclusiveUserDataFolderAccess.i
+EndStructure
+
+Structure ICoreWebView2EnvironmentOptions3Vtbl Extends IUnknownVtbl
+	get_IsCustomCrashReportingEnabled.i
+	put_IsCustomCrashReportingEnabled.i
+EndStructure
+
+;- ICoreWebView2EnvironmentOptions4Vtbl
+Structure ICoreWebView2EnvironmentOptions4Vtbl Extends IUnknownVtbl
+	GetCustomSchemeRegistrations.i
+	SetCustomSchemeRegistrations.i
+EndStructure
+
+;- ICoreWebView2EnvironmentOptions5Vtbl
+Structure ICoreWebView2EnvironmentOptions5Vtbl Extends IUnknownVtbl
+	get_EnableTrackingPrevention.i
+	put_EnableTrackingPrevention.i
+EndStructure
+
+;- ICoreWebView2EnvironmentOptions6Vtbl
+Structure ICoreWebView2EnvironmentOptions6Vtbl Extends IUnknownVtbl
+	get_AreBrowserExtensionsEnabled.i
+	put_AreBrowserExtensionsEnabled.i
+EndStructure
+

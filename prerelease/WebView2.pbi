@@ -2523,16 +2523,6 @@ DataSection
 	Data.b $A3, $9E, $95, $CF, $E5, $90, $47, $BB
 EndDataSection
 
-Structure ICoreWebView2CustomSchemeRegistrationVtbl Extends IUnknownVtbl
-	get_SchemeName.i
-	get_TreatAsSecure.i
-	put_TreatAsSecure.i
-	GetAllowedOrigins.i
-	SetAllowedOrigins.i
-	get_HasAuthorityComponent.i
-	put_HasAuthorityComponent.i
-EndStructure
-
 Interface ICoreWebView2CustomSchemeRegistration Extends IUnknown
 	get_SchemeName(SchemeName.i)
 	get_TreatAsSecure(TreatAsSecure.i)
@@ -2764,17 +2754,6 @@ DataSection
 	Data.b $8C, $5, $95, $A9, $CE, $B9, $D1, $C5
 EndDataSection
 
-Structure ICoreWebView2EnvironmentOptionsVtbl Extends IUnknownVtbl
-	get_AdditionalBrowserArguments.i
-	put_AdditionalBrowserArguments.i
-	get_Language.i
-	put_Language.i
-	get_TargetCompatibleBrowserVersion.i
-	put_TargetCompatibleBrowserVersion.i
-	get_AllowSingleSignOnUsingOSPrimaryAccount.i
-	put_AllowSingleSignOnUsingOSPrimaryAccount.i
-EndStructure
-
 Interface ICoreWebView2EnvironmentOptions Extends IUnknown
 	get_AdditionalBrowserArguments(value.i)
 	put_AdditionalBrowserArguments(value.s)
@@ -2795,11 +2774,6 @@ DataSection
 	Data.b $90, $C8, $2B, $75, $2C, $89, $E9, $E2
 EndDataSection
 
-Structure ICoreWebView2EnvironmentOptions2Vtbl Extends IUnknownVtbl
-	get_ExclusiveUserDataFolderAccess.i
-	put_ExclusiveUserDataFolderAccess.i
-EndStructure
-
 Interface ICoreWebView2EnvironmentOptions2 Extends IUnknown
 	get_ExclusiveUserDataFolderAccess(value.i)
 	put_ExclusiveUserDataFolderAccess(value.l)
@@ -2813,11 +2787,6 @@ DataSection
 	Data.w $A9E3, $4A2E
 	Data.b $89, $C3, $91, $D, $35, $13, $F5, $CC
 EndDataSection
-
-Structure ICoreWebView2EnvironmentOptions3Vtbl Extends IUnknownVtbl
-	get_IsCustomCrashReportingEnabled.i
-	put_IsCustomCrashReportingEnabled.i
-EndStructure
 
 Interface ICoreWebView2EnvironmentOptions3 Extends IUnknown
 	get_IsCustomCrashReportingEnabled(value.i)
@@ -2833,11 +2802,6 @@ DataSection
 	Data.b $9D, $CA, $87, $65, $80, $D6, $79, $3E
 EndDataSection
 
-Structure ICoreWebView2EnvironmentOptions4Vtbl Extends IUnknownVtbl
-	GetCustomSchemeRegistrations.i
-	SetCustomSchemeRegistrations.i
-EndStructure
-
 Interface ICoreWebView2EnvironmentOptions4 Extends IUnknown
 	GetCustomSchemeRegistrations(Count.i, schemeRegistrations.i)
 	SetCustomSchemeRegistrations(Count.l, schemeRegistrations.i)
@@ -2852,11 +2816,6 @@ DataSection
 	Data.b $81, $4E, $25, $9C, $34, $5D, $15, $1
 EndDataSection
 
-Structure ICoreWebView2EnvironmentOptions5Vtbl Extends IUnknownVtbl
-	get_EnableTrackingPrevention.i
-	put_EnableTrackingPrevention.i
-EndStructure
-
 Interface ICoreWebView2EnvironmentOptions5 Extends IUnknown
 	get_EnableTrackingPrevention(value.i)
 	put_EnableTrackingPrevention(value.l)
@@ -2870,11 +2829,6 @@ DataSection
 	Data.w $C84F, $42A0
 	Data.b $B0, $E2, $EF, $FB, $D5, $E1, $79, $DE
 EndDataSection
-
-Structure ICoreWebView2EnvironmentOptions6Vtbl Extends IUnknownVtbl
-	get_AreBrowserExtensionsEnabled.i
-	put_AreBrowserExtensionsEnabled.i
-EndStructure
 
 Interface ICoreWebView2EnvironmentOptions6 Extends IUnknown
 	get_AreBrowserExtensionsEnabled(value.i)
