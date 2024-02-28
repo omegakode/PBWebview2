@@ -31,7 +31,7 @@ Declare wv2_EnvironmentOptions6_Release(this.i)
 Declare wv2_CustomSchemeRegistration_AddRef(this.i)
 
 
-#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "121.0.2277.86"
+#CORE_WEBVIEW_TARGET_PRODUCT_VERSION = "122.0.2365.46"
 
 ;- GLOBALS
 Global.ICoreWebView2CustomSchemeRegistrationVtbl WV2_CUSTOM_SCHEME_REGISTRATION_VTABLE

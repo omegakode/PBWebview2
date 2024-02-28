@@ -8,10 +8,7 @@ EndEnumeration
 
 ;- Compiler Switches
 ;WV2_CONFIG_LINKING Enum
-#WV2_CONFIG_LINKING = #WV2_CONFIG_LINKING_DYNAMIC
-
-;True / False
-#WV2_CONFIG_USE_RESIDENT = #True
+#WV2_CONFIG_LINKING = #WV2_CONFIG_LINKING_STATIC
 
 CompilerIf #WV2_CONFIG_LINKING = #WV2_CONFIG_LINKING_STATIC And #PB_Compiler_Version  < 610
 	MessageRequester("PBWebView2", "Error, PB 6.10 is required for static linking.")

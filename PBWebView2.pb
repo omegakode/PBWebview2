@@ -5,6 +5,8 @@ DebugLevel #_DEBUG_LEVEL_ALL
 
 XIncludeFile "windows\windows.pbi"
 
+XIncludeFile "math.pb"
+XIncludeFile "Unsigned.pb"
 XIncludeFile "stream.pb"
 XIncludeFile "resource.pb"
 XIncludeFile "json.pb"
@@ -14,13 +16,12 @@ XIncludeFile "enum.pb"
 XIncludeFile "ffi.pbi"
 XIncludeFile "ffitarget.pbi"
 
-IncludeFile "WebView2Loader.pbi"
-IncludeFile "WebView2_IID.pbi"
-CompilerIf #WV2_CONFIG_USE_RESIDENT = #False
-	IncludeFile "WebView2.pbi"
+XIncludeFile "WebView2Loader.pbi"
+XIncludeFile "WebView2_IID.pbi"
+CompilerIf Not(Defined(ICoreWebView2, #PB_Interface))
+	XIncludeFile "WebView2.pbi"
 CompilerEndIf
-IncludeFile "WebView2EnvironmentOptions.pb"
-IncludeFile "WebView2_Helper.pb"
-IncludeFile "PB_Host_Object.pb"
-IncludeFile "WebGadget2.pb"
+XIncludeFile "WebView2EnvironmentOptions.pb"
+XIncludeFile "WebView2_Helper.pb"
+XIncludeFile "PB_Host_Object.pb"
 
