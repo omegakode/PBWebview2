@@ -1,7 +1,7 @@
 ﻿;Ohm.pb
 
-; XIncludeFile "..\..\PBWebView2.pb"
-XIncludeFile "..\..\prerelease\PBWebView2.pb"
+XIncludeFile "..\..\PBWebView2.pb"
+; XIncludeFile "..\..\prerelease\PBWebView2.pb"
 
 
 XIncludeFile "..\..\windows\commctrl.pbi"
@@ -1694,7 +1694,7 @@ Procedure window_On_SYSCOMMAND(hwnd.i, msg.l, wparam.i, lparam.i)
 	ProcedureReturn #PB_ProcessPureBasicEvents
 EndProcedure
 
-Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure window_Proc(hwnd.i, msg.i, wparam.i, lparam.i)
 	Select msg
 		Case #WM_MOVE, #WM_MOVING : window_On_MOVE_MOVING()
 		

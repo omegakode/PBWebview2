@@ -2,8 +2,8 @@
 
 ;Chartist.js example.
 
-; IncludeFile "..\PBWebView2.pb"
-IncludeFile "..\prerelease\PBWebView2.pb"
+IncludeFile "..\PBWebView2.pb"
+; IncludeFile "..\prerelease\PBWebView2.pb"
 
 EnableExplicit
 

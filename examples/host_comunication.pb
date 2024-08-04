@@ -31,7 +31,7 @@ Declare wv_WebMessageReceived(this.IWV2EventHandler, webview.ICoreWebView2, args
 Declare menu_Create(winId.i)
 Declare menu_SendMessage_Click()
 
-Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure window_Proc(hwnd.i, msg.i, wparam.i, lparam.i)
 	Select msg
 		Case #WM_MOVE, #WM_MOVING
 			wv2_Controller_On_WM_MOVE_MOVING(app\wvController)

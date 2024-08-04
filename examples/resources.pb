@@ -28,7 +28,7 @@ Declare wvController_Created(this.IWV2EventHandler, result.l, controller.ICoreWe
 Declare wv_WebResourceRequested(this.IWV2EventHandler, sender.ICoreWebView2, args.ICoreWebView2WebResourceRequestedEventArgs)
 Declare.s page1_Create()
 
-Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure window_Proc(hwnd.i, msg.i, wparam.i, lparam.i)
 	Select msg
 		Case #WM_MOVE, #WM_MOVING
 			wv2_Controller_On_WM_MOVE_MOVING(app\wvController)

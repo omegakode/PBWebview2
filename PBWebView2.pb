@@ -5,8 +5,8 @@ DebugLevel #_DEBUG_LEVEL_ALL
 
 XIncludeFile "windows\windows.pbi"
 
-XIncludeFile "math.pb"
-XIncludeFile "Unsigned.pb"
+; XIncludeFile "math.pb"
+; XIncludeFile "Unsigned.pb"
 XIncludeFile "stream.pb"
 XIncludeFile "resource.pb"
 XIncludeFile "json.pb"

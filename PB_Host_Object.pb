@@ -176,6 +176,8 @@ Procedure wv2_PBObj_Invoke_CallRTProc(retType.w, *pDispParams.DISPPARAMS_, *pVar
 	Protected.s procName
 	Protected.i procAddr
 			
+	Debug #PB_Compiler_Procedure
+	
 	;Zero params error.
 	If *pDispParams\cArgs < 1 ;error
 		ProcedureReturn #E_INVALIDARG
@@ -188,11 +190,12 @@ Procedure wv2_PBObj_Invoke_CallRTProc(retType.w, *pDispParams.DISPPARAMS_, *pVar
 	
 	procName = PeekS(*pDispParams\rgvarg\item[*pDispParams\cArgs - 1]\bstrVal)
 	procAddr = GetRuntimeInteger(procName + "()")
+	
 	;Proc not found.
 	If procAddr = 0
 		ProcedureReturn #E_INVALIDARG
 	EndIf 
-	
+		
 ; 	CompilerIf #PB_Compiler_Backend = #PB_Backend_Asm
 ; 		Protected.s vcTypes
 ; 		Protected.l pVCArgs, iArgVC, iArg

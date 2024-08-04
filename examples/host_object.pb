@@ -28,7 +28,7 @@ Declare.s page1_Create()
 Declare.d addNum(a.d, b.d)
 Declare.i addStr(a.i, b.i)
 
-Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure window_Proc(hwnd.i, msg.i, wparam.i, lparam.i)
 	Select msg
 		Case #WM_MOVE, #WM_MOVING
 			wv2_Controller_On_WM_MOVE_MOVING(app\wvController)

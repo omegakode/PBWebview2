@@ -50,7 +50,7 @@ Declare app_Free()
 Declare window_Close()
 Declare window_Resize()
 Declare window_ProcessEvents(ev.l)
-Declare window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Declare window_Proc(hwnd.i, msg.i, wparam.i, lparam.i)
 
 Declare menu_Create(winid.i)
 Declare menu_GetCheck1State_Click()
@@ -302,7 +302,7 @@ Procedure window_On_SYSCOMMAND(hwnd.i, msg.l, wparam.i, lparam.i)
 	ProcedureReturn #PB_ProcessPureBasicEvents
 EndProcedure
 
-Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure window_Proc(hwnd.i, msg.i, wparam.i, lparam.i)
 	Select msg
 		;Required by webview2
 		Case #WM_MOVE, #WM_MOVING

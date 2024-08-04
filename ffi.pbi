@@ -17,6 +17,7 @@ CompilerEndIf
 ImportC #LIB_PATH + "libffi.a"
 	ffi_call(cif.i, fn.i, rvalue.i, avalue.i)
 	ffi_prep_cif(cif.i, ffi_abi.l, nargs.l, rtype.i, atypes.i)
+	ffi_type_void
 EndImport
 
 ;- enum ffi_status
@@ -80,9 +81,6 @@ Macro FFI_TYPEDEF(name, _type, id)
 	ffi_type_#name\type = id
 	ffi_type_#name\elements = #Null
 EndMacro
-
-Global.ffi_type ffi_type_void
-ffi_type_void\type = #FFI_TYPE_VOID
 
 FFI_TYPEDEF(pointer, INTEGER, #FFI_TYPE_POINTER)
 FFI_TYPEDEF(float, FLOAT, #FFI_TYPE_FLOAT)

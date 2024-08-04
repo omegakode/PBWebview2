@@ -21,7 +21,7 @@ Declare window_Close()
 Declare window_Resize()
 Declare window_ProcessEvent(ev.l)
 
-Procedure window_Proc(hwnd.i, msg.l, wparam.i, lparam.i)
+Procedure window_Proc(hwnd.i, msg.i, wparam.i, lparam.i)
 	Select msg
 		Case #WM_MOVE, #WM_MOVING
 			wv2_Controller_On_WM_MOVE_MOVING(app\wvController)

@@ -12,7 +12,7 @@ XIncludeFile "..\keyboard.pb"
 XIncludeFile "..\enum.pb"
 XIncludeFile "..\VCall.pb"
 
-CompilerIf #WV2_CONFIG_USE_RESIDENT = #False
+CompilerIf Not Defined(ICoreWebView2, #PB_Interface)
 	IncludeFile "WebView2.pbi"
 CompilerEndIf
 XIncludeFile "WebView2Experimental.pbi"
