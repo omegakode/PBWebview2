@@ -101,12 +101,12 @@ Declare wv2_EventHandlerWaitable_SetArgs(*this.WV2_EVENT_HANDLER_WAITABLE, args.
 
 Declare wv2_CreateCoreWebView2EnvironmentWithOptionsSync(browserExecutableFolder.s, userDataFolder.s, environmentOptions.i)
 
-Declare wv2_Environment_Created_Sync(*this.WV2_EVENT_HANDLER, result.l, environment.ICoreWebView2Environment)	
+Declare wv2_Environment_Created_Sync(this.IWV2EventHandlerWaitable, result.l, environment.ICoreWebView2Environment)	
 Declare wv2_Environment_CreateCoreWebView2ControllerSync(environment.ICoreWebView2Environment, parentWindow.i)
 
-Declare wv2_Controller_Created_Sync(*this.WV2_EVENT_HANDLER, result.l, controller.ICoreWebView2Controller)
+Declare wv2_Controller_Created_Sync(this.IWV2EventHandlerWaitable, result.l, controller.ICoreWebView2Controller)
 
-Declare wv2_Core_ScriptExecuted_Sync(*this.WV2_EVENT_HANDLER, errorCode.l, resultObjectAsJson.i)
+Declare wv2_Core_ScriptExecuted_Sync(this.IWV2EventHandlerWaitable, errorCode.l, resultObjectAsJson.i)
 Declare.s wv2_Core_ExecuteScriptSync(wvCore.ICoreWebView2, script.s, *errorCode.LONG = #Null)
 
 Declare.s wv2_CreateJSHostObjectProxy(hostObjName.s)

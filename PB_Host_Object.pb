@@ -56,8 +56,8 @@ Declare wv2_PBObj_AddRef(*this.WV2_PBOBJ)
 Declare wv2_PBObj_Release(*this.WV2_PBOBJ)
 Declare wv2_PBObj_GetTypeInfoCount(*this.WV2_PBOBJ, *pctinfo.LONG)
 Declare wv2_PBObj_GetTypeInfo(*this.WV2_PBOBJ, iTInfo.l, lcid.l, ppTInfo.i)
-Declare wv2_PBObj_GetIDsOfNames(*this.WV2_PBOBJ, *riid.IID, rgszNames.i, cNames.l, lcid.l, *rgDispId.LONG)
-Declare wv2_PBObj_Invoke(*this.WV2_PBOBJ, dispIdMember.l, *riid.IID, lcid.l, wFlags.w, *pDispParams.DISPPARAMS, *pVarResult.VARIANT, *pExcepInfo.EXCEPINFO, *puArgErr.LONG)
+Declare wv2_PBObj_GetIDsOfNames(*this.WV2_PBOBJ, *riid.IID, *rgszNames.VECTOR_INT, cNames.l, lcid.l, *rgDispId.VECTOR_LONG)
+Declare wv2_PBObj_Invoke(*this.WV2_PBOBJ, dispIdMember.l, *riid.IID, lcid.l, wFlags.w, *pDispParams.DISPPARAMS_, *pVarResult.VARIANT, *pExcepInfo.EXCEPINFO, *puArgErr.LONG)
 
 Declare wv2_PBObj_Invoke_CallRTProc(retType.w, *pDispParams.DISPPARAMS_, *pVarResult.VARIANT, *pExcepInfo.EXCEPINFO, *puArgErr.LONG)
 
